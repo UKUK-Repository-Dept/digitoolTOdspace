@@ -17,7 +17,7 @@ def cli():
     pass
 
 @cli.command()
-@click.option('--group', prompt='group', type=click.Choice(['oai','forgot']), help='Choose group to categorize')
+@click.option('--group', prompt='group', type=click.Choice(['oai','forgot','noattachement','weirdattachement']), help='Choose group to categorize')
 @click.option('--skip/--no-skip', default=False, help='Skip items with known errors')
 def categorize(group, skip):
     #TODO všechny dalši skupiny viz ostatni TODO
@@ -26,14 +26,19 @@ def categorize(group, skip):
         dtx = DigitoolXML(xml_dirname, skip_missing=True)
     else:
         dtx = DigitoolXML(xml_dirname)
-    c = Categorize(dtx)
+    c = Categorize(dtx, skip=skip)
+    dt = Digitool(digitool_category) 
+    dt.download_list()
     if group == 'oai':
-        dt = Digitool(digitool_category) 
         bugs.oai(dt,dtx,c,skip=skip)
     elif group == 'forgot':
-        dt = Digitool(digitool_category) 
         bugs.forgot_attachements(dt,dtx,c,xml_dirname+"/ls_streams.txt")
+    elif group == 'noattachement':
+        bugs.no_attachements(dt,dtx,c)
+    elif group == 'weirdattachement':
+        bugs.weird_attachements(dt,dtx,c)
     c.print()
+
 
 @cli.command()
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
@@ -52,32 +57,6 @@ def dspace(dspace_admin_passwd, dspace_admin_username):
     #ds.delete_bitstream([6654,6655])
     #ds.list_bitstream()
     ds.logout()
-
-@cli.command()
-@click.option('--skip/--no-skip', default=False, help='Skip items with known errors')
-def descriptions():
-    dt = Digitool(digitool_category) 
-    dt.download_list()
-    if skip:
-        dtx = DigitoolXML(xml_dirname, skip_missing=True)
-    else:
-        dtx = DigitoolXML(xml_dirname)
-    c = FilenameConvertor()
-    
-    problems = []
-    for record in dt.list:
-        oai_id = dt.get_oai_id(record)
-        attachements = list(dtx.get_attachements(oai_id+".xml",full=True))
-        if skip:
-            if len(attachements) == 0:
-                continue
-        else:
-            if len(attachements) == 0:
-                raise Exception("No attachement in {}.",format(oai_id))
-        descriptions = c.generate_description(attachements)
-        if isinstance(descriptions, list):
-            continue
-        print(descriptions)
 
 def convertItem(oai_id, test, skip):
     dt = Digitool(digitool_category) 

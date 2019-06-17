@@ -1,4 +1,7 @@
 class FilenameConvertor:
+    #TODO odhadovat z metadat
+    def __init__(self, categorize):
+        self.categorize = categorize
 
     side = [
             ( ['vedouci'], "Posudek vedoucího" ),
@@ -36,8 +39,10 @@ class FilenameConvertor:
             filename, filetype = files[0]
             if filetype == 'application/pdf':
                 if self.match(self.side, filename):
-                    return [] #TODO
-                    #return filename #37
+                    oai_id = filetype.split('_')[0]
+                    self.categorize.categorize_item(oai_id,"hlavní soubor {} vypadá jako příloha".format(filename))
+                    #return [] #TODO
+                    return filename #37
                 else:
                     try:
                         match = self.match(self.main, filename)
@@ -51,7 +56,9 @@ class FilenameConvertor:
                     else:
                         return [(filename, filetype, "Závěrečná práce")]
             else:
-                return [] #TODO
+                #return [] #TODO
+                oai_id = filetype.split('_')[0]
+                self.categorize.categorize_item(oai_id,"jediná příloha není pdf, ale {}".format(filetype))
                 #return filename + " " + filetype #19
         else:
             side = 0

@@ -3,8 +3,9 @@ class Categorize():
     notes = [["HTF"],["FFUk","FF","FF UK","FFUK"],["etf","ETF"],["MFF"],["PF"],["FTVS"],["2LF","LF2","2LF -"],["FSV","FSV IMS","FSV_IKSZ","FSV ISS","FSV IPS"],["FHS"],["3LF"]]
     category = {}
 
-    def __init__(self, dtx):
+    def __init__(self, dtx, skip=False):
         self.dtx = dtx
+        self.skip = skip
         self.category = {}
         for tag in self.ingests:
             self.category[tag] = {}
@@ -14,15 +15,15 @@ class Categorize():
         self.category['other note'] = {}
         self.category['None note'] = {}
 
-    def categorize_list(self, oai_ids, descriptions, skip=False):
+    def categorize_list(self, oai_ids, descriptions):
         for oai_id in oai_ids:
-            self.categorize_ingest(oai_id, descriptions, skip)
+            self.categorize_ingest(oai_id, descriptions)
     
-    def categorize_item(self, oai_id, description, skip=False):
-        self.categorize_ingest(oai_id, description, skip)
+    def categorize_item(self, oai_id, description):
+        self.categorize_ingest(oai_id, description)
     
-    def categorize_ingest(self, oai_id, description, skip=False):
-        if skip:
+    def categorize_ingest(self, oai_id, description):
+        if self.skip:
             try:
                 label, ingest, note = self.dtx.get_category(oai_id+".xml")
             except:
