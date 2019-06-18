@@ -44,6 +44,12 @@ class DigitoolXML:
         for record in subrecords:
             yield from self.get_attachements(record,full)
 
+    def is_preview(self, oai_id): #TODO smazat?
+        tree = ET.parse(self.xml_dirname+"/"+str(oai_id)+".xml")
+        root = tag(tree.getroot(),'digital_entity')
+        print("id", oai_id)
+        for child in root:
+            print(child.tag, child.text)
 
     def get_category(self, filename):
         tree = ET.parse(self.xml_dirname+"/"+filename)

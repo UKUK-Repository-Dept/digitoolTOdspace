@@ -18,20 +18,16 @@ def cli():
     pass
 
 @cli.command()
-@click.option('--group', prompt='group', type=click.Choice(['all','oai','forgot','noattachement','weird','type']), help='Choose group to categorize')
-@click.option('--skip/--no-skip', default=False, help='Skip items with known errors')
-def categorize(group, skip):
+@click.option('--group', prompt='group', type=click.Choice(['all','oai','forgot','noattachement','weird','preview','type']), help='Choose group to categorize')
+def categorize(group):
     #TODO všechny dalši skupiny viz ostatni TODO
 
-    if skip:
-        dtx = DigitoolXML(xml_dirname, skip_missing=True)
-    else:
-        dtx = DigitoolXML(xml_dirname)
-    c = Categorize(dtx, skip=skip)
+    dtx = DigitoolXML(xml_dirname, skip_missing=True)
+    c = Categorize(dtx)
     dt = Digitool(digitool_category) 
     dt.download_list()
     if group == 'oai':
-        bugs.oai(dt,dtx,c,skip=skip)
+        bugs.oai(dt,dtx,c)
     elif group == 'forgot':
         bugs.forgot_attachements(dt,dtx,c,xml_dirname+"/ls_streams.txt")
     elif group == 'noattachement':
@@ -40,6 +36,11 @@ def categorize(group, skip):
         bugs.weird_attachements(dt,dtx,c)
     elif group == 'type':
         bugs.unknown_type(dt,dtx,c)
+    elif group == 'preview':
+        dtx_no_skip = DigitoolXML(xml_dirname, skip_missing=False)
+        dtx_all = DigitoolXML('s-nahledy')
+        bugs.preview(dt,dtx_no_skip,dtx_all)
+        return
     elif group == 'all':
         bugs.forgot_attachements(dt,dtx,c,xml_dirname+"/ls_streams.txt")
         bugs.no_attachements(dt,dtx,c)

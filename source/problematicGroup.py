@@ -35,12 +35,25 @@ def weird_attachements(digitool, digitoolXML, categorize):
             continue
         print(descriptions)
 
+def preview(digitool, digitoolXMLnoskip, digitoolXMLall):
+    for record in digitool.list:
+        oai_id = digitool.get_oai_id(record)
+        try:
+            attachements = list(digitoolXMLnoskip.get_attachements(oai_id))
+        except Exception as e:
+            oai_id = str(e).split('/')[-1].split('.')[0]
+            try:
+                attachements = list(digitoolXMLall.get_attachements(oai_id))
+                if len(attachements) == 1 and 'thumbnail' in attachements[0]:
+                    print(oai_id, end = ", ")
+                #digitoolXMLall.is_preview(oai_id)
+            except:
+                pass #TODO
 
 def unknown_type(digitool, digitoolXML, categorize):
     convertor = MetadataConvertor(categorize)
     for record in digitool.list:
-        originalMetadata = dt.get_metadata(record)
+        originalMetadata = digitool.get_metadata(record)
         attachements = list(digitoolXML.get_attachements(oai_id,full=True))
         #TODO třizeni typu do metada i filename convertoru
 
-    print("hurá")
