@@ -18,7 +18,7 @@ def cli():
     pass
 
 @cli.command()
-@click.option('--group', prompt='group', type=click.Choice(['all','oai','forgot','noattachement','weirdattachement']), help='Choose group to categorize')
+@click.option('--group', prompt='group', type=click.Choice(['all','oai','forgot','noattachement','weirdattachement','type']), help='Choose group to categorize')
 @click.option('--skip/--no-skip', default=False, help='Skip items with known errors')
 def categorize(group, skip):
     #TODO všechny dalši skupiny viz ostatni TODO
@@ -38,6 +38,8 @@ def categorize(group, skip):
         bugs.no_attachements(dt,dtx,c)
     elif group == 'weirdattachement':
         bugs.weird_attachements(dt,dtx,c)
+    elif group == 'type':
+        bugs.unknown_type(dt,dtx,c)
     elif group == 'all':
         bugs.forgot_attachements(dt,dtx,c,xml_dirname+"/ls_streams.txt")
         bugs.no_attachements(dt,dtx,c)

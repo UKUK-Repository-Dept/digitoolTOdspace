@@ -32,6 +32,8 @@ def weird_attachements(digitool, digitoolXML, categorize):
         descriptions = convertor.generate_description(attachements)
         if isinstance(descriptions, list):
             continue
-        #print(descriptions)
+        print(descriptions)
 
 
+def unknown_type(digitool, digitoolXML, categorize):
+    print("hurá")

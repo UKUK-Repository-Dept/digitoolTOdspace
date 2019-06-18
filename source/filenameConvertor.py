@@ -34,14 +34,12 @@ class FilenameConvertor:
             raise Exception("More matches. {}".format(name))
 
     def generate_description(self, files):
-        #TODO tohle se dá brát i z metadat
         if len(files) == 1:
             filename, filetype = files[0]
             if filetype == 'application/pdf':
                 if self.match(self.side, filename):
-                    oai_id = filetype.split('_')[0]
+                    oai_id = filename.split('_')[0]
                     self.categorize.categorize_item(oai_id,"hlavní soubor {} vypadá jako příloha".format(filename))
-                    #return filename # TODO
                 else:
                     try:
                         match = self.match(self.main, filename)
@@ -55,9 +53,8 @@ class FilenameConvertor:
                     else:
                         return [(filename, filetype, "Závěrečná práce")]
             else:
-                oai_id = filetype.split('_')[0]
+                oai_id = filename.split('_')[0]
                 self.categorize.categorize_item(oai_id,"jediná příloha není pdf, ale {}".format(filetype))
-                #return filename + " " + filetype #19 TODO
         else:
             side = 0
             for filename, filetype in files:
@@ -82,8 +79,6 @@ class FilenameConvertor:
                             match = "Posudek oponenta" 
                         elif "posudek_vedouci" in filename:
                             match = "Posudek vedoucího"
-                        #elif "DP" in filename and ( "RP" in filename or "rigo" in filename):
-                        #    match = None
                         else:
                             raise e
                     if match != None:
@@ -104,4 +99,5 @@ class FilenameConvertor:
                     res.append( (filename, filetype, None) )
                 return res
                 #return str(files)+str(side) # 57
+        return []
 

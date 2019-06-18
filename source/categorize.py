@@ -14,6 +14,7 @@ class Categorize():
             self.category[str(tags)] = {}
         self.category['other note'] = {}
         self.category['None note'] = {}
+        self.category['no xml file'] = {}
 
     def categorize_list(self, oai_ids, descriptions):
         for oai_id in oai_ids:
@@ -23,13 +24,11 @@ class Categorize():
         self.categorize_ingest(oai_id, description)
     
     def categorize_ingest(self, oai_id, description):
-        if self.skip:
-            try:
-                label, ingest, note = self.dtx.get_category(oai_id+".xml")
-            except:
-                return
-        else:
+        try:
             label, ingest, note = self.dtx.get_category(oai_id+".xml")
+        except:
+            self.category['no xml file'].setdefault(oai_id,[]).append("no xml" + description)
+            return
         for tag in self.ingests:
             if ingest != None and tag in ingest:
                 self.category[tag].setdefault(oai_id,[]).append(description)
@@ -64,3 +63,4 @@ class Categorize():
             sum += len(list_id)
             print(tag,len(list_id))
         print("celkem",sum)
+        #print(self.category["['FFUk', 'FF', 'FF UK', 'FFUK']"])
