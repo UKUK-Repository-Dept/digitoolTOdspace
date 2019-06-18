@@ -41,8 +41,7 @@ class FilenameConvertor:
                 if self.match(self.side, filename):
                     oai_id = filetype.split('_')[0]
                     self.categorize.categorize_item(oai_id,"hlavní soubor {} vypadá jako příloha".format(filename))
-                    #return [] #TODO
-                    return filename #37
+                    #return filename # TODO
                 else:
                     try:
                         match = self.match(self.main, filename)
@@ -56,10 +55,9 @@ class FilenameConvertor:
                     else:
                         return [(filename, filetype, "Závěrečná práce")]
             else:
-                #return [] #TODO
                 oai_id = filetype.split('_')[0]
                 self.categorize.categorize_item(oai_id,"jediná příloha není pdf, ale {}".format(filetype))
-                #return filename + " " + filetype #19
+                #return filename + " " + filetype #19 TODO
         else:
             side = 0
             for filename, filetype in files:
@@ -101,6 +99,9 @@ class FilenameConvertor:
                         res.append( (filename, filetype, match) )
                 return res
             else:
-                return [] #TODO
+                res = []
+                for filename, filetype in files:
+                    res.append( (filename, filetype, None) )
+                return res
                 #return str(files)+str(side) # 57
 

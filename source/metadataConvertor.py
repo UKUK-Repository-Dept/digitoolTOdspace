@@ -131,3 +131,7 @@ class MetadataConvertor:
             else:
                 raise Exception("Unknown tag")
         return self.example_return
+
+    def printMetadata(metadata):
+        for tag, value in metadata:
+            print(tag, value)

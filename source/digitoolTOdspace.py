@@ -10,6 +10,7 @@ from categorize import Categorize
 import problematicGroup as bugs
 
 xml_dirname = "28.5.2019"
+#xml_dirname = "18.6.2019"
 digitool_category = "oai_kval"
 
 @click.group()
@@ -17,7 +18,7 @@ def cli():
     pass
 
 @cli.command()
-@click.option('--group', prompt='group', type=click.Choice(['oai','forgot','noattachement','weirdattachement']), help='Choose group to categorize')
+@click.option('--group', prompt='group', type=click.Choice(['all','oai','forgot','noattachement','weirdattachement']), help='Choose group to categorize')
 @click.option('--skip/--no-skip', default=False, help='Skip items with known errors')
 def categorize(group, skip):
     #TODO všechny dalši skupiny viz ostatni TODO
@@ -36,6 +37,10 @@ def categorize(group, skip):
     elif group == 'noattachement':
         bugs.no_attachements(dt,dtx,c)
     elif group == 'weirdattachement':
+        bugs.weird_attachements(dt,dtx,c)
+    elif group == 'all':
+        bugs.forgot_attachements(dt,dtx,c,xml_dirname+"/ls_streams.txt")
+        bugs.no_attachements(dt,dtx,c)
         bugs.weird_attachements(dt,dtx,c)
     c.print()
 
@@ -80,13 +85,14 @@ def convertItem(oai_id, test, skip):
     if test:
         click.clear()
         print("converting ",oai_id)
-        print("originalMetadata:\n")
+        print("\noriginalMetadata:")
         for i in originalMetadata:
-            print(i)
-        print("convertedMetadata:\n")
-        print("attachements:\n")
+            c.printMetadata(originalMetadata[i])
+        print("\nconvertedMetadata:")
+        print("\nattachements:")
         print(attachements)
-        checked = click.confirm("Is converting OK?", default=True)
+        #checked = click.confirm("Is converting OK?", default=True)
+        checked = True
         return (checked, convertedMetadataDC, attachements)
     else:
         return (False, convertedMetadataDC, attachements)
