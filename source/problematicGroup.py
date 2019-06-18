@@ -1,4 +1,5 @@
 from filenameConvertor import FilenameConvertor
+from metadataConvertor import MetadataConvertor
 
 def oai(digitool, digitoolXML, categorize, skip=False): #categorieze whole oai
     for record in digitool.list:
@@ -36,4 +37,10 @@ def weird_attachements(digitool, digitoolXML, categorize):
 
 
 def unknown_type(digitool, digitoolXML, categorize):
+    convertor = MetadataConvertor(categorize)
+    for record in digitool.list:
+        originalMetadata = dt.get_metadata(record)
+        attachements = list(digitoolXML.get_attachements(oai_id,full=True))
+        #TODO třizeni typu do metada i filename convertoru
+
     print("hurá")

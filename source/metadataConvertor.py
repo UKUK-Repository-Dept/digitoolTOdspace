@@ -1,5 +1,9 @@
 # TODO kodovani
 class MetadataConvertor:
+    
+    def __init__(self, categorize):
+        self.categorize = categorize
+    
     typesDC = [ 
             '{http://purl.org/dc/elements/1.1/}title', # na konci je všude [rukopis], před tím to je ok
             '{http://purl.org/dc/elements/1.1/}creator', #vice hodnot katedry by šlo teoreticky třídit
@@ -30,6 +34,9 @@ class MetadataConvertor:
                 { "key": "dc.description.abstract", "language": "pt_BR", "value": "ABSTRACT" }, 
                 { "key": "dc.title", "language": "pt_BR", "value": "Pokus" } 
                 ]}
+    
+    def convertType(self, year):
+        return 'vysledný typ'
 
     def convertYear(self, year):
         if year[0] == '[':
@@ -64,8 +71,6 @@ class MetadataConvertor:
             #    print(value)
         return self.example_return
     
-    recordTags = [
-            ]
 
     typesRecord = [ 
             '{http://purl.org/dc/elements/1.1/}title', 
