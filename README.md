@@ -9,6 +9,7 @@ Primary source is digitool xml file export and we use digitool oai to chceck if 
 python3 -m venv env
 . env/bin/activate
 pip3 install -r requirements.txt
+pytest
 python3 source/digitoolTOdspace.py --help 
 ```
 

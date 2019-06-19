@@ -73,7 +73,8 @@ def convertItem(oai_id, test, skip):
         dtx = DigitoolXML(xml_dirname, skip_missing=True)
     else:
         dtx = DigitoolXML(xml_dirname)
-    c = MetadataConvertor()
+    categorize = Categorize(dtx)
+    c = MetadataConvertor(categorize)
     originalMetadata = dt.get_metadata(record)
     if originalMetadata is None:
         if skip:
@@ -84,7 +85,7 @@ def convertItem(oai_id, test, skip):
         convertedMetadataDC = c.convertDC(originalMetadata['dc'], oai_id)
     if 'record' in originalMetadata.keys(): #358, žádný průnik
         convertedMetadataRecord = c.convertRecord(originalMetadata['record'], oai_id)
-    attachements = list(dtx.get_attachements(str(oai_id)+".xml"))
+    attachements = list(dtx.get_attachements(oai_id))
     if test:
         click.clear()
         print("converting ",oai_id)
