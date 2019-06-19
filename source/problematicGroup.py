@@ -47,7 +47,7 @@ def preview(digitool, digitoolXMLnoskip, digitoolXMLall):
                 if len(attachements) == 1 and 'thumbnail' in attachements[0]:
                     pass
                     #print(oai_id2, end = ", ")
-                    #print(oai_id2)
+                    print(oai_id2)
                 else:
                     pass
                     #print(oai_id, oai_id2)
@@ -57,7 +57,7 @@ def preview(digitool, digitoolXMLnoskip, digitoolXMLall):
             except:
                 if oai_id == oai_id2:
                     pass
-                    print(oai_id, end = ", ")
+                    #print(oai_id, end = ", ")
                 else:
                     pass
                     #print(oai_id, oai_id2)

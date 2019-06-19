@@ -9,8 +9,8 @@ from metadataConvertor import MetadataConvertor
 from categorize import Categorize
 import problematicGroup as bugs
 
-xml_dirname = "28.5.2019"
-#xml_dirname = "18.6.2019"
+#xml_dirname = "28.5.2019"
+xml_dirname = "18.6.2019"
 digitool_category = "oai_kval"
 
 @click.group()
@@ -22,7 +22,7 @@ def cli():
 def categorize(group):
     #TODO všechny dalši skupiny viz ostatni TODO
 
-    dtx = DigitoolXML(xml_dirname, skip_missing=True)
+    dtx = DigitoolXML(xml_dirname)
     c = Categorize(dtx)
     dt = Digitool(digitool_category) 
     dt.download_list()
@@ -37,7 +37,7 @@ def categorize(group):
     elif group == 'type':
         bugs.unknown_type(dt,dtx,c)
     elif group == 'preview':
-        dtx_no_skip = DigitoolXML(xml_dirname, skip_missing=False)
+        dtx_no_skip = DigitoolXML(xml_dirname)
         dtx_all = DigitoolXML('s-nahledy')
         bugs.preview(dt,dtx_no_skip,dtx_all)
         return
@@ -66,25 +66,19 @@ def dspace(dspace_admin_passwd, dspace_admin_username):
     #ds.list_bitstream()
     ds.logout()
 
-def convertItem(oai_id, test, skip):
+def convertItem(oai_id, test):
     dt = Digitool(digitool_category) 
     record = dt.get_item(oai_id)
-    if skip:
-        dtx = DigitoolXML(xml_dirname, skip_missing=True)
-    else:
-        dtx = DigitoolXML(xml_dirname)
+    dtx = DigitoolXML(xml_dirname)
     categorize = Categorize(dtx)
     c = MetadataConvertor(categorize)
     originalMetadata = dt.get_metadata(record)
     if originalMetadata is None:
-        if skip:
-            return False
-        else:
-            raise Exception("No metadata in {}".format(oai_id))
+        raise Exception("No metadata in {}".format(oai_id))
     if 'dc' in originalMetadata.keys(): #3112
-        convertedMetadataDC = c.convertDC(originalMetadata['dc'], oai_id)
+        convertedMetadata = c.convertDC(originalMetadata['dc'], oai_id)
     if 'record' in originalMetadata.keys(): #358, žádný průnik
-        convertedMetadataRecord = c.convertRecord(originalMetadata['record'], oai_id)
+        convertedMetadata = c.convertRecord(originalMetadata['record'], oai_id)
     attachements = list(dtx.get_attachements(oai_id))
     if test:
         click.clear()
@@ -97,9 +91,9 @@ def convertItem(oai_id, test, skip):
         print(attachements)
         #checked = click.confirm("Is converting OK?", default=True)
         checked = True
-        return (checked, convertedMetadataDC, attachements)
+        return (checked, convertedMetadata, attachements)
     else:
-        return (False, convertedMetadataDC, attachements)
+        return (False, convertedMetadata, attachements)
 
 @cli.command()
 @click.option('--item', default=104691, help='Digitool OAI id of the item')
