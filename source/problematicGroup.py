@@ -41,14 +41,26 @@ def preview(digitool, digitoolXMLnoskip, digitoolXMLall):
         try:
             attachements = list(digitoolXMLnoskip.get_attachements(oai_id))
         except Exception as e:
-            oai_id = str(e).split('/')[-1].split('.')[0]
+            oai_id2 = str(e).split('/')[-1].split('.')[0]
             try:
-                attachements = list(digitoolXMLall.get_attachements(oai_id))
+                attachements = list(digitoolXMLall.get_attachements(oai_id2))
                 if len(attachements) == 1 and 'thumbnail' in attachements[0]:
-                    print(oai_id, end = ", ")
-                #digitoolXMLall.is_preview(oai_id)
+                    pass
+                    #print(oai_id2, end = ", ")
+                    #print(oai_id2)
+                else:
+                    pass
+                    #print(oai_id, oai_id2)
+                    #print(oai_id2, end = ", ")
+                    #print(attachements[0])
+
             except:
-                pass #TODO
+                if oai_id == oai_id2:
+                    pass
+                    print(oai_id, end = ", ")
+                else:
+                    pass
+                    #print(oai_id, oai_id2)
 
 def unknown_type(digitool, digitoolXML, categorize):
     convertor = MetadataConvertor(categorize)

@@ -120,7 +120,8 @@ def convert(dspace_admin_passwd, dspace_admin_username, test, run, skip):
         dtx = DigitoolXML(xml_dirname, skip_missing=True)
     else:
         dtx = DigitoolXML(xml_dirname)
-    c = MetadataConvertor()
+    categorize = Categorize(dtx)
+    c = MetadataConvertor(categorize)
     ds = Dspace(dspace_admin_username,dspace_admin_passwd)
     
     if test:

@@ -1,4 +1,8 @@
 # TODO kodovani
+# ověřit ty se špatným kodovanim jestli je dspace nevyřešil
+# podivat do protokolu na konkretni verzi
+# zkusit nastavit těch šest českých v request
+# hledat patterny pro ty špatné znaky
 class MetadataConvertor:
     
     def __init__(self, categorize):

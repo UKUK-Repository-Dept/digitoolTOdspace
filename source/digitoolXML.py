@@ -11,6 +11,13 @@ def tag(root,tag):
     return subtree
 
 class DigitoolXML:
+    archived_items = [ 55067, 92174, 92176, 92204, 92013, 90458, 105049, 105381, 105369, 105371, 
+            54933, 90456, 62921, 92170, 92182, 90305, 90294, 89032, 90450, 90455, 90459, 92069, 
+            90446, 92186, 90489, 91982, 91608, 91612, 91928, 90461, 90470, 90452, 92217, 90314, 
+            82518, 92085, 91998, 90477, 90478, 84003, 92171, 92168, 92197, 90493, 89027, 56213, 
+            92194, 92047, 90465, 90467, 90472, 90479, 90453, 90445, 90325, 92173, 92180, 88940, 
+            89035, 90485, 90468, 96739, 89034, 61688, 88880, 90474, 90484, 90336, 99996 ]
+
     def __init__(self, dirname, skip_missing = False):
         self.dirname = dirname
         self.xml_dirname = dirname+'/digital_entities'
@@ -20,9 +27,13 @@ class DigitoolXML:
         if self.skip_missing:
             try:
                 tree = ET.parse(self.xml_dirname+'/'+str(oai_id)+".xml")
-            except:
+            except Exception as e:
                 return
         else:
+            try:
+                tree = ET.parse(self.xml_dirname+'/'+str(oai_id)+".xml")
+            except Exception as e:
+                raise e
             tree = ET.parse(self.xml_dirname+'/'+str(oai_id)+".xml")
 
         root = tree.getroot()
@@ -43,13 +54,6 @@ class DigitoolXML:
                     subrecords.append(pid)
         for record in subrecords:
             yield from self.get_attachements(record,full)
-
-    def is_preview(self, oai_id): #TODO smazat?
-        tree = ET.parse(self.xml_dirname+"/"+str(oai_id)+".xml")
-        root = tag(tree.getroot(),'digital_entity')
-        print("id", oai_id)
-        for child in root:
-            print(child.tag, child.text)
 
     def get_category(self, filename):
         tree = ET.parse(self.xml_dirname+"/"+filename)
