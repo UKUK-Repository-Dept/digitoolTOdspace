@@ -30,7 +30,7 @@ def categorize(group):
         bugs.oai(dt,dtx,c)
     elif group == 'forgot':
         bugs.forgot_attachements(dt,dtx,c,xml_dirname+"/ls_streams.txt")
-    elif group == 'noattachement': #TODO možná je tam průnik s těmi skipovanými
+    elif group == 'noattachement': 
         bugs.no_attachements(dt,dtx,c)
     elif group == 'weird':
         bugs.weird_attachements(dt,dtx,c)
