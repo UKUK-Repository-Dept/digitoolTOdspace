@@ -49,23 +49,88 @@ other note 330
 None note 137
 no xml file 53
 celkem 3523'''
-#    elif group == 'forgot':
-#        bugs.forgot_attachements(dt,dtx,c,xml_dirname+"/ls_streams.txt")
-#    elif group == 'noattachement':
-#        bugs.no_attachements(dt,dtx,c)
-#    elif group == 'weird':
-#        bugs.weird_attachements(dt,dtx,c)
-#    elif group == 'type':
-#        bugs.unknown_type(dt,dtx,c)
-#    elif group == 'preview':
-#        dtx_no_skip = DigitoolXML(xml_dirname)
-#        dtx_all = DigitoolXML('s-nahledy')
-#        bugs.preview(dt,dtx_no_skip,dtx_all)
-#        return
-#    elif group == 'all':
-#        bugs.forgot_attachements(dt,dtx,c,xml_dirname+"/ls_streams.txt")
-#        bugs.no_attachements(dt,dtx,c)
-#        bugs.weird_attachements(dt,dtx,c)
-#    c.print()
+
+def test_forgot():
+    dtx = DigitoolXML(xml_dirname)
+    c = Categorize(dtx)
+    dt = Digitool(digitool_category) 
+    dt.download_list()
+    bugs.forgot_attachements(dt,dtx,c,xml_dirname+"/ls_streams.txt")
+    assert str(c) == '''
+ksp 377
+mff 297
+psy 166
+uisk 7
+12345 37
+other ingest 3
+['HTF'] 74
+['FFUk', 'FF', 'FF UK', 'FFUK'] 70
+['etf', 'ETF'] 38
+['MFF'] 31
+['PF'] 19
+['FTVS'] 13
+['2LF', 'LF2', '2LF -'] 10
+['FSV', 'FSV IMS', 'FSV_IKSZ', 'FSV ISS', 'FSV IPS'] 10
+['FHS'] 3
+['3LF'] 2
+other note 0
+None note 62
+no xml file 0
+celkem 1219'''
+
+def test_noattachement():
+    dtx = DigitoolXML(xml_dirname)
+    c = Categorize(dtx)
+    dt = Digitool(digitool_category) 
+    dt.download_list()
+    bugs.no_attachements(dt,dtx,c)
+    assert str(c) == '''
+ksp 0
+mff 0
+psy 0
+uisk 0
+12345 0
+other ingest 0
+['HTF'] 0
+['FFUk', 'FF', 'FF UK', 'FFUK'] 0
+['etf', 'ETF'] 2
+['MFF'] 0
+['PF'] 0
+['FTVS'] 0
+['2LF', 'LF2', '2LF -'] 0
+['FSV', 'FSV IMS', 'FSV_IKSZ', 'FSV ISS', 'FSV IPS'] 0
+['FHS'] 0
+['3LF'] 0
+other note 0
+None note 5
+no xml file 53
+celkem 60'''
 
 
+def test_weird():
+    dtx = DigitoolXML(xml_dirname)
+    c = Categorize(dtx)
+    dt = Digitool(digitool_category) 
+    dt.download_list()
+    bugs.weird_attachements(dt,dtx,c)
+    assert str(c) == '''
+ksp 0
+mff 0
+psy 4
+uisk 0
+12345 0
+other ingest 31
+['HTF'] 0
+['FFUk', 'FF', 'FF UK', 'FFUK'] 2
+['etf', 'ETF'] 0
+['MFF'] 1
+['PF'] 0
+['FTVS'] 0
+['2LF', 'LF2', '2LF -'] 0
+['FSV', 'FSV IMS', 'FSV_IKSZ', 'FSV ISS', 'FSV IPS'] 0
+['FHS'] 0
+['3LF'] 0
+other note 4
+None note 14
+no xml file 0
+celkem 56'''
