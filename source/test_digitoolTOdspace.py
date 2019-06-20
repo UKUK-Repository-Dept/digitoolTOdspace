@@ -22,15 +22,33 @@ def test_convert():
         #print(oai_id)
         attachements = list(dtx.get_attachements(oai_id))
 
-#def test_categorize(group):
-#    #TODO všechny dalši skupiny viz ostatni TODO
-#
-#    dtx = DigitoolXML(xml_dirname)
-#    c = Categorize(dtx)
-#    dt = Digitool(digitool_category) 
-#    dt.download_list()
-#    if group == 'oai':
-#        bugs.oai(dt,dtx,c)
+def test_oai():
+    dtx = DigitoolXML(xml_dirname)
+    c = Categorize(dtx)
+    dt = Digitool(digitool_category) 
+    dt.download_list()
+    bugs.oai(dt,dtx,c)
+    assert str(c) == '''
+ksp 57
+mff 3
+psy 2176
+uisk 0
+12345 0
+other ingest 52
+['HTF'] 5
+['FFUk', 'FF', 'FF UK', 'FFUK'] 503
+['etf', 'ETF'] 59
+['MFF'] 56
+['PF'] 24
+['FTVS'] 0
+['2LF', 'LF2', '2LF -'] 1
+['FSV', 'FSV IMS', 'FSV_IKSZ', 'FSV ISS', 'FSV IPS'] 18
+['FHS'] 44
+['3LF'] 5
+other note 330
+None note 137
+no xml file 53
+celkem 3523'''
 #    elif group == 'forgot':
 #        bugs.forgot_attachements(dt,dtx,c,xml_dirname+"/ls_streams.txt")
 #    elif group == 'noattachement':

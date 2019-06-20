@@ -1,5 +1,5 @@
 class Categorize():
-    ingests = ["ksp", "mff", "psy", "Dousova", "uisk", "Hubl", "smes", "nadm_velikost", "12345"] 
+    ingests = ["ksp", "mff", "psy", "uisk", "12345"] 
     notes = [["HTF"],["FFUk","FF","FF UK","FFUK"],["etf","ETF"],["MFF"],["PF"],["FTVS"],["2LF","LF2","2LF -"],["FSV","FSV IMS","FSV_IKSZ","FSV ISS","FSV IPS"],["FHS"],["3LF"]]
     category = {}
 
@@ -57,10 +57,11 @@ class Categorize():
             if other:
                 self.category['other note'].setdefault(oai_id,[]).append(description)
 
-    def print(self):
+    def __str__(self):
         sum = 0
+        output = ""
         for tag, list_id in self.category.items():
             sum += len(list_id)
-            print(tag,len(list_id))
-        print("celkem",sum)
-        #print(self.category["['FFUk', 'FF', 'FF UK', 'FFUK']"])
+            output = output + "\n" + tag + " " + str(len(list_id))
+        output = output + "\n" + "celkem " + str(sum)
+        return output

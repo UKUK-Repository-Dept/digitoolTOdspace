@@ -45,7 +45,7 @@ def categorize(group):
         bugs.forgot_attachements(dt,dtx,c,xml_dirname+"/ls_streams.txt")
         bugs.no_attachements(dt,dtx,c)
         bugs.weird_attachements(dt,dtx,c)
-    c.print()
+    print(c)
 
 
 @cli.command()
