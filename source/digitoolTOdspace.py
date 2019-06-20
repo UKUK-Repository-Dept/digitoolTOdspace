@@ -18,7 +18,7 @@ def cli():
     pass
 
 @cli.command()
-@click.option('--group', prompt='group', type=click.Choice(['all','oai','forgot','noattachement','weird','preview','type']), help='Choose group to categorize')
+@click.option('--group', prompt='group', type=click.Choice(['all','oai','forgot','noattachement','weird','type']), help='Choose group to categorize')
 def categorize(group):
     #TODO všechny dalši skupiny viz ostatni TODO
 
@@ -98,17 +98,15 @@ def convertItem(oai_id, test):
 @cli.command()
 @click.option('--item', default=104691, help='Digitool OAI id of the item')
 @click.option('--test/--no-test', default=False, help='Ask user to check convert')
-@click.option('--skip/--no-skip', default=False, help='Skip items with known errors')
-def convert_item(item, test, skip):
-    convertItem(item, test, skip)
+def convert_item(item, test):
+    convertItem(item, test)
 
 @cli.command()
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
 @click.option('--dspace_admin_passwd', prompt='passwd', help='Dspace admin passwd')
 @click.option('--test/--no-test', default=False, help='Ask user to check convert')
 @click.option('--run/--no-run', default=False, help='Pushih converted data to server')
-@click.option('--skip/--no-skip', default=False, help='Skip items with known errors')
-def convert(dspace_admin_passwd, dspace_admin_username, test, run, skip):
+def convert(dspace_admin_passwd, dspace_admin_username, test, run):
     dt = Digitool(digitool_category) 
     dt.download_list()
     if skip:
