@@ -14,7 +14,7 @@ def forgot_attachements(digitool, digitoolXML, categorize, xml_attachements_list
     for row in open(xml_attachements_list,"r"):
         if not row[:-1] in attachements:
             oai_id = row.split("_")[0]
-            categorize.categorize_item(oai_id,"opomenuty soubor {} - bez metadat".format(oai_id))
+            categorize.categorize_item(oai_id,"opomenuty soubor bez metadat".format(oai_id))
 
 def no_attachements(digitool, digitoolXML, categorize):
     for record in digitool.list:

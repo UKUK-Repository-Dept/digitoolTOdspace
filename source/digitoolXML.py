@@ -90,6 +90,9 @@ class DigitoolXML:
                     subrecords.append(pid)
         for record in subrecords:
             yield from self.get_attachements(record,full)
+    
+    def get_metadata(self, oai_id):
+        return "hurá"
 
     def get_category(self, oai_id):
         if int(oai_id) in self.skipItems:

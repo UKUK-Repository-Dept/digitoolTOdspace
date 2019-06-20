@@ -62,4 +62,6 @@ class Categorize():
             sum += len(list_id)
             output = output + "\n" + tag + " " + str(len(list_id))
         output = output + "\n" + "celkem " + str(sum)
+        #for oai_id, reasons in self.category['None note'].items():
+        #    output = output + "\n" + str(oai_id) + " " + str(reasons)
         return output
