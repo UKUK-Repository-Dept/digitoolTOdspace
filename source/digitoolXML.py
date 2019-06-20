@@ -92,6 +92,8 @@ class DigitoolXML:
             yield from self.get_attachements(record,full)
 
     def get_category(self, oai_id):
+        if int(oai_id) in self.skipItems:
+            return
         tree = ET.parse(self.xml_dirname+"/"+oai_id+".xml")
         root = tree.getroot()
         label = tag(tag(tag(root,"digital_entity"),"control"),"label")

@@ -47,8 +47,7 @@ other ingest 52
 ['3LF'] 5
 other note 330
 None note 137
-no xml file 53
-celkem 3523'''
+celkem 3470'''
 
 def test_forgot():
     dtx = DigitoolXML(xml_dirname)
@@ -75,7 +74,6 @@ other ingest 3
 ['3LF'] 2
 other note 0
 None note 62
-no xml file 0
 celkem 1219'''
 
 def test_noattachement():
@@ -103,8 +101,7 @@ other ingest 0
 ['3LF'] 0
 other note 0
 None note 5
-no xml file 53
-celkem 60'''
+celkem 7'''
 
 
 def test_weird():
@@ -132,5 +129,4 @@ other ingest 31
 ['3LF'] 0
 other note 4
 None note 14
-no xml file 0
 celkem 56'''

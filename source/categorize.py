@@ -14,7 +14,6 @@ class Categorize():
             self.category[str(tags)] = {}
         self.category['other note'] = {}
         self.category['None note'] = {}
-        self.category['no xml file'] = {}
 
     def categorize_list(self, oai_ids, descriptions):
         for oai_id in oai_ids:
@@ -24,10 +23,9 @@ class Categorize():
         self.categorize_ingest(oai_id, description)
     
     def categorize_ingest(self, oai_id, description):
-        try:
+        if  self.dtx.get_category(oai_id):
             label, ingest, note = self.dtx.get_category(oai_id)
-        except:
-            self.category['no xml file'].setdefault(oai_id,[]).append("no xml" + description)
+        else:
             return
         for tag in self.ingests:
             if ingest != None and tag in ingest:
