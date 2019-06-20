@@ -91,8 +91,8 @@ class DigitoolXML:
         for record in subrecords:
             yield from self.get_attachements(record,full)
 
-    def get_category(self, filename):
-        tree = ET.parse(self.xml_dirname+"/"+filename)
+    def get_category(self, oai_id):
+        tree = ET.parse(self.xml_dirname+"/"+oai_id+".xml")
         root = tree.getroot()
         label = tag(tag(tag(root,"digital_entity"),"control"),"label")
         note = tag(tag(tag(root,"digital_entity"),"control"),"note")

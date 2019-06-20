@@ -25,7 +25,7 @@ class Categorize():
     
     def categorize_ingest(self, oai_id, description):
         try:
-            label, ingest, note = self.dtx.get_category(oai_id+".xml")
+            label, ingest, note = self.dtx.get_category(oai_id)
         except:
             self.category['no xml file'].setdefault(oai_id,[]).append("no xml" + description)
             return
