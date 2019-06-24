@@ -1,8 +1,5 @@
-# TODO kodovani
-# ověřit ty se špatným kodovanim jestli je dspace nevyřešil
-# podivat do protokolu na konkretni verzi
-# zkusit nastavit těch šest českých v request
-# hledat patterny pro ty špatné znaky
+import re
+
 class MetadataConvertor:
     
     def __init__(self, categorize):
@@ -38,13 +35,41 @@ class MetadataConvertor:
                 { "key": "dc.description.abstract", "language": "pt_BR", "value": "ABSTRACT" }, 
                 { "key": "dc.title", "language": "pt_BR", "value": "Pokus" } 
                 ]}
-    thesisName = [ "Mgr.","Bc.","PhDr.","PhD.","PhDr","Doc.","ThDr." ]
+    
+    thesisName = [ "Mgr.","Bc.","PhDr.","PhD.","PhDr","Doc.","ThDr.",'RNDr.', 'MUDr.','JUDr.','ThD.' ]
+    thesisNameConvert = {
+            'Mgr': 'Mgr.',
+            'Phdr.': 'PhDr.',
+            'Mgr,': 'Mgr.',
+            'Bc..': 'Bc.',
+            'mgr.': 'Mgr.',
+            'Phd.': 'PhD.',
+            'Mgt.': 'Mgr.',
+        }
     thesisLevel = {
         "Diplomová práce":"TODO",
         "Bakalářská práce":"TODO",
         "Rigorózní práce":"TODO",
         "Habilitační práce":"TODO",
         "Dizertační práce":"Doktorský",
+        }
+    thesisGrantorFaculty = {
+        'Filozofická fakulta',
+        'Filozoficko-historická fakulta',
+        'Fakulta sociálních věd a publicistiky',
+        'Fakulta sociálních věd',
+        'Pedagogická fakulta',
+        'Fakulta humanitních studií',
+        'Husova evangelická bohoslovecká fakulta', #TODO vážně všechny tři?
+        'Husova československá evangelická fakulta',
+        'Husova československá evangelická fakulta bohoslovecká',
+        'Komenského evangelická bohoslovecká fakulta',
+        'Komenského bohoslovecká fakulta v Praze',
+        'Evangelická teologická fakulta',
+        'Matematicko-fyzikální fakulta',
+        '1 lékařská fakulta',
+        '2 lékařská fakulta',
+        '3 lékařská fakulta',
         }
 
     preconvert = {
@@ -67,11 +92,13 @@ class MetadataConvertor:
             if not level in self.thesisLevel.keys():
                 raise Exception("Unknown thesis level {}".format(level))
             name = name[:-1].strip()
-            #print(name)
-            if not name in self.thesisName.keys():
-                #raise Exception("Unknown thesis level {}".format(level))
-                print(oai_id,itemClass)
+            if name in self.thesisNameConvert.keys():
+                name = self.thesisNameConvert[name]
+            if not name in self.thesisName:
+                raise Exception("Unknown title {}".format(thesisName))
             origin, year = origin.split(",")
+            year = year.strip()
+            assert 1919 < int(year) < 2007
             origin = origin.strip()
             if "Univerzita Karlova. " == origin[:20]:
                 origin = origin[20:]
@@ -79,6 +106,8 @@ class MetadataConvertor:
                 faculty, department = origin.split(".",1)
             else:
                 faculty, department = origin, None
+            if not faculty in self.thesisGrantorFaculty:
+                raise Exception("Unknown faculty {}".format(faculty))
             #print('hurá',itemClass, faculty, department, year)
         
         if tag502 == []:
@@ -89,6 +118,10 @@ class MetadataConvertor:
         elif oai_id in ['67121', '69887', '71407' ]:
             pass #TODO potřebují ruční zásah
             return
+        elif oai_id in [ '74355', '59305', '67481' ]:
+            return # nesmyslný rok TODO
+        elif oai_id in [ '75140', '77462', '77463'  ]:
+            return # nesmyslná fakulta či katedra
         elif len(tag502) == 1 and tag502[0] == 'Diplomová práce':
             pass #TODO
             return
@@ -113,8 +146,22 @@ class MetadataConvertor:
         tag = tag.replace('Univerzita Karlova.F','Univerzita Karlova. F',1)
         tag = tag.replace('Univerzita Karlova v Praze.','Univerzita Karlova.',1)
         tag = tag.replace('Univerzita Karlova. Univerzita Karlova.','Univerzita Karlova.',1)
+        tag = tag.replace('Univerzita Karlova. Katedra psychologie','Univerzita Karlova. Filozofikcá fakulta. Katedra psychologie',1)
+        tag = tag.replace('Univerzita Karlova. Katedra věd o zemích Asie a Afriky','Univerzita Karlova. Filozofikcá fakulta. Katedra věd o zemích Asie a Afriky',1)
+        tag = tag.replace('Univerzita Karlova. Katedra andragogiky a personálního řízení','Univerzita Karlova. Filozofikcá fakulta. Katedra andragogiky a personálního řízení',1)
+        tag = tag.replace('Univerzita Karlova. katedra andragogiky a personálního řízení','Univerzita Karlova. Filozofikcá fakulta. Katedra andragogiky a personálního řízení',1)
+        tag = tag.replace('Univerzita Karlova. Institut mezinárodních studií','Univerzita Karlova. Fakulta sociálních věd. Institut mezinárodních studií',1)
+        tag = tag.replace('Filozofikcá','Filozofická',1)
+        tag = tag.replace('Filozofciká','Filozofická',1)
+        tag = tag.replace('Filozoficka','Filozofická',1)
+        tag = tag.replace('Filozofivká','Filozofická',1)
+        tag = tag.replace('Fiolozofická','Filozofická',1)
+        tag = tag.replace('telogická','teologická',1)
         tag = tag.replace('fakulta,','fakulta.',1)
+        tag = tag.replace('fakzulta.','fakulta.',1)
         tag = tag.replace('1. lékařská', '1 lékařská')
+        tag = tag.replace('2. lékařská', '2 lékařská')
+        tag = tag.replace('3. lékařská', '3 lékařská')
         tag = tag.replace('Disert', 'Dizert')
         tag = tag.replace('Dizertace', 'Dizertační práce')
         tag = tag.replace('Disetační', 'Dizertační')
