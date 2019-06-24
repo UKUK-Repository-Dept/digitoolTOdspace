@@ -24,27 +24,26 @@ def categorize(group):
 
     dtx = DigitoolXML(xml_dirname)
     c = Categorize(dtx)
-    dt = Digitool(digitool_category) 
-    dt.download_list()
+    oai_ids = Digitool(digitool_category).download_list()
     if group == 'oai':
-        bugs.oai(dt,dtx,c)
+        bugs.oai(oai_ids,dtx,c)
     elif group == 'forgot':
-        bugs.forgot_attachements(dt,dtx,c,xml_dirname+"/ls_streams.txt")
+        bugs.forgot_attachements(oai_ids,dtx,c,xml_dirname+"/ls_streams.txt")
     elif group == 'noattachement': 
-        bugs.no_attachements(dt,dtx,c)
+        bugs.no_attachements(oai_ids,dtx,c)
     elif group == 'weird':
-        bugs.weird_attachements(dt,dtx,c)
+        bugs.weird_attachements(oai_ids,dtx,c)
     elif group == 'type':
-        bugs.unknown_type(dt,dtx,c)
+        bugs.unknown_type(oai_ids,dtx,c)
     elif group == 'preview':
         dtx_no_skip = DigitoolXML(xml_dirname)
         dtx_all = DigitoolXML('s-nahledy')
-        bugs.preview(dt,dtx_no_skip,dtx_all)
+        bugs.preview(oai_ids,dtx_no_skip,dtx_all)
         return
     elif group == 'all':
-        bugs.forgot_attachements(dt,dtx,c,xml_dirname+"/ls_streams.txt")
-        bugs.no_attachements(dt,dtx,c)
-        bugs.weird_attachements(dt,dtx,c)
+        bugs.forgot_attachements(oai_ids,dtx,c,xml_dirname+"/ls_streams.txt")
+        bugs.no_attachements(oai_ids,dtx,c)
+        bugs.weird_attachements(oai_ids,dtx,c)
     print(c)
 
 
@@ -116,16 +115,14 @@ def convert_item(item, test):
 
 @click.option('--run/--no-run', default=False, help='Pushih converted data to server')
 def convert(dspace_admin_passwd, dspace_admin_username, test, run):
-    dt = Digitool(digitool_category) 
-    dt.download_list()
+    oai_ids = Digitool(digitool_category).download_list()
     dtx = DigitoolXML(xml_dirname)
     categorize = Categorize(dtx)
     c = MetadataConvertor(categorize)
     ds = Dspace(dspace_admin_username,dspace_admin_passwd)
 
     problems = []
-    for record in dt.list:
-        oai_id = dt.get_oai_id(record)
+    for oai_id in oai_ids:
         checked, convertedMetadata, attachements = convertItem(oai_id, test)
         if not checked:
             problems.append(oai_id)

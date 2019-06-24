@@ -11,13 +11,11 @@ def test_convertItem():
     a = convertItem(104691, False)
 
 def test_convert():
-    dt = Digitool(digitool_category) 
-    dt.download_list()
+    oai_ids = Digitool(digitool_category).download_list()
     dtx = DigitoolXML(xml_dirname)
     categorize = Categorize(dtx)
     c = MetadataConvertor(categorize)
-    for record in dt.list:
-        oai_id = dt.get_oai_id(record)
+    for oai_id in oai_ids:
        # checked, convertedMetadata, attachements = convertItem(oai_id, False)
         #print(oai_id)
         attachements = list(dtx.get_attachements(oai_id))
@@ -25,9 +23,8 @@ def test_convert():
 def test_oai():
     dtx = DigitoolXML(xml_dirname)
     c = Categorize(dtx)
-    dt = Digitool(digitool_category) 
-    dt.download_list()
-    bugs.oai(dt,dtx,c)
+    oai_ids = Digitool(digitool_category).download_list()
+    bugs.oai(oai_ids,dtx,c)
     assert str(c) == '''
 ksp 57
 mff 3
@@ -52,9 +49,8 @@ celkem 3470'''
 def test_forgot():
     dtx = DigitoolXML(xml_dirname)
     c = Categorize(dtx)
-    dt = Digitool(digitool_category) 
-    dt.download_list()
-    bugs.forgot_attachements(dt,dtx,c,xml_dirname+"/ls_streams.txt")
+    oai_ids = Digitool(digitool_category).download_list()
+    bugs.forgot_attachements(oai_ids,dtx,c,xml_dirname+"/ls_streams.txt")
     assert str(c) == '''
 ksp 377
 mff 297
@@ -79,9 +75,8 @@ celkem 1219'''
 def test_noattachement():
     dtx = DigitoolXML(xml_dirname)
     c = Categorize(dtx)
-    dt = Digitool(digitool_category) 
-    dt.download_list()
-    bugs.no_attachements(dt,dtx,c)
+    oai_ids = Digitool(digitool_category).download_list()
+    bugs.no_attachements(oai_ids,dtx,c)
     assert str(c) == '''
 ksp 0
 mff 0
@@ -107,9 +102,8 @@ celkem 7'''
 def test_weird():
     dtx = DigitoolXML(xml_dirname)
     c = Categorize(dtx)
-    dt = Digitool(digitool_category) 
-    dt.download_list()
-    bugs.weird_attachements(dt,dtx,c)
+    oai_ids = Digitool(digitool_category).download_list()
+    bugs.weird_attachements(oai_ids,dtx,c)
     assert str(c) == '''
 ksp 0
 mff 0

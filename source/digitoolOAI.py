@@ -43,6 +43,11 @@ class Digitool:
                 else:
                     raise "Unknown tag"
         self.list = list(recursion(url,None))
+        oai_ids = []
+        for record in self.list:
+            oai_ids.append(self.get_oai_id(record))
+        return oai_ids
+
 
     def get_item(self, oai_id):
         url = ( "http://" + self.server + "/OAI-PUB?" +  
