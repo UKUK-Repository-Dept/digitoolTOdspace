@@ -74,6 +74,7 @@ def convertItem(oai_id, test):
     c = MetadataConvertor(categorize)
     originalMetadata = dt.get_metadata(record)
     originalMetadataXML = dtx.get_metadata(oai_id)
+    convertedMetadata = "TODO"
     #if originalMetadata is None:
     #    raise Exception("No metadata in {}".format(oai_id))
     #if 'dc' in originalMetadata.keys(): #3112
