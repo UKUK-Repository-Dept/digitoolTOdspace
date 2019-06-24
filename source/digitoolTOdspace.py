@@ -73,19 +73,26 @@ def convertItem(oai_id, test):
     categorize = Categorize(dtx)
     c = MetadataConvertor(categorize)
     originalMetadata = dt.get_metadata(record)
-    if originalMetadata is None:
-        raise Exception("No metadata in {}".format(oai_id))
-    if 'dc' in originalMetadata.keys(): #3112
-        convertedMetadata = c.convertDC(originalMetadata['dc'], oai_id)
-    if 'record' in originalMetadata.keys(): #358, žádný průnik
-        convertedMetadata = c.convertRecord(originalMetadata['record'], oai_id)
+    originalMetadataXML = dtx.get_metadata(oai_id)
+    #if originalMetadata is None:
+    #    raise Exception("No metadata in {}".format(oai_id))
+    #if 'dc' in originalMetadata.keys(): #3112
+    #    convertedMetadata = c.convertDC(originalMetadata['dc'], oai_id)
+    #if 'record' in originalMetadata.keys(): #358, žádný průnik
+    #    convertedMetadata = c.convertRecord(originalMetadata['record'], oai_id)
+    if 'marc' in originalMetadataXML.keys():
+        convertedMetadata2 = c.convertMarc(originalMetadataXML['marc'], oai_id)
+    #else:
+    #    raise Exception("No metadata in {}".format(oai_id))
+
     attachements = list(dtx.get_attachements(oai_id))
     if test:
-        click.clear()
+        #click.clear()
         print("converting ",oai_id)
         print("\noriginalMetadata:")
-        for i in originalMetadata:
-            c.printMetadata(originalMetadata[i])
+        #for i in originalMetadata:
+        #    c.printMetadata(originalMetadata[i])
+#        print('xml',originalMetadataXML)
         print("\nconvertedMetadata:")
         print("\nattachements:")
         print(attachements)
@@ -105,23 +112,20 @@ def convert_item(item, test):
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
 @click.option('--dspace_admin_passwd', prompt='passwd', help='Dspace admin passwd')
 @click.option('--test/--no-test', default=False, help='Ask user to check convert')
+
 @click.option('--run/--no-run', default=False, help='Pushih converted data to server')
 def convert(dspace_admin_passwd, dspace_admin_username, test, run):
     dt = Digitool(digitool_category) 
     dt.download_list()
-    if skip:
-        dtx = DigitoolXML(xml_dirname, skip_missing=True)
-    else:
-        dtx = DigitoolXML(xml_dirname)
+    dtx = DigitoolXML(xml_dirname)
     categorize = Categorize(dtx)
     c = MetadataConvertor(categorize)
     ds = Dspace(dspace_admin_username,dspace_admin_passwd)
-    
-    if test:
-        problems = []
-    for record in dt.list[:10]:
+
+    problems = []
+    for record in dt.list:
         oai_id = dt.get_oai_id(record)
-        checked, convertedMetadata, attachements = convertItem(oai_id, test, skip)
+        checked, convertedMetadata, attachements = convertItem(oai_id, test)
         if not checked:
             problems.append(oai_id)
         if run:

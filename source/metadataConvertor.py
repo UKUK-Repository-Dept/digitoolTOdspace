@@ -38,9 +38,106 @@ class MetadataConvertor:
                 { "key": "dc.description.abstract", "language": "pt_BR", "value": "ABSTRACT" }, 
                 { "key": "dc.title", "language": "pt_BR", "value": "Pokus" } 
                 ]}
-    
-    def convertType(self, year):
-        return 'vysledný typ'
+    thesisName = [ "Mgr.","Bc.","PhDr.","PhD.","PhDr","Doc.","ThDr." ]
+    thesisLevel = {
+        "Diplomová práce":"TODO",
+        "Bakalářská práce":"TODO",
+        "Rigorózní práce":"TODO",
+        "Habilitační práce":"TODO",
+        "Dizertační práce":"Doktorský",
+        }
+
+    preconvert = {
+        "81846": 'Diplomová & Rigorózní práce--Univerzita Karlova. Filozofická fakulta. Katedra psychologie, 2000',
+        '74098': 'Diplomová práce (Mgr.)--Univerzita Karlova. Filozofická fakulta. Katedra sociologie, 1997',
+        '98661': 'Bakalářská práce (Bc.)--Univerzita Karlova. 2. lékařská fakulta, 2004',
+        '17196': 'Diplomová & Rigorózní práce--Univerzita Karlova. Matematicko-fyzikální fakulta, 2004',
+        '62940': 'Diplomová & Rigorózní práce—Univerzita Karlova. Filozofická fakulta. Katedra psychologie,1998',
+        '89739': 'Rigorózní práce (PhDr.)--Univerzita Karlova. Filozofická fakulta. Ústav informačních studií a knihovnictví, 2005',
+        '81829': 'Diplomová & Rigorózní práce--Univerzita Karlova. Filozofická fakulta. Katedra psychologie, 1999'
+        }
+
+    def convertType(self, tag502, oai_id):
+        #TODO Diplomová práce (Bc.)
+        def convertTypeCorrect(tag502):
+            itemClass, origin = tag502.split("--")
+            itemClass = itemClass.strip()
+            level, name = itemClass.split('(')
+            level = level.strip()
+            if not level in self.thesisLevel.keys():
+                raise Exception("Unknown thesis level {}".format(level))
+            name = name[:-1].strip()
+            #print(name)
+            if not name in self.thesisName.keys():
+                #raise Exception("Unknown thesis level {}".format(level))
+                print(oai_id,itemClass)
+            origin, year = origin.split(",")
+            origin = origin.strip()
+            if "Univerzita Karlova. " == origin[:20]:
+                origin = origin[20:]
+            if '.' in origin:
+                faculty, department = origin.split(".",1)
+            else:
+                faculty, department = origin, None
+            #print('hurá',itemClass, faculty, department, year)
+        
+        if tag502 == []:
+            pass #TODO
+            return
+        elif oai_id in self.preconvert:
+            tag502 = [self.preconvert[oai_id]]
+        elif oai_id in ['67121', '69887', '71407' ]:
+            pass #TODO potřebují ruční zásah
+            return
+        elif len(tag502) == 1 and tag502[0] == 'Diplomová práce':
+            pass #TODO
+            return
+        elif tag502[0] == 'Diplomová práce':
+            tag502=tag502[1:]
+        elif len(tag502) > 1 and tag502[1] == 'Diplomová práce':
+            tag502=tag502[:1]
+        elif len(tag502) > 1 and tag502[1] == tag502[0]:
+            tag502=tag502[:1]
+        #print(oai_id,tag502)
+        assert len(tag502) == 1
+        tag = tag502[0].strip()
+        if not "--" in tag:
+            tag = tag.replace('-','--',1)
+            tag = tag.replace('—','--',1)
+            tag = tag.replace('–','--',1)
+        tag = tag.replace('. .','.',1)
+        tag = tag.replace('Univerzita .','Univerzita Karlova.',1)
+        tag = tag.replace('Uverzita','Univerzita',1)
+        tag = tag.replace('Univerzita karlova.','Univerzita Karlova.',1)
+        tag = tag.replace('Univerzita Karlova,','Univerzita Karlova.',1)
+        tag = tag.replace('Univerzita Karlova.F','Univerzita Karlova. F',1)
+        tag = tag.replace('Univerzita Karlova v Praze.','Univerzita Karlova.',1)
+        tag = tag.replace('Univerzita Karlova. Univerzita Karlova.','Univerzita Karlova.',1)
+        tag = tag.replace('fakulta,','fakulta.',1)
+        tag = tag.replace('1. lékařská', '1 lékařská')
+        tag = tag.replace('Disert', 'Dizert')
+        tag = tag.replace('Dizertace', 'Dizertační práce')
+        tag = tag.replace('Disetační', 'Dizertační')
+        tag = tag.replace('Dizertá', 'Dizerta')
+        try: 
+            1919 < int(tag[-4:]) < 2007
+        except:
+            return #TODO
+        if ". " == tag[-6:-4]:
+            tag = tag[:-6] + ", " + tag[-4:]
+        if "a." == tag[-6:-4]:
+            tag = tag[:-6] + "a, " + tag[-4:]
+        if "a " == tag[-6:-4]:
+            tag = tag[:-6] + "a, " + tag[-4:]
+        if "e " == tag[-6:-4]:
+            tag = tag[:-6] + "e, " + tag[-4:]
+        if ",," == tag[-6:-4]:
+            tag = tag[:-6] + ", " + tag[-4:]
+        try:
+            return convertTypeCorrect(tag)
+        except:
+            #print(oai_id, tag502)
+            pass #TODO
 
     def convertYear(self, year):
         if year[0] == '[':
@@ -57,6 +154,117 @@ class MetadataConvertor:
         assert int(year) > 1919
         assert int(year) < 2019
         return year
+
+    def convertMarc(self, metadata, oai_id):
+        converted = []
+        hui = []
+        for tags, value in metadata:
+            tag = tags['tag']
+            if tag == '040':
+                pass
+            elif tag == '041':
+                pass
+            elif tag == '044':
+                pass
+            elif tag == '072':
+                pass
+            elif tag == '080':
+                pass
+            elif tag == '100':
+                pass
+            elif tag == '245':
+                #print(value)
+                pass
+            elif tag == '246':
+                pass
+            elif tag == '260':
+                pass
+            elif tag == '264':
+                pass
+            elif tag == '300':
+                pass
+            elif tag == '336':
+                pass
+            elif tag == '337':
+                pass
+            elif tag == '338':
+                pass
+            elif tag == '340':
+                pass
+            elif tag == '440':
+                pass
+            elif tag == '500':
+                pass
+            elif tag == '502':
+                hui.append(value)
+            elif tag == '504':
+                pass
+            elif tag == '506':
+                pass
+            elif tag == '520':
+                pass
+            elif tag == '526':
+                pass
+            elif tag == '530':
+                pass
+            elif tag == '538':
+                pass
+            elif tag == '540':
+                pass
+            elif tag == '546':
+                pass
+            elif tag == '586':
+                pass
+            elif tag == '600':
+                pass
+            elif tag == '610':
+                pass
+            elif tag == '646':
+                pass
+            elif tag == '648':
+                pass
+            elif tag == '650':
+                pass
+            elif tag == '651':
+                pass
+            elif tag == '653':
+                pass
+            elif tag == '655':
+                pass
+            elif tag == '700':
+                pass
+            elif tag == '710':
+                pass
+            elif tag == '850':
+                pass
+            elif tag == '856':
+                pass
+            elif tag == '910':
+                pass
+            elif tag == '980':
+                pass
+            elif tag == '981':
+                pass
+            elif tag == '988':
+                pass
+            elif tag == '993':
+                pass
+            elif tag == '997':
+                pass
+            elif tag == '998':
+                pass
+            elif tag == 'FVS':
+                pass
+            elif tag == 'KLS':
+                pass
+            elif tag == 'SID':
+                pass
+            elif tag == 'KVS':
+                pass
+            else:
+                raise Exception("Unknown tag {}".format(tag))
+        self.convertType(hui,oai_id)
+        return converted
 
     def convertDC(self, record, oai_id):
         for tag, value in record:
@@ -141,6 +349,6 @@ class MetadataConvertor:
                 raise Exception("Unknown tag")
         return self.example_return
 
-    def printMetadata(metadata):
+    def printMetadata(self,metadata):
         for tag, value in metadata:
             print(tag, value)

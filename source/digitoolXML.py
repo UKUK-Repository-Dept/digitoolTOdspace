@@ -92,7 +92,25 @@ class DigitoolXML:
             yield from self.get_attachements(record,full)
     
     def get_metadata(self, oai_id):
-        return "hurá"
+        def parseMarc(value):
+            tree = ET.fromstring(value)
+            for field in tree:
+                if field.tag == '{http://www.loc.gov/MARC21/slim}datafield':
+                    for subfield in field:
+                        yield (field.attrib,subfield.text)
+        if int(oai_id) in self.skipItems:
+            return {}
+        tree = ET.parse(self.xml_dirname+"/"+str(oai_id)+".xml")
+        root = tree.getroot()
+        mds = tag(tag(root,"digital_entity"),"mds")
+        res = {}
+        for child in mds:
+            name = tag(child,"name")
+            metadataType = tag(child,"type")
+            value = tag(child,"value")
+            if name.text == 'descriptive' and metadataType.text == 'marc':
+                res['marc'] = list(parseMarc(value.text))
+        return res
 
     def get_category(self, oai_id):
         if int(oai_id) in self.skipItems:
