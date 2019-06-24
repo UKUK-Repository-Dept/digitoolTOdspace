@@ -71,6 +71,58 @@ class MetadataConvertor:
         '2 lékařská fakulta',
         '3 lékařská fakulta',
         }
+    thesisGrantorDepartment = {
+        'Katedra sociologie',
+        'Katedra psychologie',
+        'Katedra speciální pedagogiky',
+        'Katedra marxisticko-leninskej filozofie',
+        'Institut ekonomických studií',
+        'Institut sociologických studií. Katedra sociologie',
+        'Katedra výchovy a vzdělávání dospělých',
+        'Katedra andragogiky a personálního řízení',
+        'Katedra obecné antropologie',
+        'Institut sociologických studií',
+        'Katedra řízení a supervize v sociálních a zdravotnických organizacích',
+        'Ústav informačních studií a knihovnictví',
+        'Katedra filosofie',
+        'Katedra psychofyziologie a klinické psychologie',
+        'Katedra softwarového inženýrství',
+        'Ústav filozofie a religionistiky',
+        'Katedra nadragogiky a personálního řízení',
+        'Katedra tělesné výchovy a sportu',
+        'Katedra osvěty a výchovy dospělých',
+        'Katedra pedagogiky',
+        'Katedra Starého zákona',
+        'Institut komunikačních studií a žurnalistiky',
+        'Institut komunikačních studií a žurnalistiky. Katedra mediálních studií',
+        'Katedra systematické teologie',
+        'Katedra socioloogie',
+        'Katedra věd o zemích Asie a Afriky',
+        'Katedra elektronické kultury a sémiotiky',
+        'Katedra teorie kultury',
+        'Katedra biblických věd',
+        'Katedra české literatury a literární vědy',
+        'Katedra sociologie a filozofie',
+        'Katedra sociální teologie',
+        'Katedra církevních dějin',
+        'Katedra marxisticko-leninské sociologie',
+        'Katedra teorie kultury',
+        'Institut mezinárodních studií. Katedra západoevropských studií',
+        'Psychologický seminář',
+        'Katedra výtvarné výchovy',
+        'Katedra sociologie a filosofie',
+        'Institut politologických studií',
+        'Katedra marxisticko-leninské filosofie',
+        'Katedra andragogika personálního řízení',
+
+
+
+
+
+
+
+        'Katedra', #TODO
+        }
 
     preconvert = {
         "81846": 'Diplomová & Rigorózní práce--Univerzita Karlova. Filozofická fakulta. Katedra psychologie, 2000',
@@ -108,7 +160,10 @@ class MetadataConvertor:
                 faculty, department = origin, None
             if not faculty in self.thesisGrantorFaculty:
                 raise Exception("Unknown faculty {}".format(faculty))
-            #print('hurá',itemClass, faculty, department, year)
+            department = department.strip()
+            if not department in self.thesisGrantorDepartment:
+                raise Exception("Unknown department {}".format(department))
+            return (level, name, 'Univerzita Karlova', faculty, department, year)
         
         if tag502 == []:
             pass #TODO
@@ -157,11 +212,19 @@ class MetadataConvertor:
         tag = tag.replace('Filozofivká','Filozofická',1)
         tag = tag.replace('Fiolozofická','Filozofická',1)
         tag = tag.replace('telogická','teologická',1)
-        tag = tag.replace('fakulta,','fakulta.',1)
-        tag = tag.replace('fakzulta.','fakulta.',1)
         tag = tag.replace('1. lékařská', '1 lékařská')
         tag = tag.replace('2. lékařská', '2 lékařská')
         tag = tag.replace('3. lékařská', '3 lékařská')
+        tag = tag.replace('fakulta,','fakulta.',1)
+        tag = tag.replace('fakzulta.','fakulta.',1)
+        tag = tag.replace('Kateda','Katedra',1)
+        tag = tag.replace('katedra','Katedra',1)
+        tag = tag.replace('Katerdra','Katedra',1)
+        tag = tag.replace('Katerda','Katedra',1)
+        tag = tag.replace('psyvhologie','psychologie',1)
+        tag = tag.replace('psychlogie','psychologie',1)
+        tag = tag.replace('pésychologie','psychologie',1)
+        tag = tag.replace('psychologie','psychologie',1)
         tag = tag.replace('Disert', 'Dizert')
         tag = tag.replace('Dizertace', 'Dizertační práce')
         tag = tag.replace('Disetační', 'Dizertační')
