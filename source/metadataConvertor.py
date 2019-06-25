@@ -12,6 +12,7 @@ class Metadata:
     def __init__(self, categorize, oai_id):
         self.categorize = categorize
         self.oai_id = oai_id
+        metadata = {}
     
     def convertMarc(self, metadata):
         converted = []
@@ -124,10 +125,16 @@ class Metadata:
         convertRealTag502(hui,self.oai_id,self.categorize)
         return converted
     
-    def convertDC(self, metadata):
-        converted = []
-        hui = []
-        for tag, value in metadata:
+    def convertDC(self, metadata1):
+        metadata = {}
+        for tag, value in metadata1:
+            metadata.setdefault(tag,[]).append(value)
+        
+        if not "{http://purl.org/dc/elements/1.1/}language" in metadata.keys():
+            self.categorize.categorize_item(self.oai_id, "unknown language")
+        #print(metadata["{http://purl.org/dc/elements/1.1/}language"])
+        #print(metadata["{http://purl.org/dc/elements/1.1/}title"])
+        for tag, value in metadata.items():
             if tag == "{http://purl.org/dc/elements/1.1/}type":
                 pass
             elif tag == "{http://purl.org/dc/elements/1.1/}format":
@@ -167,7 +174,6 @@ class Metadata:
             elif tag == "{http://purl.org/dc/terms/}name":
                 pass
             elif tag == "{http://purl.org/dc/terms/}level":
-                #print(value)
                 pass
             elif tag == "{http://purl.org/dc/terms/}discipline":
                 pass
@@ -278,6 +284,8 @@ class Metadata:
             elif tag == "{http://purl.org/dc/terms/}bibliographicCitation":
                  pass
             elif tag == "{http://purl.org/dc/terms/}isRequiredBy":
+                 pass
+            elif tag == "{http://purl.org/dc/elements/1.1/}ins":
                  pass
             else:
                 raise Exception("Unknown tag {}.".format(tag))

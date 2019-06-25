@@ -5,6 +5,13 @@ def oai(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
         categorize.categorize_item(oai_id,"je v oai")
 
+def dc(oai_ids, digitoolXML, categorize):
+    for oai_id in oai_ids:
+        originalMetadataXML = digitoolXML.get_metadata(oai_id)
+        if 'dc' in originalMetadataXML.keys():
+            c = Metadata(categorize, oai_id)
+            c.convertDC(originalMetadataXML['dc'])
+
 def tag502(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
         originalMetadataXML = digitoolXML.get_metadata(oai_id)
