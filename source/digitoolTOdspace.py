@@ -18,7 +18,7 @@ def cli():
     pass
 
 @cli.command()
-@click.option('--group', prompt='group', type=click.Choice(['all','oai','forgot','noattachement','weird','type']), help='Choose group to categorize')
+@click.option('--group', prompt='group', type=click.Choice(['all','oai','forgot','noattachement','weird','502']), help='Choose group to categorize')
 def categorize(group):
     #TODO všechny dalši skupiny viz ostatni TODO
 
@@ -33,17 +33,13 @@ def categorize(group):
         bugs.no_attachements(oai_ids,dtx,c)
     elif group == 'weird':
         bugs.weird_attachements(oai_ids,dtx,c)
-    elif group == 'type':
-        bugs.unknown_type(oai_ids,dtx,c)
-    elif group == 'preview':
-        dtx_no_skip = DigitoolXML(xml_dirname)
-        dtx_all = DigitoolXML('s-nahledy')
-        bugs.preview(oai_ids,dtx_no_skip,dtx_all)
-        return
+    elif group == '502':
+        bugs.tag502(oai_ids,dtx,c)
     elif group == 'all':
         bugs.forgot_attachements(oai_ids,dtx,c,xml_dirname+"/ls_streams.txt")
         bugs.no_attachements(oai_ids,dtx,c)
         bugs.weird_attachements(oai_ids,dtx,c)
+        bugs.tag502(oai_ids,dtx,c)
     print(c)
 
 

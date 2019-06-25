@@ -1,4 +1,5 @@
 import re
+from tag502 import convertRealTag502
 
 class MetadataConvertor:
     
@@ -36,219 +37,6 @@ class MetadataConvertor:
                 { "key": "dc.title", "language": "pt_BR", "value": "Pokus" } 
                 ]}
     
-    thesisName = [ "Mgr.","Bc.","PhDr.","PhD.","PhDr","Doc.","ThDr.",'RNDr.', 'MUDr.','JUDr.','ThD.' ]
-    thesisNameConvert = {
-            'Mgr': 'Mgr.',
-            'Phdr.': 'PhDr.',
-            'Mgr,': 'Mgr.',
-            'Bc..': 'Bc.',
-            'mgr.': 'Mgr.',
-            'Phd.': 'PhD.',
-            'Mgt.': 'Mgr.',
-        }
-    thesisLevel = {
-        "Diplomová práce":"TODO",
-        "Bakalářská práce":"TODO",
-        "Rigorózní práce":"TODO",
-        "Habilitační práce":"TODO",
-        "Dizertační práce":"Doktorský",
-        }
-    thesisGrantorFaculty = {
-        'Filozofická fakulta',
-        'Filozoficko-historická fakulta',
-        'Fakulta sociálních věd a publicistiky',
-        'Fakulta sociálních věd',
-        'Pedagogická fakulta',
-        'Fakulta humanitních studií',
-        'Husova evangelická bohoslovecká fakulta', #TODO vážně všechny tři?
-        'Husova československá evangelická fakulta',
-        'Husova československá evangelická fakulta bohoslovecká',
-        'Komenského evangelická bohoslovecká fakulta',
-        'Komenského bohoslovecká fakulta v Praze',
-        'Evangelická teologická fakulta',
-        'Matematicko-fyzikální fakulta',
-        '1 lékařská fakulta',
-        '2 lékařská fakulta',
-        '3 lékařská fakulta',
-        }
-    thesisGrantorDepartment = {
-        'Katedra sociologie',
-        'Katedra psychologie',
-        'Katedra speciální pedagogiky',
-        'Katedra marxisticko-leninskej filozofie',
-        'Institut ekonomických studií',
-        'Institut sociologických studií. Katedra sociologie',
-        'Katedra výchovy a vzdělávání dospělých',
-        'Katedra andragogiky a personálního řízení',
-        'Katedra obecné antropologie',
-        'Institut sociologických studií',
-        'Katedra řízení a supervize v sociálních a zdravotnických organizacích',
-        'Ústav informačních studií a knihovnictví',
-        'Katedra filosofie',
-        'Katedra psychofyziologie a klinické psychologie',
-        'Katedra softwarového inženýrství',
-        'Ústav filozofie a religionistiky',
-        'Katedra nadragogiky a personálního řízení',
-        'Katedra tělesné výchovy a sportu',
-        'Katedra osvěty a výchovy dospělých',
-        'Katedra pedagogiky',
-        'Katedra Starého zákona',
-        'Institut komunikačních studií a žurnalistiky',
-        'Institut komunikačních studií a žurnalistiky. Katedra mediálních studií',
-        'Katedra systematické teologie',
-        'Katedra socioloogie',
-        'Katedra věd o zemích Asie a Afriky',
-        'Katedra elektronické kultury a sémiotiky',
-        'Katedra teorie kultury',
-        'Katedra biblických věd',
-        'Katedra české literatury a literární vědy',
-        'Katedra sociologie a filozofie',
-        'Katedra sociální teologie',
-        'Katedra církevních dějin',
-        'Katedra marxisticko-leninské sociologie',
-        'Katedra teorie kultury',
-        'Institut mezinárodních studií. Katedra západoevropských studií',
-        'Psychologický seminář',
-        'Katedra výtvarné výchovy',
-        'Katedra sociologie a filosofie',
-        'Institut politologických studií',
-        'Katedra marxisticko-leninské filosofie',
-        'Katedra andragogika personálního řízení',
-
-
-
-
-
-
-
-        'Katedra', #TODO
-        }
-
-    preconvert = {
-        "81846": 'Diplomová & Rigorózní práce--Univerzita Karlova. Filozofická fakulta. Katedra psychologie, 2000',
-        '74098': 'Diplomová práce (Mgr.)--Univerzita Karlova. Filozofická fakulta. Katedra sociologie, 1997',
-        '98661': 'Bakalářská práce (Bc.)--Univerzita Karlova. 2. lékařská fakulta, 2004',
-        '17196': 'Diplomová & Rigorózní práce--Univerzita Karlova. Matematicko-fyzikální fakulta, 2004',
-        '62940': 'Diplomová & Rigorózní práce—Univerzita Karlova. Filozofická fakulta. Katedra psychologie,1998',
-        '89739': 'Rigorózní práce (PhDr.)--Univerzita Karlova. Filozofická fakulta. Ústav informačních studií a knihovnictví, 2005',
-        '81829': 'Diplomová & Rigorózní práce--Univerzita Karlova. Filozofická fakulta. Katedra psychologie, 1999'
-        }
-
-    def convertType(self, tag502, oai_id):
-        #TODO Diplomová práce (Bc.)
-        def convertTypeCorrect(tag502):
-            itemClass, origin = tag502.split("--")
-            itemClass = itemClass.strip()
-            level, name = itemClass.split('(')
-            level = level.strip()
-            if not level in self.thesisLevel.keys():
-                raise Exception("Unknown thesis level {}".format(level))
-            name = name[:-1].strip()
-            if name in self.thesisNameConvert.keys():
-                name = self.thesisNameConvert[name]
-            if not name in self.thesisName:
-                raise Exception("Unknown title {}".format(thesisName))
-            origin, year = origin.split(",")
-            year = year.strip()
-            assert 1919 < int(year) < 2007
-            origin = origin.strip()
-            if "Univerzita Karlova. " == origin[:20]:
-                origin = origin[20:]
-            if '.' in origin:
-                faculty, department = origin.split(".",1)
-            else:
-                faculty, department = origin, None
-            if not faculty in self.thesisGrantorFaculty:
-                raise Exception("Unknown faculty {}".format(faculty))
-            department = department.strip()
-            if not department in self.thesisGrantorDepartment:
-                raise Exception("Unknown department {}".format(department))
-            return (level, name, 'Univerzita Karlova', faculty, department, year)
-        
-        if tag502 == []:
-            pass #TODO
-            return
-        elif oai_id in self.preconvert:
-            tag502 = [self.preconvert[oai_id]]
-        elif oai_id in ['67121', '69887', '71407' ]:
-            pass #TODO potřebují ruční zásah
-            return
-        elif oai_id in [ '74355', '59305', '67481' ]:
-            return # nesmyslný rok TODO
-        elif oai_id in [ '75140', '77462', '77463'  ]:
-            return # nesmyslná fakulta či katedra
-        elif len(tag502) == 1 and tag502[0] == 'Diplomová práce':
-            pass #TODO
-            return
-        elif tag502[0] == 'Diplomová práce':
-            tag502=tag502[1:]
-        elif len(tag502) > 1 and tag502[1] == 'Diplomová práce':
-            tag502=tag502[:1]
-        elif len(tag502) > 1 and tag502[1] == tag502[0]:
-            tag502=tag502[:1]
-        #print(oai_id,tag502)
-        assert len(tag502) == 1
-        tag = tag502[0].strip()
-        if not "--" in tag:
-            tag = tag.replace('-','--',1)
-            tag = tag.replace('—','--',1)
-            tag = tag.replace('–','--',1)
-        tag = tag.replace('. .','.',1)
-        tag = tag.replace('Univerzita .','Univerzita Karlova.',1)
-        tag = tag.replace('Uverzita','Univerzita',1)
-        tag = tag.replace('Univerzita karlova.','Univerzita Karlova.',1)
-        tag = tag.replace('Univerzita Karlova,','Univerzita Karlova.',1)
-        tag = tag.replace('Univerzita Karlova.F','Univerzita Karlova. F',1)
-        tag = tag.replace('Univerzita Karlova v Praze.','Univerzita Karlova.',1)
-        tag = tag.replace('Univerzita Karlova. Univerzita Karlova.','Univerzita Karlova.',1)
-        tag = tag.replace('Univerzita Karlova. Katedra psychologie','Univerzita Karlova. Filozofikcá fakulta. Katedra psychologie',1)
-        tag = tag.replace('Univerzita Karlova. Katedra věd o zemích Asie a Afriky','Univerzita Karlova. Filozofikcá fakulta. Katedra věd o zemích Asie a Afriky',1)
-        tag = tag.replace('Univerzita Karlova. Katedra andragogiky a personálního řízení','Univerzita Karlova. Filozofikcá fakulta. Katedra andragogiky a personálního řízení',1)
-        tag = tag.replace('Univerzita Karlova. katedra andragogiky a personálního řízení','Univerzita Karlova. Filozofikcá fakulta. Katedra andragogiky a personálního řízení',1)
-        tag = tag.replace('Univerzita Karlova. Institut mezinárodních studií','Univerzita Karlova. Fakulta sociálních věd. Institut mezinárodních studií',1)
-        tag = tag.replace('Filozofikcá','Filozofická',1)
-        tag = tag.replace('Filozofciká','Filozofická',1)
-        tag = tag.replace('Filozoficka','Filozofická',1)
-        tag = tag.replace('Filozofivká','Filozofická',1)
-        tag = tag.replace('Fiolozofická','Filozofická',1)
-        tag = tag.replace('telogická','teologická',1)
-        tag = tag.replace('1. lékařská', '1 lékařská')
-        tag = tag.replace('2. lékařská', '2 lékařská')
-        tag = tag.replace('3. lékařská', '3 lékařská')
-        tag = tag.replace('fakulta,','fakulta.',1)
-        tag = tag.replace('fakzulta.','fakulta.',1)
-        tag = tag.replace('Kateda','Katedra',1)
-        tag = tag.replace('katedra','Katedra',1)
-        tag = tag.replace('Katerdra','Katedra',1)
-        tag = tag.replace('Katerda','Katedra',1)
-        tag = tag.replace('psyvhologie','psychologie',1)
-        tag = tag.replace('psychlogie','psychologie',1)
-        tag = tag.replace('pésychologie','psychologie',1)
-        tag = tag.replace('psychologie','psychologie',1)
-        tag = tag.replace('Disert', 'Dizert')
-        tag = tag.replace('Dizertace', 'Dizertační práce')
-        tag = tag.replace('Disetační', 'Dizertační')
-        tag = tag.replace('Dizertá', 'Dizerta')
-        try: 
-            1919 < int(tag[-4:]) < 2007
-        except:
-            return #TODO
-        if ". " == tag[-6:-4]:
-            tag = tag[:-6] + ", " + tag[-4:]
-        if "a." == tag[-6:-4]:
-            tag = tag[:-6] + "a, " + tag[-4:]
-        if "a " == tag[-6:-4]:
-            tag = tag[:-6] + "a, " + tag[-4:]
-        if "e " == tag[-6:-4]:
-            tag = tag[:-6] + "e, " + tag[-4:]
-        if ",," == tag[-6:-4]:
-            tag = tag[:-6] + ", " + tag[-4:]
-        try:
-            return convertTypeCorrect(tag)
-        except:
-            #print(oai_id, tag502)
-            pass #TODO
-
     def convertYear(self, year):
         if year[0] == '[':
             year = year[1:]
@@ -373,7 +161,7 @@ class MetadataConvertor:
                 pass
             else:
                 raise Exception("Unknown tag {}".format(tag))
-        self.convertType(hui,oai_id)
+        convertRealTag502(hui,oai_id,self.categorize)
         return converted
 
     def convertDC(self, record, oai_id):
@@ -386,11 +174,6 @@ class MetadataConvertor:
                 assert value in self.language_values
             if 'description' in tag:
                 pass
-                #if len(value) > 300:
-                #    print(oai_id,len(value))
-            #if 'relation' in tag:
-            #    print(oai_id,len(value))
-            #    print(value)
         return self.example_return
     
 

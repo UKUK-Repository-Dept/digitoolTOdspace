@@ -124,3 +124,32 @@ other ingest 31
 other note 4
 None note 14
 celkem 56'''
+
+
+
+def test_502():
+    dtx = DigitoolXML(xml_dirname)
+    c = Categorize(dtx)
+    oai_ids = Digitool(digitool_category).download_list()
+    bugs.tag502(oai_ids,dtx,c)
+    assert str(c) == '''
+ksp 0
+mff 0
+psy 46
+uisk 0
+12345 0
+other ingest 5
+['HTF'] 0
+['FFUk', 'FF', 'FF UK', 'FFUK'] 4
+['etf', 'ETF'] 23
+['MFF'] 1
+['PF'] 4
+['FTVS'] 0
+['2LF', 'LF2', '2LF -'] 0
+['FSV', 'FSV IMS', 'FSV_IKSZ', 'FSV ISS', 'FSV IPS'] 0
+['FHS'] 3
+['3LF'] 2
+other note 3
+None note 8
+celkem 99'''
+
