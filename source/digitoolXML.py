@@ -98,6 +98,11 @@ class DigitoolXML:
                 if field.tag == '{http://www.loc.gov/MARC21/slim}datafield':
                     for subfield in field:
                         yield (field.attrib,subfield.text)
+        def parseDC(value):
+            tree = ET.fromstring(value)
+            for field in tree:
+                yield (field.tag,field.text)
+        #TODO smazat, skipovani celých items by se mělo řešit dřív
         if int(oai_id) in self.skipItems:
             return {}
         tree = ET.parse(self.xml_dirname+"/"+str(oai_id)+".xml")
@@ -108,8 +113,15 @@ class DigitoolXML:
             name = tag(child,"name")
             metadataType = tag(child,"type")
             value = tag(child,"value")
-            if name.text == 'descriptive' and metadataType.text == 'marc':
+            if name.text != 'descriptive':
+                continue
+            if metadataType.text == 'marc':
                 res['marc'] = list(parseMarc(value.text))
+            elif metadataType.text == 'dc':
+                res['dc'] = list(parseDC(value.text))
+                pass
+            else:
+                raise Exception("unknown format")
         return res
 
     def get_category(self, oai_id):

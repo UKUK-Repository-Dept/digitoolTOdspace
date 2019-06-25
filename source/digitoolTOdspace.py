@@ -77,9 +77,13 @@ def convertItem(oai_id, test):
     #if 'record' in originalMetadata.keys(): #358, žádný průnik
     #    convertedMetadata = c.convertRecord(originalMetadata['record'], oai_id)
     if 'marc' in originalMetadataXML.keys():
-        convertedMetadata2 = c.convertMarc(originalMetadataXML['marc'], oai_id)
-    #else:
-    #    raise Exception("No metadata in {}".format(oai_id))
+        pass
+        #convertedMetadata2 = c.convertMarc(originalMetadataXML['marc'], oai_id)
+    elif 'dc' in originalMetadataXML.keys():
+        pass
+    else:
+        print('No metadata',oai_id)
+        #raise Exception("No metadata in {}".format(oai_id))
 
     attachements = list(dtx.get_attachements(oai_id))
     if test:
