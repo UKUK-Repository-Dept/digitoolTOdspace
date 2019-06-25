@@ -64,26 +64,20 @@ def dspace(dspace_admin_passwd, dspace_admin_username):
 def convertItem(oai_id, test):
     dt = Digitool(digitool_category) 
     record = dt.get_item(oai_id)
+    
     dtx = DigitoolXML(xml_dirname)
     categorize = Categorize(dtx)
     c = MetadataConvertor(categorize)
-    originalMetadata = dt.get_metadata(record)
-    originalMetadataXML = dtx.get_metadata(oai_id)
+    originalMetadata = dtx.get_metadata(oai_id)
     convertedMetadata = "TODO"
-    #if originalMetadata is None:
-    #    raise Exception("No metadata in {}".format(oai_id))
-    #if 'dc' in originalMetadata.keys(): #3112
-    #    convertedMetadata = c.convertDC(originalMetadata['dc'], oai_id)
-    #if 'record' in originalMetadata.keys(): #358, žádný průnik
-    #    convertedMetadata = c.convertRecord(originalMetadata['record'], oai_id)
-    if 'marc' in originalMetadataXML.keys():
+    if 'marc' in originalMetadata.keys():
         pass
-        #convertedMetadata2 = c.convertMarc(originalMetadataXML['marc'], oai_id)
-    elif 'dc' in originalMetadataXML.keys():
+        #convertedMetadata = c.convertMarc(originalMetadata['marc'], oai_id)
+    elif 'dc' in originalMetadata.keys():
+        convertedMetadata = c.convertDC(originalMetadata['dc'], oai_id)
         pass
     else:
-        print('No metadata',oai_id)
-        #raise Exception("No metadata in {}".format(oai_id))
+        raise Exception("No metadata in {}".format(oai_id))
 
     attachements = list(dtx.get_attachements(oai_id))
     if test:
