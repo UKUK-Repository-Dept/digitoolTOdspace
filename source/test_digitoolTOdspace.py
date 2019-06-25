@@ -2,7 +2,7 @@ from digitoolOAI import Digitool
 from digitoolXML import DigitoolXML
 from dspace import Dspace
 from filenameConvertor import FilenameConvertor
-from metadataConvertor import MetadataConvertor
+from metadataConvertor import Metadata
 from categorize import Categorize
 import problematicGroup as bugs
 from digitoolTOdspace import *
@@ -14,7 +14,6 @@ def test_convert():
     oai_ids = Digitool(digitool_category).download_list()
     dtx = DigitoolXML(xml_dirname)
     categorize = Categorize(dtx)
-    c = MetadataConvertor(categorize)
     for oai_id in oai_ids:
        # checked, convertedMetadata, attachements = convertItem(oai_id, False)
         #print(oai_id)

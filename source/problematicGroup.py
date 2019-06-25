@@ -1,17 +1,17 @@
 from filenameConvertor import FilenameConvertor
-from metadataConvertor import MetadataConvertor
+from metadataConvertor import Metadata
 
 def oai(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
         categorize.categorize_item(oai_id,"je v oai")
 
 def tag502(oai_ids, digitoolXML, categorize):
-    c = MetadataConvertor(categorize)
     for oai_id in oai_ids:
         originalMetadataXML = digitoolXML.get_metadata(oai_id)
         if 'marc' in originalMetadataXML.keys():
             try:
-                c.convertMarc(originalMetadataXML['marc'], oai_id)
+                c = Metadata(categorize, oai_id)
+                c.convertMarc(originalMetadataXML['marc'])
             except:
                 pass # chyby se zaznamenavají do categorize
 

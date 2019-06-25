@@ -1,7 +1,7 @@
 import re
 from tag502 import convertRealTag502
 
-class MetadataConvertor:
+class Metadata:
     
     example_return = {"metadata":[ 
                 { "key": "dc.contributor.author", "value": "LAST, FIRST" }, 
@@ -9,10 +9,11 @@ class MetadataConvertor:
                 { "key": "dc.title", "language": "pt_BR", "value": "Pokus" } 
                 ]}
     
-    def __init__(self, categorize):
+    def __init__(self, categorize, oai_id):
         self.categorize = categorize
+        self.oai_id = oai_id
     
-    def convertMarc(self, metadata, oai_id):
+    def convertMarc(self, metadata):
         converted = []
         hui = []
         for tags, value in metadata:
@@ -120,10 +121,10 @@ class MetadataConvertor:
                 pass
             else:
                 raise Exception("Unknown tag {}".format(tag))
-        convertRealTag502(hui,oai_id,self.categorize)
+        convertRealTag502(hui,self.oai_id,self.categorize)
         return converted
     
-    def convertDC(self, metadata, oai_id):
+    def convertDC(self, metadata):
         converted = []
         hui = []
         for tag, value in metadata:

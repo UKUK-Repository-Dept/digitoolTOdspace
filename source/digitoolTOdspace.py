@@ -5,7 +5,7 @@ from digitoolOAI import Digitool
 from digitoolXML import DigitoolXML
 from dspace import Dspace
 from filenameConvertor import FilenameConvertor
-from metadataConvertor import MetadataConvertor
+from metadataConvertor import Metadata
 from categorize import Categorize
 import problematicGroup as bugs
 
@@ -67,14 +67,15 @@ def convertItem(oai_id, test):
     
     dtx = DigitoolXML(xml_dirname)
     categorize = Categorize(dtx)
-    c = MetadataConvertor(categorize)
     originalMetadata = dtx.get_metadata(oai_id)
     convertedMetadata = "TODO"
     if 'marc' in originalMetadata.keys():
         pass
-        #convertedMetadata = c.convertMarc(originalMetadata['marc'], oai_id)
+        c = Metadata(categorize,oai_id)
+        #convertedMetadata = c.convertMarc(originalMetadata['marc'])
     elif 'dc' in originalMetadata.keys():
-        convertedMetadata = c.convertDC(originalMetadata['dc'], oai_id)
+        c = Metadata(categorize,oai_id)
+        convertedMetadata = c.convertDC(originalMetadata['dc'])
         pass
     else:
         raise Exception("No metadata in {}".format(oai_id))
@@ -112,7 +113,6 @@ def convert(dspace_admin_passwd, dspace_admin_username, test, run):
     oai_ids = Digitool(digitool_category).download_list()
     dtx = DigitoolXML(xml_dirname)
     categorize = Categorize(dtx)
-    c = MetadataConvertor(categorize)
     ds = Dspace(dspace_admin_username,dspace_admin_passwd)
 
     problems = []
