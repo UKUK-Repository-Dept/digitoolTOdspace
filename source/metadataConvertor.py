@@ -124,169 +124,95 @@ class Metadata:
                 raise Exception("Unknown tag {}".format(tag))
         convertRealTag502(hui,self.oai_id,self.categorize)
         return converted
-    
-    def convertDC(self, metadata1):
+            
+    dcParsed = '''
+{http://purl.org/dc/elements/1.1/}language
+{http://purl.org/dc/elements/1.1/}title
+{http://purl.org/dc/terms/}translated
+{http://purl.org/dc/terms/}alternative
+{http://purl.org/dc/terms/}alternativeTranslated
+'''
+    dcSkipped = '''
+{http://purl.org/dc/terms/}abstract
+{http://purl.org/dc/terms/}isPartOf
+{http://purl.org/dc/terms/}extent
+{http://purl.org/dc/elements/1.1/}collection
+{http://purl.org/dc/terms/}issued
+{http://purl.org/dc/elements/1.1/}type
+{http://purl.org/dc/elements/1.1/}format
+{http://purl.org/dc/elements/1.1/}identifier
+{http://purl.org/dc/elements/1.1/}creator
+{http://purl.org/dc/elements/1.1/}contributor
+{http://purl.org/dc/elements/1.1/}subject
+{http://purl.org/dc/terms/}issued
+{http://purl.org/dc/terms/}name
+{http://purl.org/dc/terms/}level
+{http://purl.org/dc/terms/}grantor
+{http://purl.org/dc/elements/1.1/}collection
+{http://purl.org/dc/elements/1.1/}studyID
+{http://purl.org/dc/elements/1.1/}publisher
+{http://purl.org/dc/terms/}advisor
+{http://purl.org/dc/terms/}created
+{http://purl.org/dc/terms/}dateAccepted
+{http://purl.org/dc/terms/}dateofbirth
+{http://purl.org/dc/elements/1.1/}description
+{http://purl.org/dc/terms/}discipline
+{http://purl.org/dc/terms/}referee
+{http://purl.org/dc/elements/1.1/}status
+{http://purl.org/dc/elements/1.1/}rights
+{http://purl.org/dc/terms/}medium
+'''
+    def convertDC(self, metadata1): #14653
         metadata = {}
         for tag, value in metadata1:
-            metadata.setdefault(tag,[]).append(value)
+            if value != None:
+                metadata.setdefault(tag,[]).append(value)
         
-        if not "{http://purl.org/dc/elements/1.1/}language" in metadata.keys():
+        if metadata == {}:
+            self.categorize.categorize_item(self.oai_id, "No metadata")
+            return
+        
+        tag = '{http://purl.org/dc/elements/1.1/}title'
+        if not tag in metadata.keys():
+            self.categorize.categorize_item(self.oai_id, "No title") 
+            return
+        assert len(metadata[tag]) == 1
+        if 'Plán' in metadata[tag][0]:
+            self.categorize.categorize_item(self.oai_id, "Mapa nikoliv kvalifikační práce") 
+            return
+        if 'Test LDAP' in metadata[tag][0] or 'Testovaci' in metadata[tag][0]:
+            self.categorize.categorize_item(self.oai_id, "Testovací objekt - smazat.") 
+            return
+        #print(metadata[tag]) #TODO cca tři blbosti
+        
+        tag = '{http://purl.org/dc/terms/}abstract'
+        if tag in metadata.keys() and metadata[tag] == ['abstract']:
+            #tohle všechno jsou nesmysly nebo špatně zařazené věci
+            self.categorize.categorize_item(self.oai_id, "Abstract is 'abstract'") 
+            return
+        
+        tag = "{http://purl.org/dc/elements/1.1/}language" 
+        if not tag in metadata.keys():
             self.categorize.categorize_item(self.oai_id, "unknown language")
-        #print(metadata["{http://purl.org/dc/elements/1.1/}language"])
-        #print(metadata["{http://purl.org/dc/elements/1.1/}title"])
-        for tag, value in metadata.items():
-            if tag == "{http://purl.org/dc/elements/1.1/}type":
-                pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}format":
-                pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}identifier":
-                pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}language":
-                pass
-            elif tag == "{http://purl.org/dc/terms/}isPartOf":
-                pass
-            elif tag == "{http://purl.org/dc/terms/}extent":
-                pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}title":
-                pass
-            elif tag == "{http://purl.org/dc/terms/}translated":
-                pass
-            elif tag == "{http://purl.org/dc/terms/}alternative":
-                pass
-            elif tag == "{http://purl.org/dc/terms/}alternativeTranslated":
-                pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}creator":
-                pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}subject":
-                pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}description ":
-                pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}publisher ":
-                pass
-            elif tag == "{http://purl.org/dc/terms/}advisor":
-                pass
-            elif tag == "{http://purl.org/dc/terms/}referee ":
-                pass
-            elif tag == "{http://purl.org/dc/terms/}created":
-                pass
-            elif tag == "{http://purl.org/dc/terms/}dateAccepted":
-                pass
-            elif tag == "{http://purl.org/dc/terms/}name":
-                pass
-            elif tag == "{http://purl.org/dc/terms/}level":
-                pass
-            elif tag == "{http://purl.org/dc/terms/}discipline":
-                pass
-            elif tag == "{http://purl.org/dc/terms/}grantor":
-                pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}collection":
-                 pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}rights":
-                 pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}description":
-                 pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}studyID":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}dateofbirth":
-                 pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}publisher":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}decriptionAbstract":
-                 pass
-            elif tag == " {http://purl.org/dc/terms/}referee":
-                 pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}status":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}tableOfContents":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}abstract":
-                 pass
-            elif tag == " {http://purl.org/dc/elements/1.1/}contributor":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}referee":
-                 pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}date":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}valid":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}available":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}issued":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}modified":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}dateCopyrighted":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}medium":
-                 pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}contributor":
-                 pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}source":
-                 pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}coverage":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}spatial":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}temporal":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}accessRights":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}license":
-                 pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}thesisDegree":
-                 pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}contributor":
-                 pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}source":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}isReplacedBy":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}provenance":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}educationLevel":
-                 pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}relation":
-                 pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}link":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}isVersionOf":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}hasVersion":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}replaces":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}requires":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}hasPart":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}isReferencedBy":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}references":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}isFormatOf":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}hasFormat":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}conformsTo":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}audience":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}provenance":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}rightsHolder":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}dateSubmitted":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}mediator":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}educationLevel":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}bibliographicCitation":
-                 pass
-            elif tag == "{http://purl.org/dc/terms/}isRequiredBy":
-                 pass
-            elif tag == "{http://purl.org/dc/elements/1.1/}ins":
-                 pass
-            else:
+            return
+        assert len(metadata[tag]) == 1
+      
+        # jazkyk v tagu a jazyk titulku letmým pohledem sedí - HURÁ
+        print(metadata[tag][0],metadata['{http://purl.org/dc/elements/1.1/}title'])
+
+        tag = '{http://purl.org/dc/terms/}translated'
+        if tag in metadata.keys():
+            pass #skutečne překlad titulku (druhý jazky z en, cz)
+
+        tag = '{http://purl.org/dc/terms/}alternative'
+        if tag in metadata.keys():
+            pass #skutečne podtitulek
+
+        tag = '{http://purl.org/dc/terms/}alternativeTranslated'
+        if tag in metadata.keys():
+            pass #skutečne překlad podtitulku (druhý jazky z en, cz)
+
+        for tag in metadata.keys():
+            if not tag in (self.dcParsed + self.dcSkipped).split('\n'):
                 raise Exception("Unknown tag {}.".format(tag))
 

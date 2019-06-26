@@ -102,9 +102,6 @@ class DigitoolXML:
             tree = ET.fromstring(value)
             for field in tree:
                 yield (field.tag,field.text)
-        #TODO smazat, skipovani celých items by se mělo řešit dřív
-        if int(oai_id) in self.skipItems:
-            return {}
         tree = ET.parse(self.xml_dirname+"/"+str(oai_id)+".xml")
         root = tree.getroot()
         mds = tag(tag(root,"digital_entity"),"mds")
