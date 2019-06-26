@@ -16,11 +16,8 @@ def tag502(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
         originalMetadataXML = digitoolXML.get_metadata(oai_id)
         if 'marc' in originalMetadataXML.keys():
-            try:
-                c = Metadata(categorize, oai_id)
-                c.convertMarc(originalMetadataXML['marc'])
-            except:
-                pass # chyby se zaznamenavají do categorize
+            c = Metadata(categorize, oai_id)
+            c.convertMarc(originalMetadataXML['marc'])
 
 def forgot_attachements(oai_ids, digitoolXML, categorize, xml_attachements_list):
     attachements = []

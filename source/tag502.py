@@ -78,23 +78,13 @@ thesisGrantorDepartment = {
     'Katedra teoretické informatiky a matematické logiky',
     }
 
-preconvert = {
-    "81846": 'Diplomová & Rigorózní práce--Univerzita Karlova. Filozofická fakulta. Katedra psychologie, 2000',
-    '74098': 'Diplomová práce (Mgr.)--Univerzita Karlova. Filozofická fakulta. Katedra sociologie, 1997',
-    '98661': 'Bakalářská práce (Bc.)--Univerzita Karlova. 2. lékařská fakulta, 2004',
-    '17196': 'Diplomová & Rigorózní práce--Univerzita Karlova. Matematicko-fyzikální fakulta, 2004',
-    '62940': 'Diplomová & Rigorózní práce—Univerzita Karlova. Filozofická fakulta. Katedra psychologie,1998',
-    '89739': 'Rigorózní práce (PhDr.)--Univerzita Karlova. Filozofická fakulta. Ústav informačních studií a knihovnictví, 2005',
-    '81829': 'Diplomová & Rigorózní práce--Univerzita Karlova. Filozofická fakulta. Katedra psychologie, 1999'
-    }
-
 def convertCorrectTag502(tag502, oai_id, categorize):
     itemClass, origin = tag502.split("--")
     itemClass = itemClass.strip()
     if not '(' in itemClass:
         error_msg = "No academic title in  {}".format(itemClass)
         categorize.categorize_item(oai_id,error_msg)
-        raise Exception(error_msg)
+        return
     level, name = itemClass.split('(')
     level = level.strip()
     if not level in thesisLevel.keys():
@@ -103,7 +93,7 @@ def convertCorrectTag502(tag502, oai_id, categorize):
     if not name in levelToTitle[level]:
         error_msg = "Degree '{}' has not title '{}'".format(level,name)
         categorize.categorize_item(oai_id,error_msg)
-        raise Exception(error_msg)
+        return
     origin, year = origin.split(",")
     year = year.strip()
     assert 1919 < int(year) < 2019
@@ -117,13 +107,13 @@ def convertCorrectTag502(tag502, oai_id, categorize):
     if not faculty in thesisGrantorFaculty:
         error_msg = "Unknown faculty {}".format(faculty)
         categorize.categorize_item(oai_id,error_msg)
-        raise Exception(error_msg)
+        return
     if department:
         department = department.strip()
         if not department in thesisGrantorDepartment:
             error_msg = "Unknown department {}".format(department)
             categorize.categorize_item(oai_id,error_msg)
-            raise Exception(error_msg)
+            return
     return (level, name, 'Univerzita Karlova', faculty, department, year)
 
 
@@ -145,18 +135,14 @@ def convertRealTag502(tag502, oai_id, categorize):
     if oai_id in ['81829', '62940', '17196', '81846' ]:
         error_msg = "Práce je zároveň diplomová a rigorozní {}".format(tag502)
         categorize.categorize_item(oai_id,error_msg)
-        raise Exception(error_msg)
-    if tag502 == []:
-        error_msg = "No tag 502"
-        #categorize.categorize_item(oai_id,error_msg)
-        raise Exception(error_msg)
+        return
     elif len(tag502) > 1:
         if len(tag502[0]) > len(tag502[1]): #ručně ověřeno že to kratší je zbytečný bordel
             tag = tag502[0]
         else:
             tag = tag502[1]
-    else:
-        tag = tag502[0].strip()
+    
+    tag = tag502[0].strip()
 
     if not "--" in tag:
         tag = tag.replace('-','--',1)
@@ -165,7 +151,7 @@ def convertRealTag502(tag502, oai_id, categorize):
     if not "--" in tag:
         error_msg = "Not valid 502 tag {}".format(tag)
         categorize.categorize_item(oai_id,error_msg)
-        raise Exception(error_msg)
+        return
 
     tag = tag.replace('. .','.',1)
     tag = tag.replace('Univerzita .','Univerzita Karlova.',1)
@@ -213,7 +199,7 @@ def convertRealTag502(tag502, oai_id, categorize):
     if not ( tag[-4:].isdigit() and tag [-5] in [' ',','] ):
         error_msg = "Not valid year {}".format(tag)
         categorize.categorize_item(oai_id,error_msg)
-        raise Exception(error_msg)
+        return
 
     fixBeforeYear = {'. ':', ','a.': 'a, ','a ':'a, ','e ':'e, ',',,':', '}
     if tag[-6:-4] in fixBeforeYear.keys():

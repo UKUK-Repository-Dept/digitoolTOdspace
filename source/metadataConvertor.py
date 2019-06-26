@@ -14,11 +14,16 @@ class Metadata:
         self.oai_id = oai_id
         metadata = {}
     
-    def convertMarc(self, metadata):
+    def convertMarc(self, metadata1):
+        metadata = {}
+        for tag, value in metadata1:
+            if value != None:
+                index = str(tag['tag'])+'-'+str(tag['ind1'])+'-'+str(tag['ind2'])
+                metadata.setdefault(index,[]).append(value)
         converted = []
         hui = []
-        for tags, value in metadata:
-            tag = tags['tag']
+        for tags, value in metadata.items():
+            #tag = tags['tag']
             if tag == '040':
                 pass
             elif tag == '041':
@@ -121,8 +126,13 @@ class Metadata:
             elif tag == 'KVS':
                 pass
             else:
-                raise Exception("Unknown tag {}".format(tag))
-        convertRealTag502(hui,self.oai_id,self.categorize)
+                pass
+                #raise Exception("Unknown tag {}".format(tag))
+        if not '502- - ' in metadata.keys():
+            error_msg = "No tag 502"
+            self.categorize.categorize_item(self.oai_id,error_msg)
+            return
+        convertRealTag502(metadata['502- - '],self.oai_id,self.categorize)
         return converted
 
 
