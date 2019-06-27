@@ -93,11 +93,16 @@ class DigitoolXML:
     
     def get_metadata(self, oai_id):
         def parseMarc(value):
+            metadata = {}
             tree = ET.fromstring(value)
             for field in tree:
                 if field.tag == '{http://www.loc.gov/MARC21/slim}datafield':
                     for subfield in field:
-                        yield (field.attrib,subfield.text)
+                        tag = field.attrib
+                        index = str(tag['tag'])+'-'+str(tag['ind1'])+'-'+str(tag['ind2'])
+                        if subfield.text != None:
+                            metadata.setdefault(index,[]).append(subfield.text)
+            return metadata
         def parseDC(value):
             tree = ET.fromstring(value)
             for field in tree:
@@ -113,7 +118,7 @@ class DigitoolXML:
             if name.text != 'descriptive':
                 continue
             if metadataType.text == 'marc':
-                res['marc'] = list(parseMarc(value.text))
+                res['marc'] = parseMarc(value.text)
             elif metadataType.text == 'dc':
                 res['dc'] = list(parseDC(value.text))
                 pass

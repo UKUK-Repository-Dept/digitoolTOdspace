@@ -1,5 +1,6 @@
 from filenameConvertor import FilenameConvertor
 from metadataConvertor import Metadata
+from tag502 import convertRealTag502
 
 def oai(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
@@ -12,12 +13,31 @@ def dc(oai_ids, digitoolXML, categorize):
             c = Metadata(categorize, oai_id)
             c.convertDC(originalMetadataXML['dc'])
 
+def marc(oai_ids, digitoolXML, categorize):
+    for oai_id in oai_ids:
+        originalMetadataXML = digitoolXML.get_metadata(oai_id)
+        if 'marc' in originalMetadataXML.keys():
+            m = Metadata(categorize, oai_id)
+            m.convertMarc(originalMetadataXML['marc'])
+
+def no502(oai_ids, digitoolXML, categorize):
+    for oai_id in oai_ids:
+        originalMetadataXML = digitoolXML.get_metadata(oai_id)
+        if 'marc' in originalMetadataXML.keys():
+            metadata = originalMetadataXML['marc']
+            if not '502- - ' in metadata.keys():
+                error_msg = "No tag 502"
+                categorize.categorize_item(oai_id,error_msg)
+                continue
+
 def tag502(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
         originalMetadataXML = digitoolXML.get_metadata(oai_id)
         if 'marc' in originalMetadataXML.keys():
-            c = Metadata(categorize, oai_id)
-            c.convertMarc(originalMetadataXML['marc'])
+            metadata = originalMetadataXML['marc']
+            if not '502- - ' in metadata.keys():
+                continue
+            convertRealTag502(metadata['502- - '],oai_id,categorize)
 
 def forgot_attachements(oai_ids, digitoolXML, categorize, xml_attachements_list):
     attachements = []

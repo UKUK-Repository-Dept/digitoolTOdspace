@@ -1,5 +1,6 @@
 import re
 from tag502 import convertRealTag502
+from tag245 import convertRealTag245
 
 class Metadata:
     
@@ -13,127 +14,42 @@ class Metadata:
         self.categorize = categorize
         self.oai_id = oai_id
         metadata = {}
+
+    marcParsed = '''
+502- - 
+    '''
+    marcTODO = '''
+    ''' + '''
     
-    def convertMarc(self, metadata1):
-        metadata = {}
-        for tag, value in metadata1:
-            if value != None:
-                index = str(tag['tag'])+'-'+str(tag['ind1'])+'-'+str(tag['ind2'])
-                metadata.setdefault(index,[]).append(value)
-        converted = []
-        hui = []
-        for tags, value in metadata.items():
-            #tag = tags['tag']
-            if tag == '040':
-                pass
-            elif tag == '041':
-                pass
-            elif tag == '044':
-                pass
-            elif tag == '072':
-                pass
-            elif tag == '080':
-                pass
-            elif tag == '100':
-                pass
-            elif tag == '245':
-                #print(value)
-                pass
-            elif tag == '246':
-                pass
-            elif tag == '260':
-                pass
-            elif tag == '264':
-                pass
-            elif tag == '300':
-                pass
-            elif tag == '336':
-                pass
-            elif tag == '337':
-                pass
-            elif tag == '338':
-                pass
-            elif tag == '340':
-                pass
-            elif tag == '440':
-                pass
-            elif tag == '500':
-                pass
-            elif tag == '502':
-                hui.append(value)
-            elif tag == '504':
-                pass
-            elif tag == '506':
-                pass
-            elif tag == '520':
-                pass
-            elif tag == '526':
-                pass
-            elif tag == '530':
-                pass
-            elif tag == '538':
-                pass
-            elif tag == '540':
-                pass
-            elif tag == '546':
-                pass
-            elif tag == '586':
-                pass
-            elif tag == '600':
-                pass
-            elif tag == '610':
-                pass
-            elif tag == '646':
-                pass
-            elif tag == '648':
-                pass
-            elif tag == '650':
-                pass
-            elif tag == '651':
-                pass
-            elif tag == '653':
-                pass
-            elif tag == '655':
-                pass
-            elif tag == '700':
-                pass
-            elif tag == '710':
-                pass
-            elif tag == '850':
-                pass
-            elif tag == '856':
-                pass
-            elif tag == '910':
-                pass
-            elif tag == '980':
-                pass
-            elif tag == '981':
-                pass
-            elif tag == '988':
-                pass
-            elif tag == '993':
-                pass
-            elif tag == '997':
-                pass
-            elif tag == '998':
-                pass
-            elif tag == 'FVS':
-                pass
-            elif tag == 'KLS':
-                pass
-            elif tag == 'SID':
-                pass
-            elif tag == 'KVS':
-                pass
-            else:
-                pass
-                #raise Exception("Unknown tag {}".format(tag))
+    '''
+    def convertMarc(self, metadata):
         if not '502- - ' in metadata.keys():
             error_msg = "No tag 502"
             self.categorize.categorize_item(self.oai_id,error_msg)
             return
-        convertRealTag502(metadata['502- - '],self.oai_id,self.categorize)
-        return converted
+        ret502 = convertRealTag502(metadata['502- - '],self.oai_id,self.categorize)
+        if ret502 == None:
+            return
+        else:
+            level, name, university, faculty, department, year = ret502
+
+        if '245-1-0' in metadata.keys():
+            ret245 = convertRealTag245(metadata['245-1-0'],self.oai_id,self.categorize)
+        elif '245-1-2' in metadata.keys():
+            ret245 = convertRealTag245(metadata['245-1-2'],self.oai_id,self.categorize)
+        elif '245-1-3' in metadata.keys():
+            ret245 = convertRealTag245(metadata['245-1-3'],self.oai_id,self.categorize)
+        elif '245-1-4' in metadata.keys():
+            ret245 = convertRealTag245(metadata['245-1-4'],self.oai_id,self.categorize)
+        else:
+            raise Exception("No tag 245")
+#710 fakulta
+        for tag in metadata.keys():
+            if not tag in (self.marcParsed + self.marcTODO).split('\n'):
+                pass #TODO
+                #print(tag)
+                #python3 source/digitoolTOdspace.py categorize --group marc | sort | uniq
+                #raise Exception("Unknown tag {}.".format(tag))
 
 
     # seznam už ověřených / pročištěných
@@ -260,6 +176,5 @@ class Metadata:
         
         for tag in metadata.keys():
             if not tag in (self.dcParsed + self.dcBonus + self.dcTODO +  self.dcSkipped).split('\n'):
-                print(tag)
-                #raise Exception("Unknown tag {}.".format(tag))
+                raise Exception("Unknown tag {}.".format(tag))
 
