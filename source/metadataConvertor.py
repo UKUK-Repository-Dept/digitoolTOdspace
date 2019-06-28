@@ -23,6 +23,7 @@ class Metadata:
     
     '''
     def convertMarc(self, metadata):
+        #TODO přenášet subfield, kontrolovat z více zdrojů, nezahazovat když není 502
         if not '502- - ' in metadata.keys():
             error_msg = "No tag 502"
             self.categorize.categorize_item(self.oai_id,error_msg)
@@ -33,16 +34,23 @@ class Metadata:
         else:
             level, name, university, faculty, department, year = ret502
 
-        if '245-1-0' in metadata.keys():
-            ret245 = convertRealTag245(metadata['245-1-0'],self.oai_id,self.categorize)
-        elif '245-1-2' in metadata.keys():
-            ret245 = convertRealTag245(metadata['245-1-2'],self.oai_id,self.categorize)
-        elif '245-1-3' in metadata.keys():
-            ret245 = convertRealTag245(metadata['245-1-3'],self.oai_id,self.categorize)
-        elif '245-1-4' in metadata.keys():
-            ret245 = convertRealTag245(metadata['245-1-4'],self.oai_id,self.categorize)
-        else:
-            raise Exception("No tag 245")
+        tags245 = [ '245-1-0', '245-1-2', '245-1-3', '245-1-4']
+        for tag in tags245:
+            if tag in metadata.keys():
+                tag245 = metadata[tag]
+        ret245 = convertRealTag245(tag245,self.oai_id,self.categorize)
+        # todo [ / , : a kusy slov ved kon con  pak celek
+        res, c = ret245
+        for key, value in res.items():
+            if '[' in value:
+                print(self.oai_id)
+                #print(tag245)
+                for key, value in res.items():
+                    print(key,value)
+                if c != []:
+                    print('zbytek',c)
+
+
 #710 fakulta
         for tag in metadata.keys():
             if not tag in (self.marcParsed + self.marcTODO).split('\n'):

@@ -1,8 +1,5 @@
 
-#def convertCorrectTag245(tag245, oai_id, categorize):
-#    pass
-
-def convertRealTag245(tag245, oai_id, categorize):
+def __sortTags(tag245, oai_id):
     title, alternative, creator = '','',''
     if oai_id == '74132':
         title = tag245[0]
@@ -35,79 +32,59 @@ def convertRealTag245(tag245, oai_id, categorize):
             creator = tag245[3]
     else:
         raise Exception()
+    return title, alternative, creator
 
+def __deleteBackslash(title):
+    title = title.strip()
+    if title[:2] == '/ ':
+        title = title[2:]
     if title[-1] == '/':
         if '/' in title[:-1]:
             if not ' /' in title[:-1]:
                 title = title[:-1]
         else:
             title = title[:-1]
-    
-    if title[-1] == '/':
-        if '/' in title[:-1]:
-            if not ' /' in title[:-1]:
-                title = title[:-1]
-        else:
-            title = title[:-1]
+    return title.strip()
 
-    if alternative[:-1] == '/':
-        alternative = alternative[:-1]
+def convertRealTag245(tag245, oai_id, categorize):
+
+    title, alternative, creator = __sortTags(tag245, oai_id)
+
+    res = {}
+    res['title'] = __deleteBackslash(title)
+    if alternative != '':
+        res['alternative'] = __deleteBackslash(alternative)
 
     c = creator.split(';')
-    author = c[0].strip()
-    if ',' in author or ':' in author or '/' in author:
-        categorize.categorize_item(oai_id,"tag 245c syntax")
-        return
-    if 'vypracovala' in author:
-        author = author[12:]
-    if 'vypracoval' in author:
-        author = author[11:]
+    creators = {
+            'author': ['vypracovala','vypracoval',''],
+            'advisor': ['vedoucí práce','vedoucí diplomové práce','ved. dipl. práce','ved. práce','vedoucí bakalářské práce',' škol. rig. práce','vedoucí dipl. práce','ved. bakal. práce','školitel práce','vedoucí diplomove práce','školitel disertační práce','kolitel rigorózní práce','Vedoucí diplomové práce','škol. disert. práce','vedoucí rigorózní práce','vedocí diplomové práce','ved. diplomové práce','vedouí diplomové práce' 'vedoucí diplomové vedoucí', 'vedoucí [práce]', 'vedúci práce', 'Ved. práce', 'školitel rig. práce', 'vedoucí diplomové', 'vedpoucí diplomové práce', 'ved. rigorózní práce', 'vedoucí siplomové práce', 'ved. dipl. práce Radvan Bahbouh', 'školitel ', ],
+            'committe': ['oponent'],
+            'consultant': ['konzultant','konzultanti','konzult.']
+    }
 
-    c = c[1:]
-    if len(c) == 0:
-        return (title, alternative,author)
-    if 'Univ' in c[0]:
-        c = c[1:]
-
-    
-    comitte = ['vedoucí práce','vedoucí diplomové práce','ved. dipl. práce','ved. práce','vedoucí bakalářské práce',' škol. rig. práce','vedoucí dipl. práce','ved. bakal. práce','školitel práce','vedoucí diplomove práce','školitel disertační práce','kolitel rigorózní práce','Vedoucí diplomové práce','škol. disert. práce','vedoucí rigorózní práce','vedocí diplomové práce','ved. diplomové práce','vedouí diplomové práce']
-    if len(c) == 0:
-        return (title, alternative,author)
-    for tag in comitte:
-        if tag in c[0]:
-            comitte = c[0]
-            comitte = comitte.replace(tag, '')
-            comitte = comitte.strip()
-            c = c[1:]
+    for creator, tags in creators.items():
+        if len(c) == 0:
             break
-    
-    comitte = ['oponent']
-    if len(c) == 0:
-        return (title, alternative,author)
-    for tag in comitte:
-        if tag in c[0]:
-            comitte = c[0]
-            comitte = comitte.replace(tag, '')
-            comitte = comitte.strip()
-            c = c[1:]
-            break
+        for tag in tags:
+            if tag in c[0]:
+                res[creator] = c[0].replace(tag, '').strip()
+                c = c[1:]
+                break
 
-    if len(c) == 0:
-        return (title, alternative,author)
-    
-    comitte = ['konzultant','konzultanti']
-    if len(c) == 0:
-        return (title, alternative,author)
-    for tag in comitte:
-        if tag in c[0]:
-            comitte = c[0]
-            comitte = comitte.replace(tag, '')
-            comitte = comitte.strip()
-            c = c[1:]
-            break
+    d = [
+        ('title','[diplomová práce]'),
+        ('title','[rigorózní práce]'),
+        ('alternative','[diplomová práce]'),
+            ]
+    for creator, delete in d:
+        if creator in res:
+            if delete in res[creator]:
+                res[creator] = res[creator].replace(delete, '').strip()
+   
+    res = { k:v for k,v in res.items() if v != '' }
+    for key, value in res.items():
+        if value[0] == '[' and value[-1] == ']':
+            res[key] = value[1:-1]
 
-    if len(c) == 0:
-        return (title, alternative,author)
-
-
-    print(c)
+    return res, c
