@@ -23,7 +23,7 @@ class Metadata:
     
     '''
     def convertMarc(self, metadata):
-        #TODO přenášet subfield, kontrolovat z více zdrojů, nezahazovat když není 502
+        #TODO z 502 by šlo vytáhnout víc informaci
         if not '502- - ' in metadata.keys():
             error_msg = "No tag 502"
             self.categorize.categorize_item(self.oai_id,error_msg)
@@ -37,20 +37,8 @@ class Metadata:
             if tag in metadata.keys():
                 tag245 = metadata[tag]
         ret245 = convertTag245(tag245,self.oai_id,self.categorize)
-        return #TODO
-        # todo [ / , : a kusy slov ved kon con  pak celek
-        res, c = ret245
-        for key, value in res.items():
-            if '[' in value:
-                print(self.oai_id)
-                #print(tag245)
-                for key, value in res.items():
-                    print(key,value)
-                if c != []:
-                    print('zbytek',c)
 
-
-#710 fakulta
+#710 fakulta 100 autor
         for tag in metadata.keys():
             if not tag in (self.marcParsed + self.marcTODO).split('\n'):
                 pass #TODO
