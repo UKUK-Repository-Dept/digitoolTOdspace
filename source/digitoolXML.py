@@ -101,7 +101,10 @@ class DigitoolXML:
                         tag = field.attrib
                         index = str(tag['tag'])+'-'+str(tag['ind1'])+'-'+str(tag['ind2'])
                         if subfield.text != None:
-                            metadata.setdefault(index,[]).append(subfield.text)
+                            code = subfield.attrib['code']
+                            metadata.setdefault(index,{})
+                            metadata[index].setdefault(code,[])
+                            metadata[index][code].append(subfield.text)
             return metadata
         def parseDC(value):
             tree = ET.fromstring(value)

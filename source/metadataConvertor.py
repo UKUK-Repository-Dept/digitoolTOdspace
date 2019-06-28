@@ -1,6 +1,6 @@
 import re
-from tag502 import convertRealTag502
-from tag245 import convertRealTag245
+from tag502 import convertTag502
+from tag245 import convertTag245
 
 class Metadata:
     
@@ -27,18 +27,17 @@ class Metadata:
         if not '502- - ' in metadata.keys():
             error_msg = "No tag 502"
             self.categorize.categorize_item(self.oai_id,error_msg)
-            return
-        ret502 = convertRealTag502(metadata['502- - '],self.oai_id,self.categorize)
-        if ret502 == None:
-            return
         else:
-            level, name, university, faculty, department, year = ret502
+            ret502 = convertTag502(metadata['502- - '],self.oai_id,self.categorize)
+            if ret502 != None:
+                level, name, university, faculty, department, year = ret502
 
         tags245 = [ '245-1-0', '245-1-2', '245-1-3', '245-1-4']
         for tag in tags245:
             if tag in metadata.keys():
                 tag245 = metadata[tag]
-        ret245 = convertRealTag245(tag245,self.oai_id,self.categorize)
+        ret245 = convertTag245(tag245,self.oai_id,self.categorize)
+        return #TODO
         # todo [ / , : a kusy slov ved kon con  pak celek
         res, c = ret245
         for key, value in res.items():

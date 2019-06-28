@@ -1,6 +1,6 @@
 from filenameConvertor import FilenameConvertor
 from metadataConvertor import Metadata
-from tag502 import convertRealTag502
+from tag502 import convertTag502
 
 def oai(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
@@ -37,7 +37,7 @@ def tag502(oai_ids, digitoolXML, categorize):
             metadata = originalMetadataXML['marc']
             if not '502- - ' in metadata.keys():
                 continue
-            convertRealTag502(metadata['502- - '],oai_id,categorize)
+            convertTag502(metadata['502- - '],oai_id,categorize)
 
 def forgot_attachements(oai_ids, digitoolXML, categorize, xml_attachements_list):
     attachements = []

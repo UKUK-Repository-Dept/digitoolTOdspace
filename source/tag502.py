@@ -130,8 +130,9 @@ titleConvert = {
         '(Phdr.)': '(PhDr.)',
         }
 
-def convertRealTag502(tag502, oai_id, categorize):
+def convertTag502(tag502, oai_id, categorize):
 
+    tag502 = tag502['a']
     if oai_id in ['81829', '62940', '17196', '81846' ]:
         error_msg = "Práce je zároveň diplomová a rigorozní {}".format(tag502)
         categorize.categorize_item(oai_id,error_msg)
@@ -141,7 +142,7 @@ def convertRealTag502(tag502, oai_id, categorize):
             tag = tag502[0]
         else:
             tag = tag502[1]
-    
+ 
     tag = tag502[0].strip()
 
     if not "--" in tag:
