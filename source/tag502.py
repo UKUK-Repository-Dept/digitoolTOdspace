@@ -1,82 +1,4 @@
-#TODO zkontrolovat výčty
-thesisLevel = {
-    "Diplomová práce":"TODO",
-    "Bakalářská práce":"TODO",
-    "Rigorózní práce":"TODO",
-    "Habilitační práce":"TODO",
-    "Dizertační práce":"Doktorský",
-    }
-levelToTitle = {
-    "Diplomová práce": [ "Mgr.", ],
-    "Bakalářská práce": [ "Bc.", ],
-    "Rigorózní práce": [ "PhDr.", 'JUDr.', 'RNDr.', 'PharmDr.', 'MUDr.', "ThDr.", ],
-    "Habilitační práce": [ "Doc.", ],
-    "Dizertační práce": [ 'ThD.', "PhD.", ],
-    }
-thesisGrantorFaculty = {
-    'Filozofická fakulta',
-    'Filozoficko-historická fakulta',
-    'Fakulta sociálních věd a publicistiky',
-    'Fakulta sociálních věd',
-    'Pedagogická fakulta',
-    'Fakulta humanitních studií',
-    'Husova evangelická bohoslovecká fakulta', #TODO vážně všechny tyhle Husovy?
-    'Husova československá evangelická fakulta',
-    'Husova československá evangelická fakulta bohoslovecká',
-    'Husova československá evangelická bohoslovecká fakulta',
-    'Komenského evangelická bohoslovecká fakulta',
-    'Komenského bohoslovecká fakulta v Praze',
-    'Evangelická teologická fakulta',
-    'Matematicko-fyzikální fakulta',
-    '1 lékařská fakulta',
-    '2 lékařská fakulta',
-    '3 lékařská fakulta',
-    }
-thesisGrantorDepartment = {
-    'Katedra sociologie',
-    'Katedra psychologie',
-    'Katedra speciální pedagogiky',
-    'Katedra marxisticko-leninskej filozofie',
-    'Institut ekonomických studií',
-    'Institut sociologických studií. Katedra sociologie',
-    'Katedra výchovy a vzdělávání dospělých',
-    'Katedra andragogiky a personálního řízení',
-    'Katedra obecné antropologie',
-    'Institut sociologických studií',
-    'Katedra řízení a supervize v sociálních a zdravotnických organizacích',
-    'Ústav informačních studií a knihovnictví',
-    'Katedra filosofie',
-    'Katedra psychofyziologie a klinické psychologie',
-    'Katedra softwarového inženýrství',
-    'Ústav filozofie a religionistiky',
-    'Katedra nadragogiky a personálního řízení',
-    'Katedra tělesné výchovy a sportu',
-    'Katedra osvěty a výchovy dospělých',
-    'Katedra pedagogiky',
-    'Katedra Starého zákona',
-    'Institut komunikačních studií a žurnalistiky',
-    'Institut komunikačních studií a žurnalistiky. Katedra mediálních studií',
-    'Katedra systematické teologie',
-    'Katedra socioloogie',
-    'Katedra věd o zemích Asie a Afriky',
-    'Katedra elektronické kultury a sémiotiky',
-    'Katedra teorie kultury',
-    'Katedra biblických věd',
-    'Katedra české literatury a literární vědy',
-    'Katedra sociologie a filozofie',
-    'Katedra sociální teologie',
-    'Katedra církevních dějin',
-    'Katedra marxisticko-leninské sociologie',
-    'Katedra teorie kultury',
-    'Institut mezinárodních studií. Katedra západoevropských studií',
-    'Psychologický seminář',
-    'Katedra výtvarné výchovy',
-    'Katedra sociologie a filosofie',
-    'Institut politologických studií',
-    'Katedra marxisticko-leninské filosofie',
-    'Katedra andragogika personálního řízení',
-    'Katedra teoretické informatiky a matematické logiky',
-    }
+import catalogue 
 
 def convertCorrectTag502(tag502, oai_id, categorize):
     itemClass, origin = tag502.split("--")
@@ -87,10 +9,10 @@ def convertCorrectTag502(tag502, oai_id, categorize):
         return
     level, name = itemClass.split('(')
     level = level.strip()
-    if not level in thesisLevel.keys():
+    if not level in catalogue.levelToTitle.keys():
         raise Exception("Unknown thesis level {}".format(level))
     name = name[:-1].strip()
-    if not name in levelToTitle[level]:
+    if not name in catalogue.levelToTitle[level]:
         error_msg = "Degree '{}' has not title '{}'".format(level,name)
         categorize.categorize_item(oai_id,error_msg)
         return
@@ -104,13 +26,13 @@ def convertCorrectTag502(tag502, oai_id, categorize):
         faculty, department = origin.split(".",1)
     else:
         faculty, department = origin, None
-    if not faculty in thesisGrantorFaculty:
+    if not faculty in catalogue.faculty:
         error_msg = "Unknown faculty {}".format(faculty)
         categorize.categorize_item(oai_id,error_msg)
         return
     if department:
         department = department.strip()
-        if not department in thesisGrantorDepartment:
+        if not department in catalogue.department:
             error_msg = "Unknown department {}".format(department)
             categorize.categorize_item(oai_id,error_msg)
             return

@@ -1,6 +1,7 @@
 import re
 from tag502 import convertTag502
 from tag245 import convertTag245
+import catalogue
 
 class Metadata:
     
@@ -38,6 +39,12 @@ class Metadata:
                 tag245 = metadata[tag]
         ret245 = convertTag245(tag245,self.oai_id,self.categorize)
 
+        tags710 = [ '710-2- ', '710-1- ']
+        
+        #for tag in metadata.keys():
+        #    if '710' in tag:
+        #        if tag != '710-2- ':
+        #            print(tag, metadata[tag])
 #710 fakulta 100 autor
         for tag in metadata.keys():
             if not tag in (self.marcParsed + self.marcTODO).split('\n'):
@@ -45,6 +52,9 @@ class Metadata:
                 #print(tag)
                 #python3 source/digitoolTOdspace.py categorize --group marc | sort | uniq
                 #raise Exception("Unknown tag {}.".format(tag))
+
+
+
 
 
     # seznam už ověřených / pročištěných
