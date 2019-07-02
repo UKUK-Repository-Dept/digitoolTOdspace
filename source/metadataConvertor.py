@@ -35,8 +35,6 @@ class Metadata:
             self.categorize.categorize_item(self.oai_id,error_msg)
         else:
             ret502 = convertTag502(metadata['502- - '],self.oai_id,self.categorize)
-            if ret502 != None:
-                level, name, university, faculty, department, year = ret502
 
         tags245 = [ '245-1-0', '245-1-2', '245-1-3', '245-1-4']
         for tag in tags245:

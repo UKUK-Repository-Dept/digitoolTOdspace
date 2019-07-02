@@ -19,7 +19,8 @@ def cli():
 
 @cli.command()
 @click.option('--group', prompt='group', type=click.Choice(['all','oai','forgot','noattachement','weird','502','no502','dc','marc']), help='Choose group to categorize')
-def categorize(group):
+@click.option('--output/--no-output', default=True, help='Print output')
+def categorize(group,output):
 
     dtx = DigitoolXML(xml_dirname)
     c = Categorize(dtx)
@@ -45,7 +46,8 @@ def categorize(group):
         bugs.no_attachements(oai_ids,dtx,c)
         bugs.weird_attachements(oai_ids,dtx,c)
         bugs.tag502(oai_ids,dtx,c)
-    print(c)
+    if output:
+        print(c)
 
 
 @cli.command()
