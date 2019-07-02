@@ -2,6 +2,7 @@ import re
 from tag502 import convertTag502
 from tag245 import convertTag245
 import catalogue
+import otherTag
 
 class Metadata:
     
@@ -24,6 +25,10 @@ class Metadata:
     
     '''
     def convertMarc(self, metadata):
+        #for key in metadata.keys():
+        #    for key2 in metadata.keys():
+        #        if key[:3] == key2[:3] and key != key2:
+        #            print(key, key2)
         #TODO z 502 by šlo vytáhnout víc informaci
         if not '502- - ' in metadata.keys():
             error_msg = "No tag 502"
@@ -39,12 +44,12 @@ class Metadata:
                 tag245 = metadata[tag]
         ret245 = convertTag245(tag245,self.oai_id,self.categorize)
 
-        tags710 = [ '710-2- ', '710-1- ']
+        ret = {}
+        for tag in metadata.keys():
+            if tag[:3] == '710':
+                tag710 = metadata[tag]
+                ret[710] = otherTag.convertTag710(tag710, self.oai_id, self.categorize)
         
-        #for tag in metadata.keys():
-        #    if '710' in tag:
-        #        if tag != '710-2- ':
-        #            print(tag, metadata[tag])
 #710 fakulta 100 autor
         for tag in metadata.keys():
             if not tag in (self.marcParsed + self.marcTODO).split('\n'):

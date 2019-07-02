@@ -66,5 +66,5 @@ class Categorize():
         #    output = output + "\n" + tag + " " + str(list_id)
         #for oai_id, reasons in self.category['None note'].items():
         #    output = output + "\n" + str(oai_id) + " " + str(reasons)
-        #return ""
-        return output
+        return ""
+        #return output

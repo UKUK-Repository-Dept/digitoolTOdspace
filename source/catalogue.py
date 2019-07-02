@@ -29,6 +29,8 @@ faculty = {
 department = {
     'Katedra sociologie',
     'Katedra psychologie',
+    'Katedra psychologie práce a řízení',
+    'Katedra klinické psychologie',
     'Katedra speciální pedagogiky',
     'Katedra marxisticko-leninskej filozofie',
     'Institut ekonomických studií',
