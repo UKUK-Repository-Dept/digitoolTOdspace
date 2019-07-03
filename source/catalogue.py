@@ -6,24 +6,74 @@ levelToTitle = {
     "Dizertační práce": [ 'ThD.', "PhD.", ],
     }
 
+institutToFaculty = {
+    'Institut politologických studií': 'Fakulta sociálních věd', 
+    'Institut sociologických studií': 'Fakulta sociálních věd',
+    'Institut mezinárodních studií': 'Fakulta sociálních věd',
+    'Institut ekonomických studií': 'Fakulta sociálních věd',
+    }
+
 faculty = {
-    'Filozofická fakulta',
-    'Filozoficko-historická fakulta',
-    'Fakulta sociálních věd a publicistiky',
-    'Fakulta sociálních věd',
-    'Pedagogická fakulta',
-    'Fakulta humanitních studií',
-    'Husova evangelická bohoslovecká fakulta', #TODO vážně všechny tyhle Husovy?
-    'Husova československá evangelická fakulta',
-    'Husova československá evangelická fakulta bohoslovecká',
-    'Husova československá evangelická bohoslovecká fakulta',
-    'Komenského evangelická bohoslovecká fakulta',
-    'Komenského bohoslovecká fakulta v Praze',
-    'Evangelická teologická fakulta',
-    'Matematicko-fyzikální fakulta',
-    '1 lékařská fakulta',
-    '2 lékařská fakulta',
-    '3 lékařská fakulta',
+    'Filozofická fakulta': [
+        'Katedra andragogiky a personálního řízení',
+        'Katedra české literatury a literární vědy',
+        'Katedra marxisticko-leninské filosofie',
+        'Katedra marxisticko-leninské filozofie',
+        'Katedra marxisticko-leninskej filozofie',
+        'Katedra marxisticko-leninské sociologie',
+        'Katedra pedagogiky',
+        'Katedra psychofyziologie a klinické psychologie',
+        'Katedra psychologie',
+        'Katedra sociologie',
+        'Katedra sociologie a filozofie',
+        'Katedra sociologie a filosofie',
+        'Katedra tělesné výchovy a sportu',
+        'Katedra teorie kultury',
+        'Katedra žurnalistiky',
+        'Katedra věd o zemích Asie a Afriky',
+        'Katedra výchovy a vzdělávání dospělých',
+        'Ústav filozofie a religionistiky',
+        'Ústav informačních studií a knihovnictví',
+        ],
+    'Filozoficko-historická fakulta': [ 'Psychologický seminář', ],
+    'Fakulta sociálních věd a publicistiky': [ 'Katedra osvěty a výchovy dospělých', ],
+    'Fakulta sociálních věd': [
+        'Institut politologických studií',
+        'Institut sociologických studií',
+        'Institut mezinárodních studií',
+        'Institut ekonomických studií',
+        'Institut komunikačních studií a žurnalistiky',
+        'Institut komunikačních studií a žurnalistiky. Katedra mediálních studi',
+        'Institut mezinárodních studií. Katedra západoevropských studi',
+        'Institut sociologických studií. Katedra sociologi',
+        'Katedra mediálních studií',
+        'Katedra západoevropských studií',
+        'Katedra sociologie', ],
+    'Pedagogická fakulta': [ 'Katedra speciální pedagogik', 'Katedra výtvarné výchov', ],
+    'Právnická fakulta': [],
+    'Fakulta humanitních studií': [
+        'Katedra elektronické kultury a sémiotiky',
+        'Katedra obecné antropologie',
+        'Katedra řízení a supervize v sociálních a zdravotnických organizacích', ],
+    'Husova evangelická bohoslovecká fakulta': [], #TODO vážně všechny tyhle Husovy',
+    'Husova československá evangelická fakulta': [],
+    'Husova československá evangelická fakulta bohoslovecká': [],
+    'Husova československá evangelická bohoslovecká fakulta': [],
+    'Komenského evangelická bohoslovecká fakulta': [
+        'Katedra biblických věd',
+        'Katedra církevních dějin',
+        ],
+    'Komenského bohoslovecká fakulta v Praze': [],
+    'Evangelická teologická fakulta': [ 
+            'Katedra filosofie', 'Katedra sociální teologie', 'Katedra Starého zákona', 
+            'Katedra systematické teologie', ],
+    'Matematicko-fyzikální fakulta': [
+            'Katedra softwarového inženýrství',
+            'Katedra teoretické informatiky a matematické logiky',
+        ],
+    '1 lékařská fakulta': [],
+    '2 lékařská fakulta': [],
+    '3 lékařská fakulta': [],
     }
 
 department = {
@@ -72,5 +122,6 @@ department = {
     'Katedra marxisticko-leninské filosofie',
     'Katedra andragogika personálního řízení',
     'Katedra teoretické informatiky a matematické logiky',
+    'Katedra mediálních studií',
     }
 

@@ -1,25 +1,6 @@
 import catalogue 
-
-def convertOrigin(origin, oai_id, categorize):
-    ret = {}
-    origin = origin.strip()
-    if "Univerzita Karlova. " == origin[:20]:
-        origin = origin[20:]
-    if '.' in origin:
-        faculty, department = origin.split(".",1)
-    else:
-        faculty, department = origin, None
-    if faculty in catalogue.faculty:
-        ret['faculty'] = faculty
-    else:
-        categorize.categorize_item(oai_id,"Unknown faculty {}".format(faculty))
-    if department:
-        department = department.strip()
-        if department in catalogue.department:
-            ret['department'] = department
-        else:
-            categorize.categorize_item(oai_id,"Unknown department {}".format(department))
-    return ret
+import convert
+from commonTag import convertOrigin
 
 def convertCorrectTag502(tag502, oai_id, categorize):
     ret = {}
@@ -44,34 +25,8 @@ def convertCorrectTag502(tag502, oai_id, categorize):
     assert 1919 < int(year) < 2019
     ret['year'] = year
     ret['university'] = 'Univerzita Karlova'
-    ret = { **ret, **convertOrigin(origin, oai_id, categorize) }
+    ret = { **ret, **convertOrigin(origin, oai_id, categorize, tag502) } #TODO samat tag502
     return ret 
-
-originConvert = {
-        '.': ['. .'],
-        '. F': ['.F'],
-        'fakulta.': ['fakulta,', 'fakzulta.,','práce.'],
-        'Katedra': [ 'Kateda', 'katedra', 'Katerdra', 'Katerda', ],
-        'Dizert': ['Disert'],
-        'Univerzita Karlova.': [ 'Univerzita .', 'Uverzita Karlova', 'Univerzita karlova.', 
-            'Univerzita Karlova,', 'Univerzita Karlova v Praze.', 'Univerzita Karlova. Univerzita Karlova.'],
-
-
-
-
-        'Dizertační práce': ['Dizertace', 'Disetační práce', 'Dizertáční práce'],
-        ' lékařská': ['. lékařská'], #odstraňuju tečky z lekařských fakult abych mohla parsovat #TODO vrátit
-        'teologická': ['telogická', 'teologická'],
-        'Filozofická': ['Filozofikcá', 'Filozofciká', 'Filozoficka', 'Filozofivká', 'Fiolozofická',],
-        'psychologie': ['psyvhologie', 'psychlogie', 'pésychologie', 'psychologie', ],
-        }
-
-titleConvert = {
-        '(Bc.)': ['(Bc..)'], 
-        '(Mgr.)': ['(Mgr)', '( Mgr)', '(Mgr,)', '(Mgr,.)', '(Mgr..)', '(Mgt.)', '(mgr.)',],
-        '(PhD.)': ['(Phd.)'],
-        '(PhDr.)': ['(Phdr.)'],
-        }
 
 def convertTag502(tag502, oai_id, categorize):
 
@@ -95,18 +50,26 @@ def convertTag502(tag502, oai_id, categorize):
     if not "--" in tag:
         categorize.categorize_item(oai_id, "Not valid 502 tag {}".format(tag) )
         return {}
-    
+   
+    tag = tag.replace('. .','.',1)
+    tag = tag.replace('1996.', '1996')
+    tag = tag.replace('[1922]', '1922')
+    tag = tag.replace('fakulta,','fakulta.',1)
+    tag = tag.replace('Karlova,','Karlova.',1)
+
+    tag = tag.replace('Disert', 'Dizert')
+    tag = tag.replace('Dizertace', 'Dizertační práce')
+    tag = tag.replace('Disetační', 'Dizertační')
+    tag = tag.replace('Dizertá', 'Dizerta')
+
     tag = tag.replace('Univerzita Karlova. Katedra psychologie','Univerzita Karlova. Filozofikcá fakulta. Katedra psychologie',1)
     tag = tag.replace('Univerzita Karlova. Katedra věd o zemích Asie a Afriky','Univerzita Karlova. Filozofikcá fakulta. Katedra věd o zemích Asie a Afriky',1)
     tag = tag.replace('Univerzita Karlova. Katedra andragogiky a personálního řízení','Univerzita Karlova. Filozofikcá fakulta. Katedra andragogiky a personálního řízení',1)
     tag = tag.replace('Univerzita Karlova. katedra andragogiky a personálního řízení','Univerzita Karlova. Filozofikcá fakulta. Katedra andragogiky a personálního řízení',1)
     tag = tag.replace('Univerzita Karlova. Institut mezinárodních studií','Univerzita Karlova. Fakulta sociálních věd. Institut mezinárodních studií',1)
-    tag = tag.replace('1996.', '1996')
-    tag = tag.replace('[1922]', '1922')
-    for correct, wrongs in originConvert.items():
-        for wrong in wrongs:
-            tag = tag.replace(wrong, correct)
-    for correct, wrongs in titleConvert.items():
+    
+    
+    for correct, wrongs in convert.title.items():
         for wrong in wrongs:
             tag = tag.replace(wrong, correct)
 
