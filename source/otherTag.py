@@ -21,10 +21,10 @@ def __filterUniversity(values):
                     break
     return ret
 
-def convertTag710(tag,oai_id,categorize):
+def convertTag710(tag710,oai_id,categorize):
     ret = {}
-    if 'a' in tag.keys():
-        a = __filterUniversity(tag['a'])
+    if 'a' in tag710.keys():
+        a = __filterUniversity(tag710['a'])
         if a != []:
             assert len(a) == 1
             faculty, department = a[0].split('.')
@@ -32,12 +32,14 @@ def convertTag710(tag,oai_id,categorize):
             ret['faculty'] = faculty
             if department != '':
                 department = department.strip()
-                assert department in catalogue.department
+                assert department in catalogue.faculty[faculty]
                 ret['department'] = department
-    if 'b' in tag.keys():
-        origins = tag['b']
-        faculty = 'Filozofická fakulta'
-        departments = ['Katedra psychologie'] #TODO
+    if 'b' in tag710.keys():
+        origins = tag710['b']
+        for i in range(len(origins)):
+            for correct, wrongs in convert.origin.items():
+                for wrong in wrongs:
+                    origins[i] = origins[i].replace(wrong, correct)
         if len(origins) > 4:
             raise Exception("Au")
         elif len(origins) == 4:
@@ -48,47 +50,47 @@ def convertTag710(tag,oai_id,categorize):
             departments = [commonTag.superStrip(origins[1]),commonTag.superStrip(origins[2])]
         elif len(origins) == 2:
             faculty = commonTag.superStrip(origins[0])
-            if faculty in catalogue.institutToFaculty.keys():
+            if faculty in catalogue.faculty.keys():
+                pass
+            elif faculty in catalogue.institutToFaculty.keys():
                 departments = [faculty, commonTag.superStrip(origins[1])]
                 faculty = catalogue.institutToFaculty[faculty]
+            elif faculty in ['','F']:
+                origins = origins[1:]
             else:
-                departments = [commonTag.superStrip(origins[1])]
-                #TODO to dole jde stričit do catalogue + convert
-            if len(departments) == 1 and departments[0] in ['Katedra psychologie', 'Katedra sociologie']:
-                faculty = 'Filozofická fakulta'
-            if len(departments) == 1 and departments[0] in ['Institute of Economic Studies']:
-                faculty = 'Fakulta sociálních věd'
-                department = 'Institut ekonomických studií'
-        elif len(origins) == 1:
-            origin = origins[0]
-            for correct, wrongs in convert.origin.items():
-                for wrong in wrongs:
-                    origin = origin.replace(wrong, correct)
+                categorize.categorize_item(oai_id,"Unknown faculty {}".format(faculty))
+        if len(origins) == 1:
+            origin = commonTag.superStrip(origins[0])
+            facultyTip = commonTag.getFaculty(origin)
             if origin in catalogue.faculty:
                 faculty = origin
-            elif origin in catalogue.department:
-                pass # print(origins) #TODO
-            elif origins[0] in catalogue.department:
-                pass # print(origins) #TODO
+            elif facultyTip in catalogue.faculty:
+                faculty = facultyTip
+                departments = [origin]
             else:
-                pass # print(oai_id, origin) #TODO
+                departments = [origin]
         
         if 'faculty' in locals():
-            # TODO categorize
-            #if not faculty in catalogue.faculty:
-            #    print(faculty, departments)
-            ret['faculty'] = faculty
-        if 'department' in locals():
-            #for department in departments:
-            #    if not department in catalogue.department:
-            #        print(department)
-            ret['department'] = departments
+            if faculty in catalogue.faculty:
+                ret['faculty'] = faculty
+            else:
+                categorize.categorize_item(oai_id,"Unknown faculty {}".format(faculty))
+        if 'departments' in locals():
+            facultyTip = commonTag.getFaculty(departments[0])
+            if facultyTip == None:
+                pass #TODO cca deset nezařazených kateder 
+            else:
+                assert facultyTip == faculty
+                for department in departments:
+                    if not department in catalogue.faculty[facultyTip]:
+                        raise Exception('Unknown department {}'.formant(department))
+                ret['department'] = departments
 
-    if '4' in tag.keys():
-        if not tag['4'][0] in ['dgg','oth','ths']:
+    if '4' in tag710.keys():
+        if not tag710['4'][0] in ['dgg','oth','ths']:
             pass #TODO 
-    if '7' in tag.keys():
+    if '7' in tag710.keys():
         pass #TODO identifikace (kn20010710045, xx0010498)
-    for key in tag.keys():
+    for key in tag710.keys():
         if not key in 'ab47':
-            print(key)
+            raise Exception("Unkown key")

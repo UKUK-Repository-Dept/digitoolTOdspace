@@ -15,6 +15,10 @@ def superStrip(word):
             break
     return word
 
+def getFaculty(department):
+    for faculty in catalogue.faculty.keys():
+        if department in catalogue.faculty[faculty]:
+            return faculty
 
 def convertOrigin(origin, oai_id, categorize, tag502):
     for correct, wrongs in convert.origin.items():
