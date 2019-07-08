@@ -14,7 +14,7 @@ def convertCorrectTag502(tag502, oai_id, categorize):
     if not level in catalogue.levelToTitle.keys():
         raise Exception("Unknown thesis level {}".format(level))
     else:
-        ret['degree'] = level
+        ret['degree'] = [level]
     name = name[:-1].strip()
     if not name in catalogue.levelToTitle[level]:
         categorize.categorize_item(oai_id,"Degree '{}' has not title '{}'".format(level,name))

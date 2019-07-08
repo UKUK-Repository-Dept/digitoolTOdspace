@@ -22,13 +22,14 @@ class Metadata:
         for tag in allTags:
             if name in allTags[tag].keys():
                 if result and result != allTags[tag][name]:
-                    if name in ['faculty','author']:
-                        pass #TODO zaniklé faktuly kde se tvořilo vs ty kde se digitalizovalo
-                        pass #TODO 143 neshodujících se jmen půl napůl chyby a ekvivalentní zápisy
-                    else:
-                        error_msg = 'Two different metadata value "{}" "{}"'.format(result, allTags[tag][name])
-                        print(error_msg)
-                        #raise Exception(error_msg)
+                    #TODO zaniklé faktuly kde se tvořilo vs ty kde se digitalizovalo
+                    #TODO 143 neshodujících se jmen půl napůl chyby a ekvivalentní zápisy
+                    #TODO 51 dizectanční vs rigorozní vs bakalářská 
+                    error_msg = 'Different {} "{}" "{}"'.format(name, result, allTags[tag][name])
+                    self.categorize.categorize_item(self.oai_id,error_msg)
+                    #if name == 'degree':
+                    #    print(error_msg)
+                    #raise Exception(error_msg)
                 result = allTags[tag][name]
         return result
                 
@@ -41,6 +42,7 @@ class Metadata:
         #            print(key, key2)
         ret = {}
 
+        # diplomkový speciál
         #TODO z 502 by šlo vytáhnout víc informaci
         if not '502- - ' in metadata.keys():
             error_msg = "No tag 502"
@@ -48,23 +50,21 @@ class Metadata:
         else:
             ret502 = convertTag502(metadata['502- - '],self.oai_id,self.categorize)
             if ret502:
-                ret[502] = ret502
+                ret['502'] = ret502
 
-        tags245 = [ '245-1-0', '245-1-2', '245-1-3', '245-1-4']
-        for tag in tags245:
-            if tag in metadata.keys():
+        for tag in metadata.keys():
+            if tag[:3] == '245': # titek, autor
                 tag245 = metadata[tag]
-        ret[245] = convertTag245(tag245,self.oai_id,self.categorize)
-
-        for tag in metadata.keys():
-            if tag[:3] == '710':
+                ret['245'] = convertTag245(tag245,self.oai_id,self.categorize)
+            if tag[:3] == '710': # fakulta, katedra
                 tag710 = metadata[tag]
-                ret[710] = otherTag.convertTag710(tag710, self.oai_id, self.categorize)
-        
-        for tag in metadata.keys():
-            if tag[:3] == '100':
-                ret[100] = otherTag.convertTag100(metadata[tag], self.oai_id, self.categorize)
-                pass
+                ret['710'] = otherTag.convertTag710(tag710, self.oai_id, self.categorize)
+            if tag[:3] == '100': # autor
+                ret['100'] = otherTag.convertTag100(metadata[tag], self.oai_id, self.categorize)
+            if tag[:3] == '981': # degree
+                ret['981'] = otherTag.convertTag981(metadata[tag], self.oai_id, self.categorize)
+            if tag[:3] == '655': # degree TODO
+                ret['655'] = otherTag.convertTag655(metadata[tag], self.oai_id, self.categorize)
         
         for tag in metadata.keys(): #TODO
             #>3000
@@ -75,8 +75,6 @@ class Metadata:
             #if tag[:3] == '300': # počet stran vysoká míra bordelu př  {'a': ['131 s. :'], 'b': ['příl.']} {'a': ['Obsahuje bibliografii na s. 123 - 140, tab., grafy, příl.']}
             #>2000
             #if tag[:3] == '980': # př (vždy?) {'a': ['application.pdf']}
-            #if tag[:3] == '981': # TODO porovnat s 502 př {'a': ['dp']}, {'a': ['rg']}
-            #if tag[:3] == '655': # TODO taky porovnat př {'a': ['rigorózní práce']}
             #if tag[:3] == '700': # TODO jména, roky a další
             #>1000
             #if tag[:3] == '500': # strany s literaturou, 'Příl.', a hrozně moc bordelu
@@ -85,11 +83,12 @@ class Metadata:
             #>50 (jen výběr zajímavějších)
             #if tag[:3] == '520': # abstrakt
             #if tag[:3] == '041': # jazyk
-            #if tag[:3] == '246': # TODO titulek v překladu?  
+            #if tag[:3] == '246': # titulek v překladu?  
             #if tag[:3] == '072': # téma - přidat do keywords?
             #if tag[:3] == '653': # keywords  
             #if tag[:3] == '526': # studijní obor  
             #if tag[:3] == '586': # známka 
+            if False:  
                 print(tag, metadata[tag])
         
         faculty = self.__getMetadata('faculty', ret)
@@ -99,6 +98,10 @@ class Metadata:
         author = self.__getMetadata('author', ret)
         if not author: 
             raise Exception('No author')
+        
+        degree = self.__getMetadata('degree', ret)
+        if not degree: 
+            pass #print(self.oai_id) #TODO  19 záznamů
 
         for tag in metadata.keys():
             pass #TODO ručně vytvořen soubor cetnostiTagu

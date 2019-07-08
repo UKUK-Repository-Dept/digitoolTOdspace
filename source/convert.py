@@ -37,3 +37,17 @@ title = {
         '(PhDr.)': ['(Phdr.)'],
         }
 
+degree = {
+    'dp': "Diplomová práce",
+    'bc': "Bakalářská práce",
+    'rg': "Rigorózní práce",
+    'hb': "Habilitační práce",
+    'dz': "Dizertační práce",
+        }
+
+degreeTypo = {
+    "Diplomová práce": [ "Diplomové práce", ],
+    "Bakalářská práce": [ "Bakalářské práce", ],
+    "Dizertační práce": [ "Disertace","Dizertace", "Disertační práce" ],
+    "Rigorózní práce": [ "Závěrečné práce", "Rigorozní práce"  ],
+    }
