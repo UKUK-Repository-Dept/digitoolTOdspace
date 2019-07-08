@@ -24,31 +24,66 @@ class Metadata:
     ''' + '''
     
     '''
+
+    def __getMetadata(self, name, allTags):
+        result  = None
+        for tag in allTags:
+            if name in allTags[tag].keys():
+                if result and result != allTags[tag][name]:
+                    if name == 'faculty':
+                        pass #TODO zaniklé faktuly kde se tvořilo vs ty kde se digitalizovalo
+                    else:
+                        error_msg = 'Two different metadata value "{}" "{}"'.format(result, allTags[tag][name])
+                        print(error_msg)
+                        #raise Exception(error_msg)
+                result = allTags[tag][name]
+        return result
+                
+
+
     def convertMarc(self, metadata):
         #for key in metadata.keys():
         #    for key2 in metadata.keys():
         #        if key[:3] == key2[:3] and key != key2:
         #            print(key, key2)
+        ret = {}
+
         #TODO z 502 by šlo vytáhnout víc informaci
         if not '502- - ' in metadata.keys():
             error_msg = "No tag 502"
             self.categorize.categorize_item(self.oai_id,error_msg)
         else:
             ret502 = convertTag502(metadata['502- - '],self.oai_id,self.categorize)
+            if ret502:
+                ret[502] = ret502
 
         tags245 = [ '245-1-0', '245-1-2', '245-1-3', '245-1-4']
         for tag in tags245:
             if tag in metadata.keys():
                 tag245 = metadata[tag]
-        ret245 = convertTag245(tag245,self.oai_id,self.categorize)
+        ret[245] = convertTag245(tag245,self.oai_id,self.categorize)
 
-        ret = {}
         for tag in metadata.keys():
             if tag[:3] == '710':
                 tag710 = metadata[tag]
                 ret[710] = otherTag.convertTag710(tag710, self.oai_id, self.categorize)
         
-#710 fakulta 100 autor
+        for tag in metadata.keys(): #mají všechny
+            if tag[:3] == '100':
+                #print(tag, metadata[tag])
+                ret[100] = otherTag.convertTag100(metadata[tag], self.oai_id, self.categorize)
+                pass
+        if not 100 in ret:
+            raise Exception('No author')
+        
+        faculty = self.__getMetadata('faculty', ret)
+        if not faculty: 
+            pass #TODO 40 kousků, ale některé mají 650, či ingest
+        
+        author = self.__getMetadata('author', ret)
+        if not author: 
+            pass #TODO                
+
         for tag in metadata.keys():
             if not tag in (self.marcParsed + self.marcTODO).split('\n'):
                 pass #TODO

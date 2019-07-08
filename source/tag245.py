@@ -1,3 +1,5 @@
+import  commonTag
+
 def __deleteBackslash(title):
     title = title.strip()
     if title[:2] == '/ ':
@@ -11,16 +13,16 @@ def __deleteBackslash(title):
     return title.strip()
 
 rules = {
-            'author': ['vypracovala','vypracoval'],
-            'advisor': [ 
-                'supervisor', 'ved. dipl. prác', 'školitel', 'vedúci', 'ved. dipl. prcáe',
-                'ved. dipl. p.', 'ved. dipl.', 'vedoucí diplomové práve', 'vedoucí diplomové',
-                'vedoucí diplomové vedoucí', 'vedoucí' ],
-            'committe': ['oponent práce', 'oponent','commitee'],
-            'consultant': ['konzultantka práce', 'konzultanti ', 'konzult.','consultant',
-                'konzultant práce','konzultant rigorózní práce', 'konzultant ',
-                ]
-    }
+        'author': ['vypracovala','vypracoval','autorka','autor:'],
+        'advisor': [ 
+            'supervisor', 'ved. dipl. prác', 'školitel', 'vedúci', 'ved. dipl. prcáe',
+            'ved. dipl. p.', 'ved. dipl.', 'vedoucí diplomové práve', 'vedoucí diplomové',
+            'vedoucí diplomové vedoucí', 'vedoucí' ],
+        'committe': ['oponent práce', 'oponent','commitee'],
+        'consultant': ['konzultantka práce', 'konzultanti ', 'konzult.','consultant',
+            'konzultant práce','konzultant rigorózní práce', 'konzultant ',
+            ]
+}
 
 def __splitCreator(source, rules):
     res = {}
@@ -41,7 +43,7 @@ def __splitCreator(source, rules):
                     creatorType = creator
                     remove = tag
                     break
-                if part == source.split(';')[0]:
+                if part == source.split(';')[0] and creator == 'author':
                     creatorType = 'author'
                     remove = ''
         if creatorType:
@@ -106,4 +108,12 @@ def convertTag245(tag245, oai_id, categorize):
     for tag in ['title','alternative']:
         if tag in res.keys() and ';' in res[tag]:
             res[tag] = res[tag].split(';')[0]
+
+    for tag in rules.keys():
+        if tag in res.keys():
+            res[tag] = commonTag.surnameFirst(res[tag]) 
+
+    if 'author' in res.keys():
+        if 'vypracoval' in res['author']:
+            print('au',tag245)
     return res
