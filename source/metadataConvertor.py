@@ -17,21 +17,14 @@ class Metadata:
         self.oai_id = oai_id
         metadata = {}
 
-    marcParsed = '''
-502- - 
-    '''
-    marcTODO = '''
-    ''' + '''
-    
-    '''
-
     def __getMetadata(self, name, allTags):
         result  = None
         for tag in allTags:
             if name in allTags[tag].keys():
                 if result and result != allTags[tag][name]:
-                    if name == 'faculty':
+                    if name in ['faculty','author']:
                         pass #TODO zaniklé faktuly kde se tvořilo vs ty kde se digitalizovalo
+                        pass #TODO 143 neshodujících se jmen půl napůl chyby a ekvivalentní zápisy
                     else:
                         error_msg = 'Two different metadata value "{}" "{}"'.format(result, allTags[tag][name])
                         print(error_msg)
@@ -68,13 +61,36 @@ class Metadata:
                 tag710 = metadata[tag]
                 ret[710] = otherTag.convertTag710(tag710, self.oai_id, self.categorize)
         
-        for tag in metadata.keys(): #mají všechny
+        for tag in metadata.keys():
             if tag[:3] == '100':
-                #print(tag, metadata[tag])
                 ret[100] = otherTag.convertTag100(metadata[tag], self.oai_id, self.categorize)
                 pass
-        if not 100 in ret:
-            raise Exception('No author')
+        
+        for tag in metadata.keys(): #TODO
+            #>3000
+            #if tag[:3] == '040': #př {'a': ['ABD001'], 'b': ['cze'], 'c': ['ABD001'], 'd': ['ABD001']}
+            #if tag[:3] == 'SID': # vždy {'a': ['Z39'], 'b': ['CKS01']}
+            #if tag[:3] == '260': # TODO místo vydání, rok nízká míra bordelu
+            #if tag[:3] == '910': # př  {'a': ['ABD107']}  
+            #if tag[:3] == '300': # počet stran vysoká míra bordelu př  {'a': ['131 s. :'], 'b': ['příl.']} {'a': ['Obsahuje bibliografii na s. 123 - 140, tab., grafy, příl.']}
+            #>2000
+            #if tag[:3] == '980': # př (vždy?) {'a': ['application.pdf']}
+            #if tag[:3] == '981': # TODO porovnat s 502 př {'a': ['dp']}, {'a': ['rg']}
+            #if tag[:3] == '655': # TODO taky porovnat př {'a': ['rigorózní práce']}
+            #if tag[:3] == '700': # TODO jména, roky a další
+            #>1000
+            #if tag[:3] == '500': # strany s literaturou, 'Příl.', a hrozně moc bordelu
+            #if tag[:3] == '650': # keywords; střední míra bordelu
+            #if tag[:3] == '504': # strany s literaturou a nesourodý formát
+            #>50 (jen výběr zajímavějších)
+            #if tag[:3] == '520': # abstrakt
+            #if tag[:3] == '041': # jazyk
+            #if tag[:3] == '246': # TODO titulek v překladu?  
+            #if tag[:3] == '072': # téma - přidat do keywords?
+            #if tag[:3] == '653': # keywords  
+            #if tag[:3] == '526': # studijní obor  
+            #if tag[:3] == '586': # známka 
+                print(tag, metadata[tag])
         
         faculty = self.__getMetadata('faculty', ret)
         if not faculty: 
@@ -82,17 +98,12 @@ class Metadata:
         
         author = self.__getMetadata('author', ret)
         if not author: 
-            pass #TODO                
+            raise Exception('No author')
 
         for tag in metadata.keys():
-            if not tag in (self.marcParsed + self.marcTODO).split('\n'):
-                pass #TODO
-                #print(tag)
-                #python3 source/digitoolTOdspace.py categorize --group marc | sort | uniq
-                #raise Exception("Unknown tag {}.".format(tag))
-
-
-
+            pass #TODO ručně vytvořen soubor cetnostiTagu
+            #python3 source/digitoolTOdspace.py categorize --group marc --no-output| sort | uniq -c | sort -k 1 -g
+            #print(tag)
 
 
     # seznam už ověřených / pročištěných
