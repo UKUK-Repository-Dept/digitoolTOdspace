@@ -22,9 +22,6 @@ dcParsed = '''
 {http://purl.org/dc/terms/}dateAccepted
 {http://purl.org/dc/elements/1.1/}type
 {http://purl.org/dc/terms/}name
-'''
-#tagy mimo evskp
-dcBonus = '''
 {http://purl.org/dc/terms/}dateofbirth
 {http://purl.org/dc/elements/1.1/}description
 '''
@@ -54,6 +51,11 @@ def convertDC(oai_id, categorize, metadata1):
     for tag, value in metadata1:
         if value != None:
             metadata.setdefault(tag,[]).append(value)
+    ret = {}
+    
+    for tag, value in metadata1:
+        if value and '\xa0' in value:
+            categorize.categorize_item(oai_id, "Kodování")
     
     if metadata == {}:
         categorize.categorize_item(oai_id, "No metadata")
@@ -67,10 +69,12 @@ def convertDC(oai_id, categorize, metadata1):
     if 'Plán' in metadata[tag][0]:
         categorize.categorize_item(oai_id, "Mapa nikoliv kvalifikační práce") 
         return
-    if 'Test LDAP' in metadata[tag][0] or 'Testovaci' in metadata[tag][0]:
+    if metadata[tag][0] in ['článek','AVU','Test LDAP', 'Test LDAP Htf', 'Test LDAP TF', 'Testovaci Acess rights', 'nnnnnn', ]:
         categorize.categorize_item(oai_id, "Testovací objekt - smazat.") 
         return
-    #print(metadata[tag]) #TODO cca tři blbosti
+    if 'pdf' in metadata[tag][0]:
+        categorize.categorize_item(oai_id, "Přílohy s metadataty.") 
+        return
     
     tag = '{http://purl.org/dc/terms/}abstract'
     if tag in metadata.keys() and metadata[tag] == ['abstract']:
@@ -114,14 +118,12 @@ def convertDC(oai_id, categorize, metadata1):
         #print(metadata[tag])
 
 
-    tag = '''
-{http://purl.org/dc/elements/1.1/}contributor
-    '''
-    tag = tag.strip('\n').strip()
-    if tag in metadata.keys():
-        print('!!!!',metadata[tag])
+    tag = '{http://purl.org/dc/elements/1.1/}publisher'
+    #tag = '{http://purl.org/dc/terms/}grantor'
+    #if tag in metadata.keys():
+    #    print('!!!!',metadata[tag])
     
     for tag in metadata.keys():
-        if not tag in (dcParsed + dcBonus + dcTODO +  dcSkipped).split('\n'):
+        if not tag in (dcParsed + dcTODO +  dcSkipped).split('\n'):
             raise Exception("Unknown tag {}.".format(tag))
 
