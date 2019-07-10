@@ -25,7 +25,7 @@ def convertCorrectTag502(tag502, oai_id, categorize):
     assert 1919 < int(year) < 2019
     ret['year'] = year
     ret['university'] = 'Univerzita Karlova'
-    ret = { **ret, **convertOrigin(origin, oai_id, categorize, tag502) } #TODO samat tag502
+    ret = { **ret, **convertOrigin(origin, oai_id, categorize) }
     return ret 
 
 def convertTag502(tag502, oai_id, categorize):

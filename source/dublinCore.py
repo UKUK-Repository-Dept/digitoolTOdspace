@@ -1,4 +1,4 @@
-
+import commonTag
 # seznam už ověřených / pročištěných
 # transtledet je vždy ten druhý z (en,cz)
 # subject je keywords a '53 - Fyzika' TODO nechat tam?, přidat description? (ve kterém je zadání) 
@@ -24,6 +24,7 @@ dcParsed = '''
 {http://purl.org/dc/terms/}name
 {http://purl.org/dc/terms/}dateofbirth
 {http://purl.org/dc/elements/1.1/}description
+{http://purl.org/dc/terms/}grantor
 '''
 # věci komplet špatně vyplněné či jinak nehodnotné
 dcSkipped = '''
@@ -32,14 +33,12 @@ dcSkipped = '''
 {http://purl.org/dc/elements/1.1/}collection
 {http://purl.org/dc/elements/1.1/}studyID
 {http://purl.org/dc/elements/1.1/}status
+{http://purl.org/dc/elements/1.1/}publisher
 '''
-# publisher & grantor - dělení na fakulty, je vždy stejné?
 # created má občas /
 # medium&formát zkontrolovat podle příloh
 # level a discipline potřebuje učesat a i s type zkontrolovat
 dcTODO = '''
-{http://purl.org/dc/elements/1.1/}publisher
-{http://purl.org/dc/terms/}grantor
 {http://purl.org/dc/terms/}created
 {http://purl.org/dc/terms/}medium
 {http://purl.org/dc/elements/1.1/}format
@@ -118,10 +117,11 @@ def convertDC(oai_id, categorize, metadata1):
         #print(metadata[tag])
 
 
-    tag = '{http://purl.org/dc/elements/1.1/}publisher'
-    #tag = '{http://purl.org/dc/terms/}grantor'
-    #if tag in metadata.keys():
-    #    print('!!!!',metadata[tag])
+    tag = '{http://purl.org/dc/terms/}grantor'
+    if tag in metadata.keys():
+        assert len(metadata[tag]) == 1
+        origin = metadata[tag][0]
+        r = commonTag.convertOrigin(origin, oai_id, categorize)
     
     for tag in metadata.keys():
         if not tag in (dcParsed + dcTODO +  dcSkipped).split('\n'):

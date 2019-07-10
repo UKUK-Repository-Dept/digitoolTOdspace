@@ -2,19 +2,24 @@
 origin = {
         '.': ['. .'],
         '. F': ['.F'],
-        'fakulta.': ['fakulta,', 'fakzulta.', 'práce.','fakultadgg'],
+        'fakulta.': ['fakulta,', 'fakzulta.', 'práce.','fakultadgg','fakulta v Praze','fakluta'],
         'Katedra': [ 'Kateda', 'katedra', 'Katerdra', 'Katerda', 'Katdra', 'Katedrar', 'Katedta' ],
         'Univerzita Karlova.': [ 
-            'Univerzita Karlova,', 'Univerzita Karlova v Praze.', 'Univerzita Karlova. Univerzita Karlova.'
+            'Univerzita Karlova,', 'Univerzita Karlova v Praze.', 
+            'Univerzita Karlova v Praze,', 'Univerzita Karlova V Praze.', 
+            'Univerzita Karlova. Univerzita Karlova.', 
             'Univerzita .', 'Uverzita Karlova.', 'Univerzita karlova.', 
+            'Univerzita Karlova (Praha).', 'Univerzita Karlova. (Praha)', 'Uverzita Karlova.',
+            'Univerzita karlova.', 'Univerzita Karlova .',
+            'Karlova univerzita.', 'Karlova Univerzita.','Karlova Univerzita v Praze.',
             ],
         ' lékařská': ['. lékařská'], #odstraňuju tečky z lekařských fakult abych mohla parsovat #TODO vrátit
 
         '1 lékařská fakulta': ['Lékařská fakulta. 1'],
         '2 lékařská fakulta': ['Lékařská fakulta. 2'],
         '3 lékařská fakulta': ['Lékařská fakulta. 3'],
-        'teologická': ['telogická', 'teologická'],
-        'Filozofická': ['Filozofikcá', 'Filozofciká', 'Filozoficka', 'Filozofivká', 'Fiolozofická',],
+        'teologická': ['telogická', 'teologická','teol,ogická'],
+        'Filozofická': ['Filozofikcá', 'Filozofciká', 'Filozoficka', 'Filozofivká', 'Fiolozofická','Filizofická'],
         'psychologie': ['psyvhologie', 'psychlogie', 'pésychologie', 'psychologie', 
             'pdychologie','psachologie','psycholigie','Psychologie','psychologie (1951-1975)','psycholohie',
             'pychologie', 
@@ -24,10 +29,15 @@ origin = {
         'andragogiky a ': ['nadragogiky a ','andragogika '],
         'sociologie': ['socioloogie'],
         'Fakulta sociálních věd': ['Faculty of Social Sciences'],
-        'Univerzita Karlova.': ['Univerzita Karlova (Praha).', 'Univerzita Karlova. (Praha)',
-            'Univerzita Karlova. Univerzita Karlova.',
-            'Univerzita .','Uverzita Karlova.','Univerzita Karlova v Praze.', 
-            'Univerzita karlova.', 'Univerzita Karlova .', 'Univerzita Karlova,', 'Univerzita Karlova '],
+        'Matematicko': ['Matemeticko'],
+        'humanitních ': ['humanitní '],
+        'Evangelická': ['Evangelikcá'],
+        'Katedra pastorační a sociální práce': [
+            'Sociální a pastorační fakulta',
+            'Sociální a pastorační činnost',
+            'Sociální a pastorační práce',
+            'Sociálaní a pastorační fakulta',
+            ]
         }
 
 title = {

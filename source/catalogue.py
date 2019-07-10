@@ -15,6 +15,9 @@ institutToFaculty = {
 
 faculty = {
     'Filozofická fakulta': [
+        'Katedra andragogiky',
+        'Katedra pomocných věd historických a archivního studia',
+        'Ústav etnologie',
         'Katedra andragogiky a personálního řízení',
         'Katedra české literatury a literární vědy',
         'Katedra marxisticko-leninské filosofie',
@@ -43,12 +46,13 @@ faculty = {
     'Fakulta sociálních věd': [
         'Institut politologických studií',
         'Institut sociologických studií',
+        'Institut sociologických studií. Katedra sociologie',
         'Institut mezinárodních studií',
+        'Institut mezinárodních studií. Katedra západoevropských studií',
         'Institut ekonomických studií',
         'Institut komunikačních studií a žurnalistiky',
-        'Institut komunikačních studií a žurnalistiky. Katedra mediálních studi',
-        'Institut mezinárodních studií. Katedra západoevropských studi',
-        'Institut sociologických studií. Katedra sociologi',
+        'Institut komunikačních studií a žurnalistiky. Katedra žurnalistiky',
+        'Institut komunikačních studií a žurnalistiky. Katedra mediálních studií',
         'Katedra mediálních studií',
         'Katedra západoevropských studií',
         'Katedra politologie',
@@ -56,8 +60,20 @@ faculty = {
         'Katedra německých a rakouských studií',
         'Katedra mezinárodních vztahů',
         'Katedra sociologie', ],
-    'Pedagogická fakulta': [ 'Katedra speciální pedagogik', 'Katedra výtvarné výchov', ],
-    'Právnická fakulta': [],
+    'Pedagogická fakulta': [ 
+        'Katedra speciální pedagogiky', 
+        'Katedra výtvarné výchovy', 
+        'Katedra pedagogické a školní psychologie',
+        'Katedra informačních technologií a technické výchovy',
+        ],
+    'Právnická fakulta': [ 
+        'Katedra trestního práva',
+        'Katedra obchodního práva',
+        'Katedra občanského práva',
+        'Katedra pracovního práva a práva sociálního zabezpečení',
+        'Katedra teorie práva a právních učení',
+        'Ústav práva autorského, práv průmyslových a práva soutěžního',
+        ],
     'Fakulta humanitních studií': [
         'Katedra elektronické kultury a sémiotiky',
         'Katedra obecné antropologie',
@@ -66,6 +82,15 @@ faculty = {
     'Husova československá evangelická fakulta': [],
     'Husova československá evangelická fakulta bohoslovecká': [],
     'Husova československá evangelická bohoslovecká fakulta': [],
+    'Husitská teologická fakulta': [
+        'Katedra filosofie',
+        'Katedra pedagogiky a psychologie',
+        'Katedra psychosociálních věd',
+        'Katedra religionistiky',
+        'Katedra učitelství',
+        'Ústav východního křesťanství',
+        'Ústav židovských studií',
+        ],
     'Komenského evangelická bohoslovecká fakulta': [
         'Katedra biblických věd',
         'Katedra církevních dějin',
@@ -73,7 +98,12 @@ faculty = {
     'Komenského bohoslovecká fakulta v Praze': [],
     'Evangelická teologická fakulta': [ 
             'Katedra filosofie', 'Katedra sociální teologie', 'Katedra Starého zákona', 
-            'Katedra systematické teologie', ],
+            'Katedra systematické teologie', 'Katedra teologické etiky', 'Katedra sociální pedagogiky',
+            'Teologie křesťanských tradic',
+            'Katedra pastorační a sociální práce',
+            'Katedra sociálně pedagogická',
+            'Katedra praktické teologie',
+            'Katedra religionistiky',],
     'Matematicko-fyzikální fakulta': [
         'Katedra softwarového inženýrství',
         'Katedra teoretické informatiky a matematické logiky',
@@ -82,5 +112,5 @@ faculty = {
         ],
     '1 lékařská fakulta': [],
     '2 lékařská fakulta': [],
-    '3 lékařská fakulta': [],
+    '3 lékařská fakulta': ['Klinika otorinolaryngologická'],
     }

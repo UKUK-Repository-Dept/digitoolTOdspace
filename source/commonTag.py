@@ -7,13 +7,19 @@ def superStrip(word):
         if word != word.strip():
             word = word.strip()
             change = True
+        word = word.strip()
         if word == '':
             break
         if word[-1] == '.':
             word = word[:-1]
+            continue
+        if word[0] == '.':
+            word = word[1:]
+            continue
         if not change:
             break
     return word
+
 
 def getFaculty(department):
     for faculty in catalogue.faculty.keys():
@@ -27,7 +33,7 @@ def surnameFirst(name):
     else: 
         return name
 
-def convertOrigin(origin, oai_id, categorize, tag502):
+def convertOrigin(origin, oai_id, categorize):
     for correct, wrongs in convert.origin.items():
         for wrong in wrongs:
             origin = origin.replace(wrong, correct)
@@ -45,7 +51,7 @@ def convertOrigin(origin, oai_id, categorize, tag502):
         categorize.categorize_item(oai_id,"Unknown faculty {}".format(faculty))
         return ret #jinak by se katedra psychologie v plzni mohla smotat s tou pražskou, raději ať to zařve
     if department:
-        department = department.strip()
+        department = superStrip(department)
         if department in catalogue.faculty[faculty]:
             ret['department'] = department
         else:
