@@ -10,7 +10,8 @@ from categorize import Categorize
 import problematicGroup as bugs
 
 #xml_dirname = "28.5.2019"
-xml_dirname = "18.6.2019"
+#xml_dirname = "18.6.2019"
+xml_dirname = "23.7.2019"
 digitool_category = "oai_kval"
 
 @click.group()
@@ -45,7 +46,7 @@ def categorize(group,output):
         bugs.forgot_attachements(oai_ids,dtx,c,xml_dirname+"/ls_streams.txt")
         bugs.no_attachements(oai_ids,dtx,c)
         bugs.weird_attachements(oai_ids,dtx,c)
-        bugs.tag502(oai_ids,dtx,c)
+        #bugs.tag502(oai_ids,dtx,c)
     if output:
         print(c)
 

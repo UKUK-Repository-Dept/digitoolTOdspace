@@ -1,6 +1,7 @@
 import requests
 import json
 import xml.etree.ElementTree as ET
+import digitoolXML #TODO SMAZAT
 # http://www.openarchives.org/OAI/openarchivesprotocol.html
 
 def tag(root,tag):
@@ -102,6 +103,10 @@ class Digitool:
             oai_id = self.get_oai_id(record)
             if int(oai_id) in self.skipItems:
                 continue
+            header = tag(record,"header")
+            if 'status' in header.attrib and header.attrib['status'] == 'deleted':
+                continue
+            d = "23.7.2019" + '/digital_entities'
             oai_ids.append(oai_id)
         return oai_ids
 
