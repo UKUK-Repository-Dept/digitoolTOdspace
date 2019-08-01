@@ -49,6 +49,10 @@ def forgot_attachements(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
         attachements += list(digitoolXML.get_attachements(oai_id))
     for row in open( digitoolXML.xml_dirname.split('/')[0]+"/ls_streams.txt" ,"r"):
+        if '_index.html' in row:
+            continue
+        if '_thumbnail.jpg' in row:
+            continue
         if not row[:-1] in attachements:
             oai_id = row.split("_")[0]
             categorize.categorize_item(oai_id,"opomenuty soubor bez metadat".format(oai_id))
