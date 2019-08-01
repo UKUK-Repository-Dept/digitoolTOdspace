@@ -20,19 +20,8 @@ class Digitool:
             '{http://www.openarchives.org/OAI/2.0/}record':'record',
             }
 
-    #TODO 
-    mistery = [ # nejspíš neaktualizace oai
-            23450, 14220, 14175, 1333924, 14704, 14706, 14681, 24331, 23521, 14222, 14254, 14294, 
-            14767, 15333, 46706, 14708, 46205, 14182, 14177, 50214, 14293, 14186, 14680, 14675, 
-            14183, 14221, 14678, 15064, 14631, 52563, 14682, 14685, 14766, 52626, 23520, 43163, 
-            14164, 14217, 14185, 14147, 15062, 14679, 14632, 15332, 15061, 14684, 14683, 17946, 
-            23532, 14224, 14219, 15330, 1333901 ] 
-    otherTrash = [ 1553331, 92518 ]
-
-
     def __init__(self,oai_set):
         self.oai_set = oai_set
-        self.skipItems = self.mistery + self.otherTrash 
 
     def download_list(self):
         url = ( "http://" + self.server + "/OAI-PUB?" +  
@@ -58,12 +47,11 @@ class Digitool:
         oai_ids = []
         for record in self.list:
             oai_id = self.get_oai_id(record)
-            if int(oai_id) in self.skipItems:
+            if oai_id in [ '1553331' ]: #TODO co to bylo??
                 continue
             header = tag(record,"header")
             if 'status' in header.attrib and header.attrib['status'] == 'deleted':
                 continue
-            d = "23.7.2019" + '/digital_entities'
             oai_ids.append(oai_id)
         return oai_ids
 
