@@ -20,15 +20,15 @@ def cli():
 
 
 categories = {
-    'all': bugs.all_attachements,
-    'oai': bugs.oai,
-    'forgot': bugs.forgot_attachements,
-    'noattachement': bugs.no_attachements,
-    'weird': bugs.weird_attachements,
-    'no502': bugs.no502,
-    '502': bugs.tag502,
-    'dc': bugs.dc,
-    'marc': bugs.marc,
+    'all_problems_for_hanka': bugs.all_attachements,
+    'all_items_in_oai': bugs.oai,
+    'attachments_not_linked_to_oai': bugs.forgot_attachements,
+    'ittems_without_attachement': bugs.no_attachements,
+    'susspicious_name_of_attachements': bugs.weird_attachements,
+    'no_502': bugs.no502,
+    'not_valid_502': bugs.tag502,
+    'not_valid_dc': bugs.dc,
+    'not_valid_marc': bugs.marc,
     }
 
 
