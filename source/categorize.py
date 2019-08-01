@@ -3,9 +3,9 @@ class Categorize():
     notes = [["HTF"],["FFUk","FF","FF UK","FFUK"],["etf","ETF"],["MFF"],["PF"],["FTVS"],["2LF","LF2","2LF -"],["FSV","FSV IMS","FSV_IKSZ","FSV ISS","FSV IPS"],["FHS"],["3LF"]]
     category = {}
 
-    def __init__(self, dtx, skip=False):
+
+    def __init__(self, dtx, export='list'):
         self.dtx = dtx
-        self.skip = skip
         self.category = {}
         for tag in self.ingests:
             self.category[tag] = {}
@@ -14,6 +14,8 @@ class Categorize():
             self.category[str(tags)] = {}
         self.category['other note'] = {}
         self.category['None note'] = {}
+        assert export in ['no','list','id_on_row','with_reason']
+        self.export = export
 
     def categorize_list(self, oai_ids, descriptions):
         for oai_id in oai_ids:
@@ -58,13 +60,19 @@ class Categorize():
     def __str__(self):
         sum = 0
         output = ""
+        if self.export == 'no':
+            return output
         for tag, list_id in self.category.items():
             sum += len(list_id)
-            output = output + "\n" + tag + " " + str(len(list_id))
+            output = output + tag + " " + str(len(list_id)) + "\n"
+            if self.export == 'id_on_row':
+                output = output + "\n"
+                for id in list_id:
+                    output = output + str(id) + "\n"
+            elif self.export == 'with_reason':
+                output = output + "\n"
+                for oai_id, reasons in self.category['psy'].items():
+                     output = output + str(oai_id) + " " + str(reasons) + "\n"
+                pass
         output = output + "\n" + "celkem " + str(sum)
-        #for tag, list_id in self.category.items():
-        #    output = output + "\n" + tag + " " + str(list_id)
-        #for oai_id, reasons in self.category['psy'].items():
-        #    output = output + "\n" + str(oai_id) + " " + str(reasons)
-        #return ""
         return output

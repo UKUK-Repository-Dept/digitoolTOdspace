@@ -24,25 +24,23 @@ categories = {
     'all_items_in_oai': bugs.oai,
     'attachments_not_linked_to_oai': bugs.forgot_attachements,
     'ittems_without_attachement': bugs.no_attachements,
-    'susspicious_name_of_attachements': bugs.weird_attachements,
+    'weird_attachements': bugs.weird_attachements,
     'no_502': bugs.no502,
     'not_valid_502': bugs.tag502,
     'not_valid_dc': bugs.dc,
     'not_valid_marc': bugs.marc,
     }
-
-
+output = ['no','list','id_on_row','with_reason']
 
 @cli.command()
 @click.option('--group', prompt='group', type=click.Choice(categories.keys()), help='Choose group to categorize')
-@click.option('--output/--no-output', default=True, help='Print output')
+@click.option('--output', default='list', type=click.Choice(output), help='Output print format')
 def categorize(group,output):
     dtx = DigitoolXML(xml_dirname)
-    c = Categorize(dtx)
+    c = Categorize(dtx, output)
     oai_ids = Digitool(digitool_category).download_list()
     categories[group](oai_ids,dtx,c)
-    if output:
-        print(c)
+    print(c)
 
 
 @cli.command()
