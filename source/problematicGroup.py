@@ -2,6 +2,11 @@ from filenameConvertor import FilenameConvertor
 from metadataConvertor import Metadata
 from tag502 import convertTag502
 
+def all_attachements(oai_ids, dtx, c):
+    forgot_attachements(oai_ids,dtx,c)
+    no_attachements(oai_ids,dtx,c)
+    weird_attachements(oai_ids,dtx,c)
+
 def oai(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
         categorize.categorize_item(oai_id,"je v oai")

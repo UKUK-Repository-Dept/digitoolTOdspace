@@ -18,35 +18,29 @@ digitool_category = "oai_kval"
 def cli():
     pass
 
+
+categories = {
+    'all': bugs.all_attachements,
+    'oai': bugs.oai,
+    'forgot': bugs.forgot_attachements,
+    'noattachement': bugs.no_attachements,
+    'weird': bugs.weird_attachements,
+    'no502': bugs.no502,
+    '502': bugs.tag502,
+    'dc': bugs.dc,
+    'marc': bugs.marc,
+    }
+
+
+
 @cli.command()
-@click.option('--group', prompt='group', type=click.Choice(['all','oai','forgot','noattachement','weird','502','no502','dc','marc']), help='Choose group to categorize')
+@click.option('--group', prompt='group', type=click.Choice(categories.keys()), help='Choose group to categorize')
 @click.option('--output/--no-output', default=True, help='Print output')
 def categorize(group,output):
-
     dtx = DigitoolXML(xml_dirname)
     c = Categorize(dtx)
     oai_ids = Digitool(digitool_category).download_list()
-    if group == 'oai':
-        bugs.oai(oai_ids,dtx,c)
-    elif group == 'forgot':
-        bugs.forgot_attachements(oai_ids,dtx,c)
-    elif group == 'noattachement': 
-        bugs.no_attachements(oai_ids,dtx,c)
-    elif group == 'weird':
-        bugs.weird_attachements(oai_ids,dtx,c)
-    elif group == 'no502':
-        bugs.no502(oai_ids,dtx,c)
-    elif group == '502':
-        bugs.tag502(oai_ids,dtx,c)
-    elif group == 'dc':
-        bugs.dc(oai_ids,dtx,c)
-    elif group == 'marc':
-        bugs.marc(oai_ids,dtx,c)
-    elif group == 'all':
-        bugs.forgot_attachements(oai_ids,dtx,c)
-        bugs.no_attachements(oai_ids,dtx,c)
-        bugs.weird_attachements(oai_ids,dtx,c)
-        #bugs.tag502(oai_ids,dtx,c)
+    categories[group](oai_ids,dtx,c)
     if output:
         print(c)
 
