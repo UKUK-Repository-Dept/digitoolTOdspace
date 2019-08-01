@@ -55,7 +55,7 @@ class Categorize():
                     output = output + str(id) + "\n"
             elif self.export == 'with_reason':
                 output = output + "\n"
-                for oai_id, reasons in self.category['psy'].items():
+                for oai_id, reasons in self.category[tag].items():
                      output = output + str(oai_id) + " " + str(reasons) + "\n"
                 pass
         output = output + "\n" + "celkem " + str(sum)
