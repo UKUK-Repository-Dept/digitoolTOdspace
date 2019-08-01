@@ -48,15 +48,17 @@ class Categorize():
             return output
         for tag, list_id in self.category.items():
             sum += len(list_id)
-            output = output + tag + " " + str(len(list_id)) + "\n"
+            if len(list_id) > 0:
+                output = output + tag + " " + str(len(list_id)) + "\n"
             if self.export == 'id_on_row':
-                output = output + "\n"
-                for id in list_id:
-                    output = output + str(id) + "\n"
+                if len(list_id) > 0:
+                    for id in list_id:
+                        output = output + str(id) + "\n"
+                    output = output + "\n"
             elif self.export == 'with_reason':
-                output = output + "\n"
-                for oai_id, reasons in self.category[tag].items():
-                     output = output + str(oai_id) + " " + str(reasons) + "\n"
-                pass
-        output = output + "\n" + "celkem " + str(sum)
+                if len(list_id) > 0:
+                    for oai_id, reasons in self.category[tag].items():
+                        output = output + str(oai_id) + " " + str(reasons) + "\n"
+                    output = output + "\n"
+        output = output + "celkem " + str(sum)
         return output
