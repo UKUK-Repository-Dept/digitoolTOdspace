@@ -29,7 +29,7 @@ def categorize(group,output):
     if group == 'oai':
         bugs.oai(oai_ids,dtx,c)
     elif group == 'forgot':
-        bugs.forgot_attachements(oai_ids,dtx,c,xml_dirname+"/ls_streams.txt")
+        bugs.forgot_attachements(oai_ids,dtx,c)
     elif group == 'noattachement': 
         bugs.no_attachements(oai_ids,dtx,c)
     elif group == 'weird':
@@ -43,7 +43,7 @@ def categorize(group,output):
     elif group == 'marc':
         bugs.marc(oai_ids,dtx,c)
     elif group == 'all':
-        bugs.forgot_attachements(oai_ids,dtx,c,xml_dirname+"/ls_streams.txt")
+        bugs.forgot_attachements(oai_ids,dtx,c)
         bugs.no_attachements(oai_ids,dtx,c)
         bugs.weird_attachements(oai_ids,dtx,c)
         #bugs.tag502(oai_ids,dtx,c)
