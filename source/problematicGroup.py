@@ -66,10 +66,17 @@ def no_attachements(oai_ids, digitoolXML, categorize):
 def weird_attachements(oai_ids, digitoolXML, categorize):
     convertor = FilenameConvertor(categorize)
     for oai_id in oai_ids:
-        attachements = list(digitoolXML.get_attachements(oai_id,full=True))
-        if len(attachements) == 0:
-            continue
-        descriptions = convertor.generate_description(attachements)
+        originalMetadataXML = digitoolXML.get_metadata(oai_id)
+        if 'marc' in originalMetadataXML.keys():
+            m = Metadata(categorize, oai_id)
+            m.convertMarc(originalMetadataXML['marc'])
+            #print(m.degree) TODO poslat dovnitr
+            attachements = list(digitoolXML.get_attachements(oai_id,full=True))
+            descriptions = convertor.generate_description(attachements)
+        else:
+            assert 'dc' in originalMetadataXML.keys()
+            #TODO
+
         if isinstance(descriptions, list):
             continue
         print(descriptions)

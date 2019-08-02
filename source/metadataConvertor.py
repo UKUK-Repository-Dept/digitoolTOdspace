@@ -100,8 +100,8 @@ class Metadata:
         if not author: 
             raise Exception('No author')
         
-        degree = self.__getMetadata('degree', ret)
-        if not degree: 
+        self.degree = self.__getMetadata('degree', ret)
+        if not self.degree: 
             pass #print(self.oai_id) #TODO  19 záznamů
 
         for tag in metadata.keys():
