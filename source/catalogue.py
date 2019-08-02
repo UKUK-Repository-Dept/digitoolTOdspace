@@ -54,6 +54,7 @@ faculty = {
         'Institut komunikačních studií a žurnalistiky. Katedra žurnalistiky',
         'Institut komunikačních studií a žurnalistiky. Katedra mediálních studií',
         'Katedra mediálních studií',
+        'Katedra veřejné a sociální politiky',
         'Katedra západoevropských studií',
         'Katedra politologie',
         'Katedra amerických studií',

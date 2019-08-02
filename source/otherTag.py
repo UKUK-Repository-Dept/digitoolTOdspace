@@ -83,7 +83,7 @@ def convertTag710(tag710,oai_id,categorize):
                 assert facultyTip == faculty
                 for department in departments:
                     if not department in catalogue.faculty[facultyTip]:
-                        raise Exception('Unknown department {}'.formant(department))
+                        raise Exception('Unknown department {}'.format(department))
                 ret['department'] = departments
 
     if '4' in tag710.keys():
