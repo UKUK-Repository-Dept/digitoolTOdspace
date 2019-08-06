@@ -8,11 +8,14 @@ from filenameConvertor import FilenameConvertor
 from metadataConvertor import Metadata
 from categorize import Categorize
 import problematicGroup as bugs
+import logging
 
 #xml_dirname = "28.5.2019"
 #xml_dirname = "18.6.2019"
 xml_dirname = "1.8.2019"
 digitool_category = "oai_kval"
+
+#logging.basicConfig(level=logging.DEBUG)
 
 @click.group()
 def cli():

@@ -73,9 +73,10 @@ def weird_attachements(oai_ids, digitoolXML, categorize):
             #print(m.degree) TODO poslat dovnitr
             attachements = list(digitoolXML.get_attachements(oai_id,full=True))
             descriptions = convertor.generate_description(attachements)
+        elif 'dc' in originalMetadataXML.keys():
+            pass #TODO
         else:
-            assert 'dc' in originalMetadataXML.keys()
-            #TODO
+            pass # print(oai_id) #TODO
 
         if isinstance(descriptions, list):
             continue
