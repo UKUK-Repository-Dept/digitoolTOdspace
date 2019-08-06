@@ -15,8 +15,7 @@ python3 source/digitoolTOdspace.py --help
 
 # File export from digitool
 ```
-scp -r novotj@dingo.is.cuni.cz:/exlibris/dtl/j3_1/digitool/home/profile/export/export_Jitka/digital_entities 28.5.2019/digital_entities
-ssh novotj@dingo.is.cuni.cz
-ls /exlibris/dtl/j3_1/digitool/home/profile/export/export_Jitka/streams/ > /home/novotj/ls_streams.txt
-scp -r novotj@dingo.is.cuni.cz:/home/novotj/ls_streams.txt 18.6.2019/
+ssh novotj@dingo.is.cuni.cz "ls /exlibris/dtl/j3_1/digitool/home/profile/export/export_Jitka/streams/ > /home/novotj/ls_streams.txt"
+scp -r novotj@dingo.is.cuni.cz:/exlibris/dtl/j3_1/digitool/home/profile/export/export_Jitka/digital_entities $(date +%F)/digital_entities
+scp -r novotj@dingo.is.cuni.cz:/home/novotj/ls_streams.txt $(date +%F)
 ```
