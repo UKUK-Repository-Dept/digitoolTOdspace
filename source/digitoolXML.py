@@ -23,8 +23,6 @@ class DigitoolXML:
         return usage_type in ['ARCHIVE','INDEX']
 
     def get_attachements(self, oai_id, full=False, previous=0):
-        #if oai_id == "1553331" : #TODO smazat, kalich
-        #    return []
         logging.info("Getting attachement of {}.".format(oai_id))        
         tree = ET.parse(self.xml_dirname+'/'+str(oai_id)+".xml")
         root = tree.getroot()
@@ -42,9 +40,6 @@ class DigitoolXML:
                 relation_type = relation.find('type').text
                 if relation_type == "include":
                     pid = relation.find('pid').text
-                    #if pid == previous: #TODO smazat, v dalším exportu to bude opravene
-                    #    #print(pid)
-                    #    continue
                     if not self.__skipped_type(pid):
                         subrecords.append(pid)
         for record in subrecords:
