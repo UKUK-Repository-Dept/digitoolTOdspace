@@ -12,7 +12,7 @@ import logging
 
 #xml_dirname = "28.5.2019"
 #xml_dirname = "18.6.2019"
-xml_dirname = "1.8.2019"
+xml_dirname = "2019-08-06"
 digitool_category = "oai_kval"
 
 #logging.basicConfig(level=logging.INFO)
@@ -41,7 +41,7 @@ output = ['no','list','id_on_row','with_reason']
 def categorize(group,output):
     dtx = DigitoolXML(xml_dirname)
     c = Categorize(dtx, output)
-    oai_ids = Digitool(digitool_category).download_list()
+    oai_ids = Digitool(digitool_category,xml_dirname).download_list()
     categories[group](oai_ids,dtx,c)
     print(c)
 

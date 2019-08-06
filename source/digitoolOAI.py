@@ -22,18 +22,19 @@ class Digitool:
             }
     #http://dingo.ruk.cuni.cz:8881/OAI-PUB?verb=GetRecord&identifier=oai:DURCharlesUniPrague.cz:134895&metadataPrefix=marc21
 
-    def __init__(self,oai_set):
+    def __init__(self,oai_set,xml_dirname):
         self.oai_set = oai_set
+        self.xml_dirname = xml_dirname
 
     def download_list(self):
         oai_ids = []
-        path = "1.8.2019/digital_entities"
+        path = self.xml_dirname + "/digital_entities"
         for filename in os.listdir(path):
             with open(path+'/'+filename,'r') as f:
                 if "<name>descriptive</name>" in f.read():
                     oai_id = filename.split('.')[0]
                     oai_ids.append(oai_id)
-        #print(len(oai_ids))
+        #print(oai_ids)
         return oai_ids
 
     def download_list_old(self): #OAI is evil and do not show everything which it has
