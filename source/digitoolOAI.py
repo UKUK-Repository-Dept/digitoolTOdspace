@@ -1,7 +1,8 @@
 import requests
+import logging
 import json
+import os
 import xml.etree.ElementTree as ET
-import digitoolXML #TODO SMAZAT
 # http://www.openarchives.org/OAI/openarchivesprotocol.html
 
 def tag(root,tag):
@@ -13,17 +14,30 @@ def tag(root,tag):
 
 class Digitool:
     server = "dingo.ruk.cuni.cz:8881"
-    metadataPrefix = "oai_dc"
+    metadataPrefix = "oai_dc" #alternativně "marc21"
     identifierPrefix = "oai:DURCharlesUniPrague.cz:"
     metadata_types = { 
             '{http://www.openarchives.org/OAI/2.0/oai_dc/}dc':'dc',
             '{http://www.openarchives.org/OAI/2.0/}record':'record',
             }
+    #http://dingo.ruk.cuni.cz:8881/OAI-PUB?verb=GetRecord&identifier=oai:DURCharlesUniPrague.cz:134895&metadataPrefix=marc21
 
     def __init__(self,oai_set):
         self.oai_set = oai_set
 
     def download_list(self):
+        oai_ids = []
+        path = "1.8.2019/digital_entities"
+        for filename in os.listdir(path):
+            with open(path+'/'+filename,'r') as f:
+                if "<name>descriptive</name>" in f.read():
+                    oai_id = filename.split('.')[0]
+                    oai_ids.append(oai_id)
+        #print(len(oai_ids))
+        return oai_ids
+
+    def download_list_old(self): #OAI is evil and do not show everything which it has
+        logging.info('Connecting to OAI.')
         url = ( "http://" + self.server + "/OAI-PUB?" +  
             "verb=ListRecords" + 
             "&metadataPrefix=" + self.metadataPrefix + 
@@ -47,12 +61,14 @@ class Digitool:
         oai_ids = []
         for record in self.list:
             oai_id = self.get_oai_id(record)
-            if oai_id in [ '1553331' ]: #TODO co to bylo??
+            if oai_id in [ '1553331' ]: #TODO casopis kalich, už by měl byt smazatelny
                 continue
             header = tag(record,"header")
             if 'status' in header.attrib and header.attrib['status'] == 'deleted':
                 continue
             oai_ids.append(oai_id)
+        print(len(oai_ids))
+        logging.info('OAI list downloaded')
         return oai_ids
 
 

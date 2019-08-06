@@ -15,7 +15,7 @@ import logging
 xml_dirname = "1.8.2019"
 digitool_category = "oai_kval"
 
-#logging.basicConfig(level=logging.DEBUG)
+#logging.basicConfig(level=logging.INFO)
 
 @click.group()
 def cli():

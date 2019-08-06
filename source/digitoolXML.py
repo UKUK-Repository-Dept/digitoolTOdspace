@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import os
 import requests, json
+import logging
 import xml.etree.ElementTree as ET
 
 def tag(root,tag):
@@ -21,7 +22,10 @@ class DigitoolXML:
         usage_type = root.findall("./*/*/usage_type")[0].text
         return usage_type in ['ARCHIVE','INDEX']
 
-    def get_attachements(self, oai_id, full=False):
+    def get_attachements(self, oai_id, full=False, previous=0):
+        if oai_id == "1553331" : #TODO smazat, kalich
+            return []
+        logging.info("Getting attachement of {}.".format(oai_id))        
         tree = ET.parse(self.xml_dirname+'/'+str(oai_id)+".xml")
         root = tree.getroot()
         for stream_ref in root.findall("./*stream_ref"):
@@ -38,10 +42,13 @@ class DigitoolXML:
                 relation_type = relation.find('type').text
                 if relation_type == "include":
                     pid = relation.find('pid').text
+                    if pid == previous: #TODO smazat, v dalším exportu to bude opravene
+                        #print(pid)
+                        continue
                     if not self.__skipped_type(pid):
                         subrecords.append(pid)
         for record in subrecords:
-            yield from self.get_attachements(record,full)
+            yield from self.get_attachements(record,full,previous=oai_id)
     
     def get_metadata(self, oai_id):
         def parseMarc(value):
