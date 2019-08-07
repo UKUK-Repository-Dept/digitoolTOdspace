@@ -43,8 +43,8 @@ class DigitoolXML:
                 pid = relation.find('pid').text
                 if pid in seen:
                     continue
-                if not self.__skipped_type(pid):
-                    subrecords.append(pid)
+                #if not self.__skipped_type(pid): #teď děláme exporty se všim
+                subrecords.append(pid)
         seen = seen + subrecords
         for new_id in subrecords:
             yield from self.get_attachements(new_id,full=full,seen=seen)
