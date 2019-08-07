@@ -22,7 +22,9 @@ class DigitoolXML:
         usage_type = root.findall("./*/*/usage_type")[0].text
         return usage_type in ['ARCHIVE','INDEX']
 
-    def get_attachements(self, oai_id, full=False, previous=0):
+    def get_attachements(self, oai_id, full=False, seen=None):
+        if seen == None:
+            seen = [oai_id]
         logging.info("Getting attachement of {}.".format(oai_id))        
         tree = ET.parse(self.xml_dirname+'/'+str(oai_id)+".xml")
         root = tree.getroot()
@@ -38,12 +40,14 @@ class DigitoolXML:
         for relations in root.findall("./*relations"):
             for relation in relations:
                 relation_type = relation.find('type').text
-                if relation_type == "include":
-                    pid = relation.find('pid').text
-                    if not self.__skipped_type(pid):
-                        subrecords.append(pid)
-        for record in subrecords:
-            yield from self.get_attachements(record,full,previous=oai_id)
+                pid = relation.find('pid').text
+                if pid in seen:
+                    continue
+                if not self.__skipped_type(pid):
+                    subrecords.append(pid)
+        seen = seen + subrecords
+        for new_id in subrecords:
+            yield from self.get_attachements(new_id,full=full,seen=seen)
     
     def get_metadata(self, oai_id):
         def parseMarc(value):
