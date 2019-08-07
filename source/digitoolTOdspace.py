@@ -15,7 +15,6 @@ import logging
 xml_dirname = "2019-08-06"
 digitool_category = "oai_kval"
 
-#logging.basicConfig(level=logging.INFO)
 
 @click.group()
 def cli():
@@ -34,11 +33,15 @@ categories = {
     'not_valid_marc': bugs.marc,
     }
 output = ['no','list','id_on_row','with_reason']
+loggingMap = {'error':logging.ERROR, 'info':logging.INFO}
+
 
 @cli.command()
 @click.option('--group', prompt='group', type=click.Choice(categories.keys()), help='Choose group to categorize')
 @click.option('--output', default='list', type=click.Choice(output), help='Output print format')
-def categorize(group,output):
+@click.option('--log', default='error', type=click.Choice(loggingMap.keys()), help='Logging level')
+def categorize(group,output,log):
+    logging.getLogger().setLevel(loggingMap[log])
     dtx = DigitoolXML(xml_dirname)
     c = Categorize(dtx, output)
     oai_ids = Digitool(digitool_category,xml_dirname).download_list()
