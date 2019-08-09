@@ -1,5 +1,6 @@
 from filenameConvertor import FilenameConvertor
 from metadataConvertor import Metadata
+from categorize import Categorize
 from tag502 import convertTag502
 
 def all_attachements(oai_ids, dtx, c):
@@ -47,7 +48,7 @@ def tag502(oai_ids, digitoolXML, categorize):
 def forgot_attachements(oai_ids, digitoolXML, categorize):
     attachements = []
     for oai_id in oai_ids:
-        attachements += list(digitoolXML.get_attachements(oai_id))
+        attachements += list(zip(*digitoolXML.get_attachements(oai_id)))[0]
     for row in open( digitoolXML.xml_dirname.split('/')[0]+"/ls_streams.txt" ,"r"):
         if '_index.html' in row:
             continue
@@ -68,17 +69,13 @@ def weird_attachements(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
         originalMetadataXML = digitoolXML.get_metadata(oai_id)
         if 'marc' in originalMetadataXML.keys():
-            m = Metadata(categorize, oai_id)
+            m = Metadata(Categorize(digitoolXML,'no'), oai_id)
             m.convertMarc(originalMetadataXML['marc'])
-            #print(m.degree) TODO poslat dovnitr
-            attachements = list(digitoolXML.get_attachements(oai_id,full=True))
-            descriptions = convertor.generate_description(attachements)
+            attachements = list(digitoolXML.get_attachements(oai_id))
+            descriptions = convertor.generate_description(oai_id,attachements,m.degree)
         elif 'dc' in originalMetadataXML.keys():
+            #print(m.degree) # TODO poslat dovnitr
             pass #TODO
         else:
-            pass # print(oai_id) #TODO
-
-        if isinstance(descriptions, list):
-            continue
-        print(descriptions)
-
+            #print(m.degree) # TODO poslat dovnitr
+            pass #print(oai_id) #TODO

@@ -22,20 +22,17 @@ class DigitoolXML:
         usage_type = root.findall("./*/*/usage_type")[0].text
         return usage_type in ['ARCHIVE','INDEX']
 
-    def get_attachements(self, oai_id, full=False, seen=None):
+    def get_attachements(self, oai_id, seen=None):
         if seen == None:
             seen = [oai_id]
-        logging.info("Getting attachement of {}.".format(oai_id))        
+        logging.debug("Getting attachement of {}.".format(oai_id))        
         tree = ET.parse(self.xml_dirname+'/'+str(oai_id)+".xml")
         root = tree.getroot()
         for stream_ref in root.findall("./*stream_ref"):
             filename = stream_ref.find('file_name').text
             if filename != None:
-                if full:
-                    mime_type = stream_ref.find('mime_type').text
-                    yield filename, mime_type
-                else:
-                    yield filename
+                mime_type = stream_ref.find('mime_type').text
+                yield filename, mime_type
         subrecords = []
         for relations in root.findall("./*relations"):
             for relation in relations:
@@ -47,7 +44,7 @@ class DigitoolXML:
                 subrecords.append(pid)
         seen = seen + subrecords
         for new_id in subrecords:
-            yield from self.get_attachements(new_id,full=full,seen=seen)
+            yield from self.get_attachements(new_id,seen=seen)
     
     def get_metadata(self, oai_id):
         def parseMarc(value):
@@ -65,9 +62,13 @@ class DigitoolXML:
                             metadata[index][code].append(subfield.text)
             return metadata
         def parseDC(value):
-            tree = ET.fromstring(value)
+            try:
+                tree = ET.fromstring(value)
+            except:
+                return #TODO v dalsim exportu smazat
             for field in tree:
                 yield (field.tag,field.text)
+        logging.debug("Getting metadata of {}.".format(oai_id))        
         tree = ET.parse(self.xml_dirname+"/"+str(oai_id)+".xml")
         root = tree.getroot()
         mds = tag(tag(root,"digital_entity"),"mds")

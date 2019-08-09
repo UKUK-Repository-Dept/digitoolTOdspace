@@ -10,8 +10,7 @@ from categorize import Categorize
 import problematicGroup as bugs
 import logging
 
-#xml_dirname = "28.5.2019"
-#xml_dirname = "18.6.2019"
+#xml_dirname = "2019-08-06"
 xml_dirname = "2019-08-06"
 digitool_category = "oai_kval"
 
@@ -33,7 +32,7 @@ categories = {
     'not_valid_marc': bugs.marc,
     }
 output = ['no','list','id_on_row','with_reason']
-loggingMap = {'error':logging.ERROR, 'info':logging.INFO}
+loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
 
 
 @cli.command()
