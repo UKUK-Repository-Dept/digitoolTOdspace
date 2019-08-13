@@ -62,8 +62,6 @@ class Digitool:
         oai_ids = []
         for record in self.list:
             oai_id = self.get_oai_id(record)
-            if oai_id in [ '1553331' ]: #TODO casopis kalich, už by měl byt smazatelny
-                continue
             header = tag(record,"header")
             if 'status' in header.attrib and header.attrib['status'] == 'deleted':
                 continue

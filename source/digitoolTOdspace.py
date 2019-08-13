@@ -73,11 +73,10 @@ def convertItem(oai_id, test):
     dtx = DigitoolXML(xml_dirname)
     categorize = Categorize(dtx)
     originalMetadata = dtx.get_metadata(oai_id)
-    convertedMetadata = "TODO"
     if 'marc' in originalMetadata.keys():
         pass
         c = Metadata(categorize,oai_id)
-        #convertedMetadata = c.convertMarc(originalMetadata['marc'])
+        convertedMetadata = c.convertMarc(originalMetadata['marc'])
     else:
         raise Exception("No marc metadata in {}".format(oai_id))
 

@@ -3,7 +3,6 @@ from tag502 import convertTag502
 from tag245 import convertTag245
 import catalogue
 import otherTag
-import dublinCore
 
 class Metadata:
     
