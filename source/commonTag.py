@@ -1,7 +1,7 @@
 import catalogue, convert
 
 def superStrip(word):
-    #TODO / : , []
+    delete = ['/',':',',','[',']']
     while True:
         change = False
         if word != word.strip():
@@ -10,10 +10,10 @@ def superStrip(word):
         word = word.strip()
         if word == '':
             break
-        if word[-1] == '.':
+        if word[-1] in delete:
             word = word[:-1]
             continue
-        if word[0] == '.':
+        if word[0] in delete:
             word = word[1:]
             continue
         if not change:
