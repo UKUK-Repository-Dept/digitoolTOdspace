@@ -108,7 +108,3 @@ class Metadata:
             pass #TODO ručně vytvořen soubor cetnostiTagu
             #python3 source/digitoolTOdspace.py categorize --group marc --no-output| sort | uniq -c | sort -k 1 -g
             #print(tag)
-
-
-    def convertDC(self, metadata):
-        dublinCore.convertDC(self.oai_id, self.categorize, metadata)

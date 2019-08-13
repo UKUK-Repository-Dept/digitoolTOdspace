@@ -12,13 +12,6 @@ def oai(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
         categorize.categorize_item(oai_id,"je v oai")
 
-def dc(oai_ids, digitoolXML, categorize):
-    for oai_id in oai_ids:
-        originalMetadataXML = digitoolXML.get_metadata(oai_id)
-        if 'dc' in originalMetadataXML.keys():
-            c = Metadata(categorize, oai_id)
-            c.convertDC(originalMetadataXML['dc'])
-
 def marc(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
         originalMetadataXML = digitoolXML.get_metadata(oai_id)
@@ -80,5 +73,5 @@ def weird_attachements(oai_ids, digitoolXML, categorize):
             attachements = list(digitoolXML.get_attachements(oai_id))
             descriptions = convertor.generate_description(oai_id,attachements,m.degree)
         else:
-            pass #TODO raise Exception('no morc')
+            pass #TODO raise Exception('no marc')
 

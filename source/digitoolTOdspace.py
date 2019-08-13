@@ -29,7 +29,6 @@ categories = {
     'no_502': bugs.no502,
     'only_dc': bugs.only_dc,
     'not_valid_502': bugs.tag502,
-    'not_valid_dc': bugs.dc,
     'not_valid_marc': bugs.marc,
     }
 output = ['no','list','id_on_row','with_reason']
@@ -79,12 +78,8 @@ def convertItem(oai_id, test):
         pass
         c = Metadata(categorize,oai_id)
         #convertedMetadata = c.convertMarc(originalMetadata['marc'])
-    elif 'dc' in originalMetadata.keys():
-        c = Metadata(categorize,oai_id)
-        convertedMetadata = c.convertDC(originalMetadata['dc'])
-        pass
     else:
-        raise Exception("No metadata in {}".format(oai_id))
+        raise Exception("No marc metadata in {}".format(oai_id))
 
     attachements = list(dtx.get_attachements(oai_id))
     if test:
