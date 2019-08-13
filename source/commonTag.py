@@ -1,7 +1,7 @@
 import catalogue, convert
 
 def superStrip(word):
-    delete = ['/',':',',','[',']']
+    delete = ['.','/',':',',','[',']']
     while True:
         change = False
         if word != word.strip():

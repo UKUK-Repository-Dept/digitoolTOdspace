@@ -80,7 +80,7 @@ def convertTag710(tag710,oai_id,categorize):
             if facultyTip == None:
                 pass #TODO cca deset nezařazených kateder 
             else:
-                assert facultyTip == faculty
+                assert facultyTip == faculty, "{}, {}".format(facultyTip, faculty)
                 for department in departments:
                     if not department in catalogue.faculty[facultyTip]:
                         raise Exception('Unknown department {}'.format(department))
