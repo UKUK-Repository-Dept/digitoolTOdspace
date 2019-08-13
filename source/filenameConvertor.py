@@ -1,5 +1,7 @@
 
 def distance(word1,word2):
+    word1 = word1.split('_',1)[1]
+    word2 = word2.split('_',1)[1]
     diff = 0
     if len(word2) > len(word1):
         word1, word2 = word2, word1
@@ -10,7 +12,6 @@ def distance(word1,word2):
     return diff
 
 class FilenameConvertor:
-    #TODO odhadovat z metadat
     def __init__(self, categorize):
         self.categorize = categorize
 
@@ -38,7 +39,6 @@ class FilenameConvertor:
         #TODO některé kategorie asi nebudumene nulovat ale ignorovat
         attachement = []
         mainFiles = []
-        joinFiles = False #TODO smazat
         for filename, filetype in files:
             if '_index.html' in filename or '_thumbnail.jpg' in filename:
                 continue
@@ -62,7 +62,6 @@ class FilenameConvertor:
                         attachement.append((f,t,'Příloha'))
             else:
                 self.categorize.categorize_item(oai_id, "příliš mnoho souboru vypadá jako text práce")
-                joinFiles = True
         elif len(mainFiles) == 0:
             #self.categorize.categorize_item(oai_id, "všechny soubory vypadají jako přílohy")
             pass
@@ -77,7 +76,6 @@ class FilenameConvertor:
             filename2, filetype2 = mainFiles[1]
             if filetype1 == filetype2 == 'application/pdf':
                 self.categorize.categorize_item(oai_id, "příliš mnoho souboru vypadá jako text práce")
-                joinFiles = True
                 return
             if filetype1 != 'application/pdf' and filetype2 != 'application/pdf':
                 self.categorize.categorize_item(oai_id, "text práce není v pdf")
@@ -89,8 +87,49 @@ class FilenameConvertor:
             assert filetype2 == 'application/msword'
             return attachement + [(filename1, filetype1, "Text práce"), (filename2, filetype2, "Text práce v doc")]
 
-        if joinFiles:
+        self.joinFiles(oai_id, mainFiles)
+    
+    def joinFiles(self, oai_id, mainFiles):
+        if len(mainFiles) > 2:
+            if sum([ 1 for f,t in mainFiles if t == 'application/pdf']) == 1:
+                return
+            else:
+                joinFiles = True
+        elif len(mainFiles) < 2:
+            return
+        else:
+            filename1, filetype1 = mainFiles[0]
+            filename2, filetype2 = mainFiles[1]
+            if not filetype1 == filetype2 == 'application/pdf':
+                return
+        
+        diff = [ distance(f,mainFiles[0][0]) for f,t in mainFiles]
+        if max(diff) > 1:
             for f,t in mainFiles:
-                #print('"'+f+'"',end = ' ')
-                print(f)
+                pass
+                #print(f)
+        else:
+            if 'Bulan' in mainFiles[0][0]:
+                return
+            files = []
+            ids = []
+            for f,t in mainFiles:
+                files.append(f.split('_',1)[1])
+                ids.append(f.split('_',1)[0])
+            import numpy as np
+            files = np.unique(files)
+            for i in ids:
+                print(i,end = ', ')
             print()
+            for f,t in mainFiles:
+                print(f,end=' ')
+            #print('pdfunite',end=' ')
+            #for f in files:
+            #    print('*'+f,end=' ')
+            newName = ''
+            for i in range(len(files[0])):
+                if files[0][i] == files[1][i]:
+                   newName = newName + files[0][i]
+            newName = newName.replace('_.','.')
+            print(newName)
+            #print(newName,end=' ')
