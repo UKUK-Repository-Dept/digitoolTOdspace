@@ -87,7 +87,7 @@ class FilenameConvertor:
             assert filetype2 == 'application/msword'
             return attachement + [(filename1, filetype1, "Text práce"), (filename2, filetype2, "Text práce v doc")]
 
-        self.joinFiles(oai_id, mainFiles)
+        #self.joinFiles(oai_id, mainFiles)
     
     def joinFiles(self, oai_id, mainFiles):
         if len(mainFiles) > 2:

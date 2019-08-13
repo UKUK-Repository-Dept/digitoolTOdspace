@@ -27,6 +27,7 @@ categories = {
     'ittems_without_attachement': bugs.no_attachements,
     'weird_attachements': bugs.weird_attachements,
     'no_502': bugs.no502,
+    'only_dc': bugs.only_dc,
     'not_valid_502': bugs.tag502,
     'not_valid_dc': bugs.dc,
     'not_valid_marc': bugs.marc,

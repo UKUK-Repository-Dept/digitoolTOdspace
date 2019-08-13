@@ -6,7 +6,7 @@ from tag502 import convertTag502
 def all_attachements(oai_ids, dtx, c):
     forgot_attachements(oai_ids,dtx,c)
     no_attachements(oai_ids,dtx,c)
-    weird_attachements(oai_ids,dtx,c)
+    only_dc(oai_ids,dtx,c)
 
 def oai(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
@@ -56,7 +56,7 @@ def forgot_attachements(oai_ids, digitoolXML, categorize):
             continue
         if not row[:-1] in attachements:
             oai_id = row.split("_")[0]
-            categorize.categorize_item(oai_id,"opomenuty soubor bez metadat".format(oai_id))
+            categorize.categorize_item(oai_id,"{} nemá metadata".format(row[:-1]))
 
 def no_attachements(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
@@ -64,18 +64,21 @@ def no_attachements(oai_ids, digitoolXML, categorize):
         if len(attachements) == 0:
             categorize.categorize_item(oai_id,"bez přílohy")
 
+def only_dc(oai_ids, digitoolXML, categorize):
+    for oai_id in oai_ids:
+        originalMetadataXML = digitoolXML.get_metadata(oai_id)
+        if not 'marc' in originalMetadataXML.keys() and 'dc' in originalMetadataXML.keys():
+            categorize.categorize_item(oai_id,"má dc, nemá marc")
+
 def weird_attachements(oai_ids, digitoolXML, categorize):
     convertor = FilenameConvertor(categorize)
     for oai_id in oai_ids:
         originalMetadataXML = digitoolXML.get_metadata(oai_id)
+        m = Metadata(Categorize(digitoolXML,export='no'), oai_id)
         if 'marc' in originalMetadataXML.keys():
-            m = Metadata(Categorize(digitoolXML,'no'), oai_id)
             m.convertMarc(originalMetadataXML['marc'])
             attachements = list(digitoolXML.get_attachements(oai_id))
             descriptions = convertor.generate_description(oai_id,attachements,m.degree)
-        elif 'dc' in originalMetadataXML.keys():
-            #print(m.degree) # TODO poslat dovnitr
-            pass #TODO
         else:
-            #print(m.degree) # TODO poslat dovnitr
-            pass #print(oai_id) #TODO
+            pass #TODO raise Exception('no morc')
+
