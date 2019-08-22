@@ -75,3 +75,5 @@ def weird_attachements(oai_ids, digitoolXML, categorize):
         else:
             pass #TODO raise Exception('no marc')
 
+def jaro(oai_ids, digitoolXML, categorize):
+    print("jaro")

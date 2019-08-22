@@ -69,6 +69,7 @@ class FilenameConvertor:
             filename, filetype = mainFiles[0]
             if filetype != 'application/pdf': 
                 self.categorize.categorize_item(oai_id, "text práce není v pdf")
+                self.covertToPdf(mainFiles[0])
             else:
                 return attachement + [(filename, filetype, "Text práce")]
         elif len(mainFiles) == 2:
@@ -79,6 +80,7 @@ class FilenameConvertor:
                 return
             if filetype1 != 'application/pdf' and filetype2 != 'application/pdf':
                 self.categorize.categorize_item(oai_id, "text práce není v pdf")
+                self.covertToPdf(mainFiles[0])
                 return
             if filetype2 == 'application/pdf':
                 filename1, filename2 = filename2, filename1
@@ -87,9 +89,12 @@ class FilenameConvertor:
             assert filetype2 == 'application/msword'
             return attachement + [(filename1, filetype1, "Text práce"), (filename2, filetype2, "Text práce v doc")]
 
-        #self.joinFiles(oai_id, mainFiles)
+        #self.joinFiles(oai_id mainFiles)
     
-    def joinFiles(self, oai_id, mainFiles):
+    def covertToPdf(self, docFiles):
+        pass #print(docFiles)
+    
+    def joinFiles(self, mainFiles):
         if len(mainFiles) > 2:
             if sum([ 1 for f,t in mainFiles if t == 'application/pdf']) == 1:
                 return
