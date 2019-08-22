@@ -2,6 +2,7 @@ from filenameConvertor import FilenameConvertor
 from metadataConvertor import Metadata
 from categorize import Categorize
 from tag502 import convertTag502
+from aleph import openAleph
 
 def all_attachements(oai_ids, dtx, c):
     forgot_attachements(oai_ids,dtx,c)
@@ -75,5 +76,5 @@ def weird_attachements(oai_ids, digitoolXML, categorize):
         else:
             pass #TODO raise Exception('no marc')
 
-def jaro(oai_ids, digitoolXML, categorize):
-    print("jaro")
+def aleph(oai_ids, digitoolXML, categorize):
+    records = openAleph("dtl_2006.xml")

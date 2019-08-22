@@ -30,7 +30,7 @@ categories = {
     'only_dc': bugs.only_dc,
     'not_valid_502': bugs.tag502,
     'not_valid_marc': bugs.marc,
-    'jaro': bugs.jaro,
+    'aleph': bugs.aleph,
     }
 output = ['no','list','id_on_row','with_reason']
 loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
