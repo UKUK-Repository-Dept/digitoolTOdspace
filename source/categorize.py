@@ -21,7 +21,10 @@ class Categorize():
         self.__categorize_ingest(oai_id, description)
     
     def __categorize_ingest(self, oai_id, description):
-        label, ingest, note = self.dtx.get_category(oai_id)
+        try:
+            label, ingest, note = self.dtx.get_category(oai_id)
+        except:
+            label, ingest, note = None, None, None 
         if ingest == None:
             self.__categorize_note(oai_id, description, note)
         else:

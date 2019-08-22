@@ -24,7 +24,7 @@ rules = {
             ]
 }
 
-def __splitCreator(source, rules):
+def __splitCreator(source, rules, oai_id, categorize):
     res = {}
     for part in source.split(';'):
         creatorType = None
@@ -49,7 +49,8 @@ def __splitCreator(source, rules):
         if creatorType:
             res[creatorType] = part.replace(remove,'').strip()
         else:
-            raise Exception('no Creator category')
+            categorize.categorize_item(oai_id,"245: No creator category")
+            #raise Exception('no Creator category')
     return res
 
 def convertTag245(tag245, oai_id, categorize):
@@ -64,7 +65,7 @@ def convertTag245(tag245, oai_id, categorize):
         res['alternative'] = __deleteBackslash(alternative)
     if 'c' in tag245.keys():
         creator = tag245['c'][0]
-        res.update(__splitCreator(creator, rules))
+        res.update(__splitCreator(creator, rules, oai_id, categorize))
     if 'p' in tag245.keys():
         alternative = tag245['p'][0]
     for key in tag245.keys():
