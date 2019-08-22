@@ -81,8 +81,11 @@ def aleph(oai_ids, digitoolXML, categorize):
     for metadata in records:
         oai_id = None
         for tag in metadata.keys():
-            if '856' in tag:
-                oai_id = metadata[tag]['u'][0].split('=')[-1]
+            #if '856' in tag:
+            #    oai_id = metadata[tag]['u'][0].split('=')[-1]
+            if '001' in tag:
+                oai_id = metadata[tag]
+                print(oai_id)
         #if not '502- - ' in metadata.keys():
         #    continue
         #convertTag502(metadata['502- - '],oai_id,categorize)
