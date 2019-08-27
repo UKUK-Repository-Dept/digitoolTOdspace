@@ -1,5 +1,5 @@
 import re
-import tag502, tag245, otherTag
+import tag502, tag245, tag710, otherTag
 import catalogue
 
 class Metadata:
@@ -35,7 +35,7 @@ class Metadata:
                 '100':otherTag.convertTag100, #autor
                 '245':tag245.convertTag245, #titul,autor #TODO celé znova projít
                 #'260':otherTag.convertTag260, #místo vydání (vyhazovat jen překlepy)
-                '710':otherTag.convertTag710, #fakulta, katedra
+                '710':tag710.convertTag710, #fakulta, katedra
                 }
         obligatory = {
                 '981': otherTag.convertTag981, # degree
