@@ -60,9 +60,17 @@ def no_attachements(oai_ids, digitoolXML, categorize):
 
 def only_dc(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
-        originalMetadataXML = digitoolXML.get_metadata(oai_id)
-        if not 'marc' in originalMetadataXML.keys() and 'dc' in originalMetadataXML.keys():
+        mark = False
+        dc = False
+        for relation in digitoolXML.get_relations(oai_id):
+            originalMetadataXML = digitoolXML.get_metadata(relation)
+            if 'marc' in originalMetadataXML.keys():
+                mark = True
+            if 'dc' in originalMetadataXML.keys():
+                dc = True
+        if not mark and dc:
             categorize.categorize_item(oai_id,"má dc, nemá marc")
+            
 
 def weird_attachements(oai_ids, digitoolXML, categorize):
     convertor = FilenameConvertor(categorize)
@@ -85,7 +93,7 @@ def aleph(oai_ids, digitoolXML, categorize):
             #    oai_id = metadata[tag]['u'][0].split('=')[-1]
             if '001' in tag:
                 oai_id = metadata[tag]
-                print(oai_id)
+        #print(oai_id)
         #if not '502- - ' in metadata.keys():
         #    continue
         #convertTag502(metadata['502- - '],oai_id,categorize)
