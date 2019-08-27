@@ -27,8 +27,9 @@ class Metadata:
         return result
 
     def convertMarc(self, metadata):
+        #TODO projet postupně všechny subconvetortony
+        #TODO kouknout na ty zbytkové tagy (nějaké na smazání?)
         ret = {}
-
         mandatory = {
                 '502':tag502.convertTag502, #kvalifikační práce
                 '100':otherTag.convertTag100, #autor
@@ -36,35 +37,31 @@ class Metadata:
                 #'260':otherTag.convertTag260, #místo vydání (vyhazovat jen překlepy)
                 '710':otherTag.convertTag710, #fakulta, katedra
                 }
+        obligatory = {
+                '981': otherTag.convertTag981, # degree
+                '655': otherTag.convertTag655,  
+                #'520': # abstrakt
+                #'041': # jazyk
+                #'246': # titulek v překladu  
+                }
+
         for tag in mandatory.keys():
             if not tag in metadata.keys():
                 error_msg = "No tag {} in metadata".format(tag)
                 self.categorize.categorize_item(self.oai_id,error_msg)
                 return
-            ret = mandatory[tag](metadata[tag], self.oai_id, self.categorize)
+        
+        allTags = {**mandatory, **obligatory}
+        for tag in allTags.keys():
+            if not tag in metadata.keys():
+                continue
+            ret = allTags[tag](metadata[tag], self.oai_id, self.categorize)
             if ret == None: #TODO smazat to jsou categorize veci
                 return
             self.metadata[tag] = ret
+       
 
 
-        for tag in metadata.keys():
-            if tag[:3] == '981': # degree
-                ret['981'] = otherTag.convertTag981(metadata[tag], self.oai_id, self.categorize)
-            if tag[:3] == '655': # degree TODO
-                ret['655'] = otherTag.convertTag655(metadata[tag], self.oai_id, self.categorize)
-        
-        for tag in metadata.keys(): #TODO
-            #>3000
-            # zjevne preklepy
-            #if tag[:3] == '260': # TODO místo vydání, rok nízká míra bordelu
-            #>50 (jen výběr zajímavějších)
-            #if tag[:3] == '520': # abstrakt
-            #if tag[:3] == '041': # jazyk
-            #if tag[:3] == '246': # titulek v překladu  
-            
-            if False:  
-                print(tag, metadata[tag])
-        
         faculty = self.__getMetadata('faculty')
         if not faculty: 
             self.categorize.categorize_item(self.oai_id,"No faculty")
