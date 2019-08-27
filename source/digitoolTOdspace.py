@@ -25,6 +25,7 @@ categories = {
     'all_items_in_oai': bugs.oai,
     'attachments_not_linked_to_oai': bugs.forgot_attachements,
     'ittems_without_attachement': bugs.no_attachements,
+    'not_in_aleph': bugs.not_in_aleph,
     'weird_attachements': bugs.weird_attachements,
     'no_502': bugs.no502,
     'only_dc': bugs.only_dc,

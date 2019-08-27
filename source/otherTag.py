@@ -74,7 +74,8 @@ def convertTag710(tag710,oai_id,categorize):
             if faculty in catalogue.faculty:
                 ret['faculty'] = faculty
             else:
-                categorize.categorize_item(oai_id,"Unknown faculty {}".format(faculty))
+                pass #TODO
+                #categorize.categorize_item(oai_id,"Unknown faculty {}".format(faculty))
         if 'departments' in locals():
             facultyTip = commonTag.getFaculty(departments[0])
             if facultyTip == None:
@@ -150,7 +151,8 @@ def convertTag655(tag655,oai_id,categorize):
                 if not level in ret['degree']:
                     ret['degree'].append(level)
             else:
-                categorize.categorize_item(oai_id,"Unknown degree {}".format(level))
+                # TODO tady je stucie to je cajk?
+                pass #categorize.categorize_item(oai_id,"Unknown degree {}".format(level))
             if ret['degree'] == []:
                 return {}
     for key in tag655.keys():

@@ -20,7 +20,7 @@ rules = {
             'vedoucí diplomové vedoucí', 'vedoucí' ],
         'committe': ['oponent práce', 'oponent','commitee'],
         'consultant': ['konzultantka práce', 'konzultanti ', 'konzult.','consultant',
-            'konzultant práce','konzultant rigorózní práce', 'konzultant ',
+            'konzultant práce','konzultant rigorózní práce', 'konzultant ', 'konzultantka ',
             ]
 }
 
@@ -49,6 +49,7 @@ def __splitCreator(source, rules, oai_id, categorize):
         if creatorType:
             res[creatorType] = part.replace(remove,'').strip()
         else:
+            print(source, rules)
             categorize.categorize_item(oai_id,"245: No creator category")
             #raise Exception('no Creator category')
     return res

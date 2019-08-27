@@ -46,7 +46,7 @@ class Metadata:
         #TODO z 502 by šlo vytáhnout víc informaci
         if not '502- - ' in metadata.keys():
             error_msg = "No tag 502"
-            self.categorize.categorize_item(self.oai_id,error_msg)
+            #self.categorize.categorize_item(self.oai_id,error_msg)
         else:
             ret502 = convertTag502(metadata['502- - '],self.oai_id,self.categorize)
             if ret502:
@@ -91,9 +91,9 @@ class Metadata:
             if False:  
                 print(tag, metadata[tag])
         
-        faculty = self.__getMetadata('faculty', ret)
-        if not faculty: 
-            pass #TODO 40 kousků, ale některé mají 650, či ingest
+        #faculty = self.__getMetadata('faculty', ret)
+        #if not faculty: 
+        #    self.categorize.categorize_item(self.oai_id,"No faculty")
         
         author = self.__getMetadata('author', ret)
         if not author: 

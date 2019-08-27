@@ -48,13 +48,15 @@ def convertOrigin(origin, oai_id, categorize):
     if faculty in catalogue.faculty:
         ret['faculty'] = faculty
     else:
-        categorize.categorize_item(oai_id,"Unknown faculty {}".format(faculty))
+        pass #TODO
+        #categorize.categorize_item(oai_id,"Unknown faculty {}".format(faculty))
         return ret #jinak by se katedra psychologie v plzni mohla smotat s tou pražskou, raději ať to zařve
     if department:
         department = superStrip(department)
         if department in catalogue.faculty[faculty]:
             ret['department'] = department
         else:
-            categorize.categorize_item(oai_id,"Unknown department {}".format(department))
+            pass # TODO
+            #categorize.categorize_item(oai_id,"Unknown department {}".format(department))
     return ret
 

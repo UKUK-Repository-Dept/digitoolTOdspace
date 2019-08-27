@@ -100,3 +100,12 @@ def aleph(oai_ids, digitoolXML, categorize):
         m = Metadata(categorize, oai_id)
         m.convertMarc(metadata)
 
+def not_in_aleph(oai_ids, digitoolXML, categorize):
+    records = openAleph("dtl_2006.xml")
+    for oai_id in oai_ids:
+        originalMetadataXML = digitoolXML.get_metadata(oai_id)
+        if not 'marc' in originalMetadataXML.keys():
+            #categorize.categorize_item(oai_id,"no marc")
+            continue
+        #if not '001' in originalMetadataXML['marc']:
+        #    print(originalMetadataXML['marc'])

@@ -25,6 +25,7 @@ class DigitoolXML:
     def get_relations(self, oai_id, seen=None):
         if seen == None:
             seen = [oai_id]
+            yield oai_id
         subrecords = []
         tree = ET.parse(self.xml_dirname+'/'+str(oai_id)+".xml")
         root = tree.getroot()
@@ -62,6 +63,7 @@ class DigitoolXML:
                     for subfield in field:
                         tag = field.attrib
                         index = str(tag['tag'])+'-'+str(tag['ind1'])+'-'+str(tag['ind2'])
+                        index = str(tag['tag'])+'-'+str(tag['ind1'])+'-'+str(tag['ind2'])
                         if subfield.text != None:
                             code = subfield.attrib['code']
                             metadata.setdefault(index,{})
@@ -84,6 +86,7 @@ class DigitoolXML:
             name = tag(child,"name")
             metadataType = tag(child,"type")
             value = tag(child,"value")
+            #print(oai_id, name.text, metadataType.text, value.text)
             if name.text != 'descriptive':
                 continue
             if metadataType.text == 'marc':

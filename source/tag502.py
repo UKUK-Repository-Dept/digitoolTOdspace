@@ -12,13 +12,13 @@ def convertCorrectTag502(tag502, oai_id, categorize):
     level, name = itemClass.split('(')
     level = level.strip()
     if not level in catalogue.levelToTitle.keys():
-        categorize.categorize_item(oai_id,"Unknown thesis level {}".format(level))
+#        categorize.categorize_item(oai_id,"Unknown thesis level {}".format(level))
         return
     else:
         ret['degree'] = [level]
     name = name[:-1].strip()
     if not name in catalogue.levelToTitle[level]:
-        categorize.categorize_item(oai_id,"Degree '{}' has not title '{}'".format(level,name))
+        categorize.categorize_item(oai_id,"Degree '{}' has no title '{}'".format(level,name))
     else:
         ret['degreeTitle'] = name
     origin, year = origin.split(",")
@@ -34,7 +34,7 @@ def convertTag502(tag502, oai_id, categorize):
     tag502 = tag502['a']
     if oai_id in ['81829', '62940', '17196', '81846' ]:
         error_msg = "Práce je zároveň diplomová a rigorozní {}".format(tag502)
-        categorize.categorize_item(oai_id,error_msg)
+        #categorize.categorize_item(oai_id,error_msg)
         return
     elif len(tag502) > 1:
         if len(tag502[0]) > len(tag502[1]): #ručně ověřeno že to kratší je zbytečný bordel
@@ -49,7 +49,7 @@ def convertTag502(tag502, oai_id, categorize):
             tag = tag.replace(slash,'--')
 
     if not "--" in tag:
-        categorize.categorize_item(oai_id, "Not valid 502 tag {}".format(tag) )
+        #categorize.categorize_item(oai_id, "Not valid 502 tag {}".format(tag) )
         return {}
    
     tag = tag.replace('. .','.',1)
@@ -76,7 +76,7 @@ def convertTag502(tag502, oai_id, categorize):
 
     if not ( tag[-4:].isdigit() and tag [-5] in [' ',','] ):
         error_msg = "Not valid year {}".format(tag)
-        categorize.categorize_item(oai_id,error_msg)
+        #categorize.categorize_item(oai_id,error_msg)
         return
 
     fixBeforeYear = {'. ':', ','a.': 'a, ','a ':'a, ','e ':'e, ',',,':', '}

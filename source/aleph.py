@@ -7,15 +7,18 @@ def openAleph(filename):
     for record in root:
         metadata = {}
         for field in record:
-            if field.tag in ['{http://www.loc.gov/MARC21/slim}datafield','{http://www.loc.gov/MARC21/slim}controlfield']:
+            tag = field.attrib
+            if field.tag == '{http://www.loc.gov/MARC21/slim}datafield':
+                index = str(tag['tag'])+'-'+str(tag['ind1'])+'-'+str(tag['ind2'])
                 for subfield in field:
-                    tag = field.attrib
-                    index = str(tag['tag'])+'-'+str(tag['ind1'])+'-'+str(tag['ind2'])
                     if subfield.text != None:
                         code = subfield.attrib['code']
                         metadata.setdefault(index,{})
                         metadata[index].setdefault(code,[])
                         metadata[index][code].append(subfield.text)
+            if field.tag == '{http://www.loc.gov/MARC21/slim}controlfield':
+                index = tag['tag']
+                metadata[index] = field.text
             else:
                 pass
         records.append(metadata)
