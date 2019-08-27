@@ -33,7 +33,7 @@ class Metadata:
         mandatory = {
                 '502':tag502.convertTag502, #kvalifikační práce
                 '100':otherTag.convertTag100, #autor
-                '245':tag245.convertTag245, #titul,autor
+                '245':tag245.convertTag245, #titul,autor #TODO celé znova projít
                 #'260':otherTag.convertTag260, #místo vydání (vyhazovat jen překlepy)
                 '710':otherTag.convertTag710, #fakulta, katedra
                 }

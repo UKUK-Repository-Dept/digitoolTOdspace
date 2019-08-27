@@ -49,9 +49,8 @@ def __splitCreator(source, rules, oai_id, categorize):
         if creatorType:
             res[creatorType] = part.replace(remove,'').strip()
         else:
-            print(source, rules)
             categorize.categorize_item(oai_id,"245: No creator category")
-            #raise Exception('no Creator category')
+            raise Exception('no Creator category')
     return res
 
 def convertTag245(tag245, oai_id, categorize):
@@ -105,7 +104,7 @@ def convertTag245(tag245, oai_id, categorize):
         if ', vedoucí ' in res['author']:
             res['author'] = res['author'].split(',')[0]
         else:
-            #print(res['author']) #TODO co s rozenyma 
+            print(res['author']) #TODO co s rozenyma 
             pass
     for tag in ['title','alternative']:
         if tag in res.keys() and ';' in res[tag]:
