@@ -1,8 +1,6 @@
 import re
-from tag502 import convertTag502
-from tag245 import convertTag245
+import tag502, tag245, otherTag
 import catalogue
-import otherTag
 
 class Metadata:
     
@@ -11,56 +9,45 @@ class Metadata:
                 { "key": "dc.description.abstract", "language": "pt_BR", "value": "ABSTRACT" }, 
                 { "key": "dc.title", "language": "pt_BR", "value": "Pokus" } 
                 ]}
+    metadata = {}
     
     def __init__(self, categorize, oai_id):
         self.categorize = categorize
         self.oai_id = oai_id
-        metadata = {}
 
-    def __getMetadata(self, name, allTags):
+    def __getMetadata(self, name):
         result  = None
-        for tag in allTags:
-            if name in allTags[tag].keys():
-                if result and result != allTags[tag][name]:
-                    #TODO zaniklé faktuly kde se tvořilo vs ty kde se digitalizovalo
-                    #TODO 143 neshodujících se jmen půl napůl chyby a ekvivalentní zápisy
-                    #TODO 51 dizectanční vs rigorozní vs bakalářská 
-                    error_msg = 'Different {} "{}" "{}"'.format(name, result, allTags[tag][name])
-                    self.categorize.categorize_item(self.oai_id,error_msg)
-                    #if name == 'degree':
-                    #    print(error_msg)
-                    #raise Exception(error_msg)
-                result = allTags[tag][name]
+        for tag in self.metadata:
+            if not name in  self.metadata[tag].keys():
+                continue
+            if result and result != self.metadata[tag][name]:
+                error_msg = 'Different {} "{}" "{}"'.format(name, result, self.metadata[tag][name])
+                self.categorize.categorize_item(self.oai_id,error_msg)
+            result = self.metadata[tag][name]
         return result
-                
-
 
     def convertMarc(self, metadata):
-        #for key in metadata.keys():
-        #    for key2 in metadata.keys():
-        #        if key[:3] == key2[:3] and key != key2:
-        #            print(key, key2)
         ret = {}
 
-        # diplomkový speciál
-        #TODO z 502 by šlo vytáhnout víc informaci
-        if not '502- - ' in metadata.keys():
-            error_msg = "No tag 502"
-            #self.categorize.categorize_item(self.oai_id,error_msg)
-        else:
-            ret502 = convertTag502(metadata['502- - '],self.oai_id,self.categorize)
-            if ret502:
-                ret['502'] = ret502
+        mandatory = {
+                '502':tag502.convertTag502, #kvalifikační práce
+                '100':otherTag.convertTag100, #autor
+                '245':tag245.convertTag245, #titul,autor
+                #'260':otherTag.convertTag260, #místo vydání (vyhazovat jen překlepy)
+                '710':otherTag.convertTag710, #fakulta, katedra
+                }
+        for tag in mandatory.keys():
+            if not tag in metadata.keys():
+                error_msg = "No tag {} in metadata".format(tag)
+                self.categorize.categorize_item(self.oai_id,error_msg)
+                return
+            ret = mandatory[tag](metadata[tag], self.oai_id, self.categorize)
+            if ret == None: #TODO smazat to jsou categorize veci
+                return
+            self.metadata[tag] = ret
+
 
         for tag in metadata.keys():
-            if tag[:3] == '245': # titek, autor
-                tag245 = metadata[tag]
-                ret['245'] = convertTag245(tag245,self.oai_id,self.categorize)
-            if tag[:3] == '710': # fakulta, katedra
-                tag710 = metadata[tag]
-                ret['710'] = otherTag.convertTag710(tag710, self.oai_id, self.categorize)
-            if tag[:3] == '100': # autor
-                ret['100'] = otherTag.convertTag100(metadata[tag], self.oai_id, self.categorize)
             if tag[:3] == '981': # degree
                 ret['981'] = otherTag.convertTag981(metadata[tag], self.oai_id, self.categorize)
             if tag[:3] == '655': # degree TODO
@@ -68,42 +55,24 @@ class Metadata:
         
         for tag in metadata.keys(): #TODO
             #>3000
-            #if tag[:3] == '040': #př {'a': ['ABD001'], 'b': ['cze'], 'c': ['ABD001'], 'd': ['ABD001']}
-            #if tag[:3] == 'SID': # vždy {'a': ['Z39'], 'b': ['CKS01']}
+            # zjevne preklepy
             #if tag[:3] == '260': # TODO místo vydání, rok nízká míra bordelu
-            #if tag[:3] == '910': # př  {'a': ['ABD107']}  
-            #if tag[:3] == '300': # počet stran vysoká míra bordelu př  {'a': ['131 s. :'], 'b': ['příl.']} {'a': ['Obsahuje bibliografii na s. 123 - 140, tab., grafy, příl.']}
-            #>2000
-            #if tag[:3] == '980': # př (vždy?) {'a': ['application.pdf']}
-            #if tag[:3] == '700': # TODO jména, roky a další
-            #>1000
-            #if tag[:3] == '500': # strany s literaturou, 'Příl.', a hrozně moc bordelu
-            #if tag[:3] == '650': # keywords; střední míra bordelu
-            #if tag[:3] == '504': # strany s literaturou a nesourodý formát
             #>50 (jen výběr zajímavějších)
             #if tag[:3] == '520': # abstrakt
             #if tag[:3] == '041': # jazyk
-            #if tag[:3] == '246': # titulek v překladu?  
-            #if tag[:3] == '072': # téma - přidat do keywords?
-            #if tag[:3] == '653': # keywords  
-            #if tag[:3] == '526': # studijní obor  
-            #if tag[:3] == '586': # známka 
+            #if tag[:3] == '246': # titulek v překladu  
+            
             if False:  
                 print(tag, metadata[tag])
         
-        #faculty = self.__getMetadata('faculty', ret)
-        #if not faculty: 
-        #    self.categorize.categorize_item(self.oai_id,"No faculty")
+        faculty = self.__getMetadata('faculty')
+        if not faculty: 
+            self.categorize.categorize_item(self.oai_id,"No faculty")
         
-        author = self.__getMetadata('author', ret)
+        author = self.__getMetadata('author')
         if not author: 
             raise Exception('No author')
         
-        self.degree = self.__getMetadata('degree', ret)
+        self.degree = self.__getMetadata('degree')
         if not self.degree: 
-            pass #print(self.oai_id) #TODO  19 záznamů
-
-        for tag in metadata.keys():
-            pass #TODO ručně vytvořen soubor cetnostiTagu
-            #python3 source/digitoolTOdspace.py categorize --group marc --no-output| sort | uniq -c | sort -k 1 -g
-            #print(tag)
+            self.categorize.categorize_item(self.oai_id,"No degre")

@@ -62,8 +62,8 @@ class DigitoolXML:
                 if field.tag == '{http://www.loc.gov/MARC21/slim}datafield':
                     for subfield in field:
                         tag = field.attrib
-                        index = str(tag['tag'])+'-'+str(tag['ind1'])+'-'+str(tag['ind2'])
-                        index = str(tag['tag'])+'-'+str(tag['ind1'])+'-'+str(tag['ind2'])
+                        #index = str(tag['tag'])+'-'+str(tag['ind1'])+'-'+str(tag['ind2'])
+                        index = tag['tag']
                         if subfield.text != None:
                             code = subfield.attrib['code']
                             metadata.setdefault(index,{})

@@ -9,7 +9,8 @@ def openAleph(filename):
         for field in record:
             tag = field.attrib
             if field.tag == '{http://www.loc.gov/MARC21/slim}datafield':
-                index = str(tag['tag'])+'-'+str(tag['ind1'])+'-'+str(tag['ind2'])
+                #index = str(tag['tag'])+'-'+str(tag['ind1'])+'-'+str(tag['ind2'])
+                index = tag['tag']
                 for subfield in field:
                     if subfield.text != None:
                         code = subfield.attrib['code']

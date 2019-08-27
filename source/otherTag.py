@@ -8,7 +8,7 @@ university = [
     'Univerzita Karlova .',
     'Univerzita Karlova,',
     'Univerzita Karlova',
-    ]
+    ] #jsou chyby opravit
 
 def __filterUniversity(values):
     university = convert.origin['Univerzita Karlova.']
