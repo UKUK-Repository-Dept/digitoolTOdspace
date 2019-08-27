@@ -21,30 +21,37 @@ class DigitoolXML:
         root = tree.getroot()
         usage_type = root.findall("./*/*/usage_type")[0].text
         return usage_type in ['ARCHIVE','INDEX']
-
-    def get_attachements(self, oai_id, seen=None):
+    
+    def get_relations(self, oai_id, seen=None):
         if seen == None:
             seen = [oai_id]
-        logging.debug("Getting attachement of {}.".format(oai_id))        
+        subrecords = []
         tree = ET.parse(self.xml_dirname+'/'+str(oai_id)+".xml")
         root = tree.getroot()
-        for stream_ref in root.findall("./*stream_ref"):
-            filename = stream_ref.find('file_name').text
-            if filename != None:
-                mime_type = stream_ref.find('mime_type').text
-                yield filename, mime_type
-        subrecords = []
         for relations in root.findall("./*relations"):
             for relation in relations:
                 relation_type = relation.find('type').text
                 pid = relation.find('pid').text
                 if pid in seen:
                     continue
-                #if not self.__skipped_type(pid): #teď děláme exporty se všim
+                else:
+                    seen.append(pid)
+                    yield pid
                 subrecords.append(pid)
         seen = seen + subrecords
         for new_id in subrecords:
-            yield from self.get_attachements(new_id,seen=seen)
+            yield from self.get_relations(new_id,seen=seen)
+
+    def get_attachements(self, oai_id, seen=None):
+        logging.debug("Getting attachement of {}.".format(oai_id))
+        for relation in self.get_relations(oai_id):
+            tree = ET.parse(self.xml_dirname+'/'+str(relation)+".xml")
+            root = tree.getroot()
+            for stream_ref in root.findall("./*stream_ref"):
+                filename = stream_ref.find('file_name').text
+                if filename != None:
+                    mime_type = stream_ref.find('mime_type').text
+                    yield filename, mime_type
     
     def get_metadata(self, oai_id):
         def parseMarc(value):
