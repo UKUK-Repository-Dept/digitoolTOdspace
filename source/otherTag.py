@@ -11,10 +11,11 @@ def convertTag100(tag100,oai_id,categorize):
             author = author[:-1]
         ret['author'] = author
     if 'c' in tag100.keys():
-        pass # print(tag100['c']) zbytečné př 'sociologie Dr ml r.obhaj.
+        pass # print(oai_id,tag100['c']) # zbytečné př 'sociologie Dr ml r.obhaj.
     if 'd' in tag100.keys():
-        pass #print(tag100['d']) #TODO narozeni (a umrti) autora
+        pass #print(oai_id,tag100['d']) #TODO narozeni (a umrti) autora
     if 'q' in tag100.keys():
+        #print(oai_id,tag100['q'])
         pass # TODO 4x rok obhájení i když tam má být  "Fuller form of name (NR)"
     if '4' in tag100.keys():
         if not tag100['4'][0] in ['dis','aut','ths']:

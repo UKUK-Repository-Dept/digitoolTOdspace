@@ -7,7 +7,7 @@ def convertTag710(tag710,oai_id,categorize):
         if tag710['a'][:31] == 'Univerzita Karlova. ':
             a = tag710['a'][31:i]
         else:
-            print(tag710)
+            pass # TODO print(tag710)
 
         if a != []:
             assert len(a) == 1

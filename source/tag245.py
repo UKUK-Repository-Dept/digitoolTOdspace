@@ -86,12 +86,15 @@ def convertTag245(tag245, oai_id, categorize):
     for creator, delete in d:
         if creator in res:
             if delete in res[creator]:
+                #if delete in res[creator]:
+                #    print(oai_id,tag245)
                 res[creator] = res[creator].replace(delete, '').strip()
    
     res = { k:v for k,v in res.items() if not v in ['','není uveden','neuveden'] }
     for key, value in res.items():
         if value[0] == ':':
             value = value[1:]
+            #print(oai_id,tag245)
         if value[0] == '[':
             value = value[1:]
         if value[-1] == ']':
@@ -104,7 +107,7 @@ def convertTag245(tag245, oai_id, categorize):
         if ', vedoucí ' in res['author']:
             res['author'] = res['author'].split(',')[0]
         else:
-            print(res['author']) #TODO co s rozenyma 
+            #print(res['author']) #TODO co s rozenyma 
             pass
     for tag in ['title','alternative']:
         if tag in res.keys() and ';' in res[tag]:
