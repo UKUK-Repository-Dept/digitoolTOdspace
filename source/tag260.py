@@ -15,7 +15,8 @@ def convertTag260(tag,oai_id,categorize):
         assert len(tag['c']) == 1
         year = tag['c'][0]
         if not len(year) == 4:
-            print(oai_id,year)
+            pass
+            #print(oai_id,year)
         else:
             assert 1900 < int(year) < 2019, year
         pass

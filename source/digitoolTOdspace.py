@@ -7,6 +7,7 @@ from dspace import Dspace
 from filenameConvertor import FilenameConvertor
 from metadataConvertor import Metadata
 from categorize import Categorize
+import aleph
 import problematicGroup as bugs
 import logging
 
@@ -49,6 +50,21 @@ def categorize(group,output,log):
     categories[group](oai_ids,dtx,c)
     print(c)
 
+@cli.command()
+@click.option('--log', default='error', type=click.Choice(loggingMap.keys()), help='Logging level')
+def statistic(log):
+    logging.getLogger().setLevel(loggingMap[log])
+    records = aleph.openAleph("dtl_2006.xml")
+    print('záznamů ',len(records))
+    allTags = []
+    for metadata in records:
+        allTags.extend(metadata.keys())
+    statistic = []
+    for tag in set(allTags):
+        statistic.append((allTags.count(tag),tag))
+    statistic = sorted(statistic,reverse=True)
+    for count, tag in statistic:
+        print(tag,count)
 
 @cli.command()
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')

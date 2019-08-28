@@ -11,7 +11,7 @@ def convertTag100(tag100,oai_id,categorize):
             author = author[:-1]
         ret['author'] = author
     if 'c' in tag100.keys():
-        pass # print(oai_id,tag100['c']) # zbytečné př 'sociologie Dr ml r.obhaj.
+        pass #print(oai_id,tag100['c']) # TODO má tam být Dr a pod nikoliv 'psychologie'
     if 'd' in tag100.keys():
         pass #print(oai_id,tag100['d']) #TODO narozeni (a umrti) autora
     if 'q' in tag100.keys():
