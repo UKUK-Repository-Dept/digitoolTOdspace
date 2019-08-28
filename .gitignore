@@ -4,6 +4,7 @@ output.txt
 export_vskp
 .vsdoce/*
 */__pycache__/*
+*/*/__pycache__/*
 *2019*/
 .vscode/*
 env/*

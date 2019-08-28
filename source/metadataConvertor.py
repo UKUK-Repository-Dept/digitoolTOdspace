@@ -1,5 +1,5 @@
 import re
-import tag502, tag245, tag710, tag260, otherTag
+import tags.tag502, tags.tag245, tags.tag710, tags.tag260, tags.tag100, tags.otherTag
 import catalogue
 
 class Metadata:
@@ -31,15 +31,15 @@ class Metadata:
         #TODO kouknout na ty zbytkové tagy (nějaké na smazání?)
         ret = {}
         mandatory = {
-                '502':tag502.convertTag502, #kvalifikační práce
-                '100':otherTag.convertTag100, #autor
-                '245':tag245.convertTag245, #titul,autor 
-                '260':tag260.convertTag260, #místo vydání a datum (vyhazovat jen překlepy)
-                '710':tag710.convertTag710, #fakulta, katedra
+                '502':tags.tag502.convertTag502, #kvalifikační práce
+                '100':tags.tag100.convertTag100, #autor
+                '245':tags.tag245.convertTag245, #titul,autor 
+                '260':tags.tag260.convertTag260, #místo vydání a datum (vyhazovat jen překlepy)
+                '710':tags.tag710.convertTag710, #fakulta, katedra
                 }
         obligatory = {
-                '981': otherTag.convertTag981, # degree
-                '655': otherTag.convertTag655,  
+                '981': tags.otherTag.convertTag981, # degree
+                '655': tags.otherTag.convertTag655,  
                 #'520': # abstrakt
                 #'041': # jazyk
                 #'246': # titulek v překladu  

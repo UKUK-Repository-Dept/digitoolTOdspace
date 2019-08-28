@@ -1,4 +1,4 @@
-import  commonTag
+import  tags.commonTag
 
 def __deleteBackslash(title):
     title = title.strip()
@@ -115,7 +115,7 @@ def convertTag245(tag245, oai_id, categorize):
 
     for tag in rules.keys():
         if tag in res.keys():
-            res[tag] = commonTag.surnameFirst(res[tag]) 
+            res[tag] = tags.commonTag.surnameFirst(res[tag]) 
 
     if 'author' in res.keys():
         if 'vypracoval' in res['author']:

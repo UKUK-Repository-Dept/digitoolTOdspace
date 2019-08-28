@@ -1,7 +1,7 @@
 from filenameConvertor import FilenameConvertor
 from metadataConvertor import Metadata
 from categorize import Categorize
-from tag502 import convertTag502
+from tags.tag502 import convertTag502
 from aleph import openAleph
 
 def all_attachements(oai_ids, dtx, c):

@@ -1,6 +1,6 @@
 import catalogue 
 import convert
-from commonTag import convertOrigin
+from tags.commonTag import convertOrigin
 
 def convertCorrectTag502(tag502, oai_id, categorize):
     ret = {}
