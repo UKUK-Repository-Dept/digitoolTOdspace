@@ -22,3 +22,4 @@ def convertTag260(tag,oai_id,categorize):
         pass
     for k in tag.keys():
         assert k in 'abc'
+    return {}

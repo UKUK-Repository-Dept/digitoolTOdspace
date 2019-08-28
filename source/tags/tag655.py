@@ -1,8 +1,11 @@
-
+import convert
 
 def convertTag655(tag655,oai_id,categorize):
     ret = {}
+    #print(tag655)
+    return ret
     if 'a' in tag655.keys():
+        print(tag655['a'])
         ret['degree'] = []
         for level in tag655['a']:
             level = tag655['a'][0]

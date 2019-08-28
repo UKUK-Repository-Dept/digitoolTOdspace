@@ -1,18 +1,25 @@
 import catalogue 
+import convert
+from tags import commonTag
 
 def convertTag710(tag710,oai_id,categorize):
     ret = {}
     if 'a' in tag710.keys():
         #a = __filterUniversity(tag710['a'])
+        
+        a=0
         if tag710['a'][:31] == 'Univerzita Karlova. ':
             a = tag710['a'][31:i]
         else:
+            a = tag710['a']
             pass # TODO print(tag710)
-
-        if a != []:
+        if tag710['a'][:31] == 'Univerzita Karlova. ':
+            pass
+    return {}
+'''        if a != []:
             assert len(a) == 1
-            faculty, department = a[0].split('.')
-            assert faculty in catalogue.faculty
+            #faculty, department = a[0].split('.')
+            #assert faculty in catalogue.faculty
             ret['faculty'] = faculty
             if department != '':
                 department = department.strip()
@@ -75,4 +82,4 @@ def convertTag710(tag710,oai_id,categorize):
         if not key in 'ab47':
             raise Exception("Unkown key")
     return ret
-
+'''

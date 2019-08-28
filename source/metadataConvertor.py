@@ -1,5 +1,4 @@
 import re
-#import tags.tag502, tags.tag245, tags.tag710, tags.tag260, tags.tag100, tags.tag981, tags.tag655
 from tags import * 
 import catalogue
 
@@ -28,6 +27,7 @@ class Metadata:
         return result
 
     def convertMarc(self, metadata):
+        #TODO smazat soubort convert / vše opravit
         ret = {}
         mandatory = {
                 '502': tag502.convertTag502, #kvalifikační práce
@@ -37,11 +37,11 @@ class Metadata:
                 '710': tag710.convertTag710, #fakulta, katedra #TODO kontrola dle mailu
                 }
         obligatory = {
-                '981': tag981.convertTag981, # degree #TODO napsat mail
                 '655': tag655.convertTag655, # TODO kontrola dle mailu
                 #'520': # abstrakt
                 #'041': # jazyk
-                #'246': # titulek v překladu  
+                #'246': # titulek v překladu 
+                #'650': # předmětvá hesla (bez kontroly obsahu)
                 }
 
         for tag in mandatory.keys():
@@ -55,7 +55,7 @@ class Metadata:
             if not tag in metadata.keys():
                 continue
             ret = allTags[tag](metadata[tag], self.oai_id, self.categorize)
-            if ret == None: #TODO smazat to jsou categorize veci
+            if ret == None: #TODO smazat, to by se děje jen při chybách
                 return
             self.metadata[tag] = ret
        
