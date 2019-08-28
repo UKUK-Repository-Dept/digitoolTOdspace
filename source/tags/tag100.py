@@ -7,18 +7,20 @@ def convertTag100(tag100,oai_id,categorize):
         if author[-1] == ',':
             author = author[:-1]
         ret['author'] = author
-    if 'c' in tag100.keys():
-        pass #print(oai_id,tag100['c']) # TODO má tam být Dr a pod nikoliv 'psychologie'
-    if 'd' in tag100.keys():
-        pass #print(oai_id,tag100['d']) #TODO narozeni (a umrti) autora
+    if 'c' in tag100.keys(): # má tam být Dr a pod nikoliv 'psychologie'
+        assert len(tag100['c']) == 1
+        if not tag100['c'] in ['PhDr','ml','Dr']:
+            categorize.categorize_item(oai_id,"100c neznámá hodnota  {}".format(tag100['c']))
+    if 'd' in tag100.keys(): # narození (a úmrti) autora
+        pass 
     if 'q' in tag100.keys():
-        #print(oai_id,tag100['q'])
-        pass # TODO 4x rok obhájení i když tam má být  "Fuller form of name (NR)"
+        assert 'obhaj' in tag100['q'][0]
+        categorize.categorize_item(oai_id,"100q nemá mít roky obhajoby  {}".format(tag100['q']))
     if '4' in tag100.keys():
         if not tag100['4'][0] in ['dis','aut','ths']:
             pass
     if '7' in tag100.keys():
-        pass # print(tag100['7']) #108 ks 'jk01100092' 'xx0058281'
+        pass 
     for key in tag100.keys():
         if not key in 'acdq47':
             raise Exception("Unkown key")
