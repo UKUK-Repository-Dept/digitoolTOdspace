@@ -1,5 +1,6 @@
 import re
-import tags.tag502, tags.tag245, tags.tag710, tags.tag260, tags.tag100, tags.otherTag
+#import tags.tag502, tags.tag245, tags.tag710, tags.tag260, tags.tag100, tags.tag981, tags.tag655
+from tags import * 
 import catalogue
 
 class Metadata:
@@ -27,19 +28,17 @@ class Metadata:
         return result
 
     def convertMarc(self, metadata):
-        #TODO projet postupně všechny subconvetortony
-        #TODO kouknout na ty zbytkové tagy (nějaké na smazání?)
         ret = {}
         mandatory = {
-                '502':tags.tag502.convertTag502, #kvalifikační práce
-                '100':tags.tag100.convertTag100, #autor
-                '245':tags.tag245.convertTag245, #titul,autor 
-                '260':tags.tag260.convertTag260, #místo vydání a datum (vyhazovat jen překlepy)
-                '710':tags.tag710.convertTag710, #fakulta, katedra
+                '502': tag502.convertTag502, #kvalifikační práce
+                '100': tag100.convertTag100, #autor
+                '245': tag245.convertTag245, #titul,autor #TODO kontrola dle mailu od Iry 
+                '260': tag260.convertTag260, #místo vydání a datum (vyhazovat jen překlepy) # TODO čeká na odpověď
+                '710': tag710.convertTag710, #fakulta, katedra #TODO kontrola dle mailu
                 }
         obligatory = {
-                '981': tags.otherTag.convertTag981, # degree
-                '655': tags.otherTag.convertTag655,  
+                '981': tag981.convertTag981, # degree #TODO napsat mail
+                '655': tag655.convertTag655, # TODO kontrola dle mailu
                 #'520': # abstrakt
                 #'041': # jazyk
                 #'246': # titulek v překladu  
