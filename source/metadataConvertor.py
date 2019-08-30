@@ -40,10 +40,10 @@ class Metadata:
                 }
         obligatory = {
                 '655': tag655.convertTag655, # TODO čekám na mail
-                '520': tag520.convertTag520, # abstrakt #TODO prázdné
-                '041': tag041.convertTag041, # jazyk #TODO prázdné 
-                '246': tag246.convertTag246, # titulek v překladu #TODO prázdné  
-                '650': tag650.convertTag650, # předmětvá hesla (bez kontroly obsahu) #TODO prázdné 
+                '520': tag520.convertTag520, # abstrakt #TODO čekám na mail
+                '041': tag041.convertTag041, # jazyk 
+                '246': tag246.convertTag246, # titulek v překladu  
+                '650': tag650.convertTag650, # keywords (bez kontroly obsahu) 
                 }
 
         for tag in mandatory.keys():
@@ -74,3 +74,5 @@ class Metadata:
         self.degree = self.__getMetadata('degree')
         if not self.degree: 
             self.categorize.categorize_item(self.oai_id,"No degre")
+
+        #TODO lang alternative_lang
