@@ -1,10 +1,18 @@
 levelToTitle = {
-    "Diplomová práce": [ "Mgr.", ],
     "Bakalářská práce": [ "Bc.", ],
+    "Diplomová práce": [ "Mgr.", ],
     "Rigorózní práce": [ "PhDr.", 'JUDr.', 'RNDr.', 'PharmDr.', 'MUDr.', "ThDr.", ],
-    "Habilitační práce": [ "Doc.", ],
     "Dizertační práce": [ 'ThD.', "PhD.", ],
+    "Habilitační práce": [ "Doc.", ],
     }
+categoryToTypeTitle = {
+    "bakalářské práce": "Bakalářská práce",
+    "diplomové práce": "Diplomová práce",
+    "rigorózní práce": "Rigorózní práce",
+    "dizertační práce": "Dizertační práce",
+    "habilitační práce": "Habilitační práce",
+    }
+
 
 institutToFaculty = {
     'Institut politologických studií': 'Fakulta sociálních věd', 

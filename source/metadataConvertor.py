@@ -17,13 +17,15 @@ class Metadata:
 
     def __getMetadata(self, name):
         result  = None
+        resultTag = None
         for tag in self.metadata:
             if not name in  self.metadata[tag].keys():
                 continue
             if result and result != self.metadata[tag][name]:
-                error_msg = 'Different {} "{}" "{}"'.format(name, result, self.metadata[tag][name])
+                error_msg = 'Different {} {}:"{}" {}: "{}"'.format(name, resultTag, result, tag, self.metadata[tag][name])
                 self.categorize.categorize_item(self.oai_id,error_msg)
             result = self.metadata[tag][name]
+            resultTag = tag
         return result
 
     def convertMarc(self, metadata):
@@ -33,7 +35,7 @@ class Metadata:
                 '502': tag502.convertTag502, #kvalifikační práce
                 '100': tag100.convertTag100, #autor
                 '245': tag245.convertTag245, #titul,autor #TODO kontrola dle mailu od Iry 
-                '260': tag260.convertTag260, #místo vydání a datum (vyhazovat jen překlepy) # TODO čeká na odpověď
+                #'260': tag260.convertTag260, #místo vydání a datum (vyhazovat jen překlepy) # nejdřív si to objednají a pak chtějí ignorovat
                 '710': tag710.convertTag710, #fakulta, katedra #TODO kontrola dle mailu
                 }
         obligatory = {

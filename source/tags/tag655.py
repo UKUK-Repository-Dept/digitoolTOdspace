@@ -1,28 +1,18 @@
-import convert
+import catalogue
 
 def convertTag655(tag655,oai_id,categorize):
     ret = {}
-    #print(tag655)
-    return ret
     if 'a' in tag655.keys():
-        print(tag655['a'])
-        ret['degree'] = []
-        for level in tag655['a']:
-            level = tag655['a'][0]
-            level = level[0].upper() + level[1:] #první písmeno má být velké
-            for correct, wrongs in convert.degreeTypo.items():
-                for wrong in wrongs:
-                    level = level.replace(wrong, correct)
-            if level in catalogue.levelToTitle.keys():
-                if not level in ret['degree']:
-                    ret['degree'].append(level)
-            else:
-                # TODO tady je stucie to je cajk?
-                pass #categorize.categorize_item(oai_id,"Unknown degree {}".format(level))
-            if ret['degree'] == []:
-                return {}
+        if len(tag655['a']) > 1:
+            categorize.categorize_item(oai_id,"More than one degree {}".format(tag655['a']))
+            return ret
+        degree = tag655['a'][0]
+        if not degree in catalogue.categoryToTypeTitle.keys():
+            pass #TODO ignorovat disertaci?
+            return ret
+        ret['degree'] = catalogue.categoryToTypeTitle[degree]
+        return ret
     for key in tag655.keys():
         if not key in 'a27':
-            print(key)
-            #raise Exception("Unkown key")
+            raise Exception("Unkown key")
     return ret
