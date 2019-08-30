@@ -40,10 +40,10 @@ class Metadata:
                 }
         obligatory = {
                 '655': tag655.convertTag655, # TODO čekám na mail
-                #'520': # abstrakt
-                #'041': # jazyk
-                #'246': # titulek v překladu 
-                #'650': # předmětvá hesla (bez kontroly obsahu)
+                '520': tag520.convertTag520, # abstrakt #TODO prázdné
+                '041': tag041.convertTag041, # jazyk #TODO prázdné 
+                '246': tag246.convertTag246, # titulek v překladu #TODO prázdné  
+                '650': tag650.convertTag650, # předmětvá hesla (bez kontroly obsahu) #TODO prázdné 
                 }
 
         for tag in mandatory.keys():
