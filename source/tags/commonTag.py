@@ -1,26 +1,5 @@
 import catalogue
 
-def superStrip(word):
-    delete = ['.','/',':',',','[',']']
-    while True:
-        change = False
-        if word != word.strip():
-            word = word.strip()
-            change = True
-        word = word.strip()
-        if word == '':
-            break
-        if word[-1] in delete:
-            word = word[:-1]
-            continue
-        if word[0] in delete:
-            word = word[1:]
-            continue
-        if not change:
-            break
-    return word
-
-
 def getFaculty(department):
     for faculty in catalogue.faculty.keys():
         if department in catalogue.faculty[faculty]:
@@ -49,7 +28,6 @@ def convertOrigin(origin, oai_id, categorize):
         #categorize.categorize_item(oai_id,"Unknown faculty {}".format(faculty))
         return ret #jinak by se katedra psychologie v plzni mohla smotat s tou pražskou, raději ať to zařve
     if department:
-        department = superStrip(department)
         if department in catalogue.faculty[faculty]:
             ret['department'] = department
         else:

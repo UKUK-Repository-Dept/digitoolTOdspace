@@ -29,7 +29,6 @@ class Metadata:
         return result
 
     def convertMarc(self, metadata):
-        #TODO smazat superstrip
         #TODO presat surnameFirst+convertOrigin
         ret = {}
         mandatory = {
