@@ -1,5 +1,4 @@
 import catalogue 
-import convert
 from tags import commonTag
 
 def convertTag710(tag710,oai_id,categorize):

@@ -1,5 +1,4 @@
 import catalogue 
-import convert
 from tags.commonTag import convertOrigin
 
 def convertCorrectTag502(tag502, oai_id, categorize):
@@ -7,18 +6,18 @@ def convertCorrectTag502(tag502, oai_id, categorize):
     itemClass, origin = tag502.split("--")
     itemClass = itemClass.strip()
     if not '(' in itemClass:
-        categorize.categorize_item(oai_id,"No academic title in  {}".format(itemClass))
+        categorize.categorize_item(oai_id,"502: No academic title in  {}".format(itemClass))
         return ret
     level, name = itemClass.split('(')
     level = level.strip()
     if not level in catalogue.levelToTitle.keys():
-        categorize.categorize_item(oai_id,"Unknown thesis level {}".format(level))
+        categorize.categorize_item(oai_id,"502: Unknown thesis level {}".format(level))
         return
     else:
         ret['degree'] = level
     name = name[:-1].strip()
     if not name in catalogue.levelToTitle[level]:
-        categorize.categorize_item(oai_id,"Degree '{}' has no title '{}'".format(level,name))
+        categorize.categorize_item(oai_id,"502: Degree '{}' has no title '{}'".format(level,name))
     else:
         ret['degreeTitle'] = name
     if origin.count(',') != 1:
@@ -42,15 +41,11 @@ def convertTag502(tag502, oai_id, categorize):
     tag = tag502[0].strip()
 
     if not "--" in tag:
-        categorize.categorize_item(oai_id,"No -- split.")
+        categorize.categorize_item(oai_id,"502: No -- split.")
         return
     
-    for correct, wrongs in convert.title.items():
-        for wrong in wrongs:
-            tag = tag.replace(wrong, correct)
-
     if not ( tag[-4:].isdigit() and tag [-5] in [' ',','] ):
-        error_msg = "Not valid year in {}".format(tag)
+        error_msg = "502: Not valid year in {}".format(tag)
         categorize.categorize_item(oai_id,error_msg)
         return
 

@@ -29,17 +29,18 @@ class Metadata:
         return result
 
     def convertMarc(self, metadata):
-        #TODO smazat soubort convert / vše opravit
+        #TODO smazat superstrip
+        #TODO presat surnameFirst+convertOrigin
         ret = {}
         mandatory = {
                 '502': tag502.convertTag502, #kvalifikační práce
                 '100': tag100.convertTag100, #autor
-                '245': tag245.convertTag245, #titul,autor #TODO kontrola dle mailu od Iry 
-                #'260': tag260.convertTag260, #místo vydání a datum (vyhazovat jen překlepy) # nejdřív si to objednají a pak chtějí ignorovat
-                '710': tag710.convertTag710, #fakulta, katedra #TODO kontrola dle mailu
+                '245': tag245.convertTag245, #titul,autor #TODO kontrola dle mailu od Iry, počkat na nový export 
+                '260': tag260.convertTag260, #místo vydání a datum (vyhazovat jen překlepy) # kontrola dle mailu, počkat na nový export
+                '710': tag710.convertTag710, #fakulta, katedra #TODO kontrola dle mailu, počkat na nový export
                 }
         obligatory = {
-                '655': tag655.convertTag655, # TODO kontrola dle mailu
+                '655': tag655.convertTag655, # TODO čekám na mail
                 #'520': # abstrakt
                 #'041': # jazyk
                 #'246': # titulek v překladu 

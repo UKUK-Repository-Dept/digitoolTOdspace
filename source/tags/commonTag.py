@@ -1,4 +1,4 @@
-import catalogue, convert
+import catalogue
 
 def superStrip(word):
     delete = ['.','/',':',',','[',']']
@@ -34,9 +34,6 @@ def surnameFirst(name):
         return name
 
 def convertOrigin(origin, oai_id, categorize):
-    for correct, wrongs in convert.origin.items():
-        for wrong in wrongs:
-            origin = origin.replace(wrong, correct)
     ret = {}
     origin = origin.strip()
     if "Univerzita Karlova. " == origin[:20]:
