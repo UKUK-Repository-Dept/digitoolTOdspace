@@ -23,11 +23,6 @@ class Metadata:
                 continue
             if result and result != self.metadata[tag][name]:
                 error_msg = 'Different {} {}:"{}" {}: "{}"'.format(name, resultTag, result, tag, self.metadata[tag][name])
-                #TODO smazat
-                #if name == 'lang':
-                #    print(error_msg)
-                if name == 'degree':
-                    print(self.oai_id,error_msg)
                 self.categorize.categorize_item(self.oai_id,error_msg)
             result = self.metadata[tag][name]
             resultTag = tag
@@ -35,6 +30,7 @@ class Metadata:
 
     def convertMarc(self, metadata):
         #TODO presat surnameFirst+convertOrigin
+        #TODO 264 a 260 se vzájemně nahrazují a doplňují
         ret = {}
         mandatory = {
                 '502': tag502.convertTag502, #kvalifikační práce

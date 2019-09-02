@@ -91,18 +91,14 @@ def weird_attachements(oai_ids, digitoolXML, categorize):
 def aleph(oai_ids, digitoolXML, categorize):
     records = openAleph("dtl_2006.xml")
     for metadata in records:
-        oai_id = None
+        digittol_id, aleph_id = None, None
         for tag in metadata.keys():
-            # digitool
             if '856' in tag:
-                oai_id = metadata[tag]['u'][0].split('=')[-1]
-            # aleph
-#            if '001' in tag:
-#                oai_id = metadata[tag]
-        #print(oai_id)
-        #if not '502- - ' in metadata.keys():
-        #    continue
-        #convertTag502(metadata['502- - '],oai_id,categorize)
+                digittol_id = metadata[tag]['u'][0].split('=')[-1]
+            if '001' in tag:
+                aleph_id = metadata[tag]
+        #oai_id = "{},{}".format(aleph_id,digittol_id)
+        oai_id = aleph_id
         m = Metadata(categorize, oai_id)
         m.convertMarc(metadata)
 

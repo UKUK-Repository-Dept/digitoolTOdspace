@@ -26,6 +26,10 @@ faculty = {
         'Katedra andragogiky',
         'Katedra pomocných věd historických a archivního studia',
         'Ústav etnologie',
+        'Knihovna andragogiky a kulturologie',
+        'Katedra sociální práce a vzdělávání dospělých',
+        'Katedra andragogiky a sociální práce',
+        'Katedra anglistiky, germanistiky a nordistiky',
         'Katedra andragogiky a personálního řízení',
         'Katedra české literatury a literární vědy',
         'Katedra marxisticko-leninské filosofie',
@@ -89,6 +93,7 @@ faculty = {
         'Katedra řízení a supervize v sociálních a zdravotnických organizacích', ],
     'Husova evangelická bohoslovecká fakulta': [], #TODO vážně všechny tyhle Husovy',
     'Husova československá evangelická fakulta': [],
+    'Husova československá bohoslovecká fakulta': [],
     'Husova československá evangelická fakulta bohoslovecká': [],
     'Husova československá evangelická bohoslovecká fakulta': [],
     'Husitská teologická fakulta': [
@@ -103,6 +108,7 @@ faculty = {
     'Komenského evangelická bohoslovecká fakulta': [
         'Katedra biblických věd',
         'Katedra církevních dějin',
+        'Katedra biblická',
         ],
     'Komenského bohoslovecká fakulta v Praze': [],
     'Evangelická teologická fakulta': [ 
