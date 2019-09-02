@@ -31,7 +31,9 @@ def convertTag520(tag520,oai_id,categorize):
         ret['lang'] = tag520['8'][0]
     if '9' in tag520.keys():
         ret['lang'] = tag520['9'][0]
+    if 'b' in tag520.keys():
+        categorize.categorize_item(oai_id,"502: Abstract in digitool '{}'".format(abstract))
     for key in tag520.keys():
-        if not key in 'a89':
-            raise Exception("Unkown key {}".format(key))
+        if not key in 'ab89':
+            raise Exception("520: Unkown key {}".format(key))
     return ret

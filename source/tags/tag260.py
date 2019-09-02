@@ -26,6 +26,8 @@ def convertTag260(tag,oai_id,categorize):
         if len(year) == 4: # nebo šechny??
             assert 1900 < int(year) < 2019, year
             ret['year'] = tag['c'][0]
+        else:
+            print(year)
     
     for k in tag.keys():
         assert k in 'abc'

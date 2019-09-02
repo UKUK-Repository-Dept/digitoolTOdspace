@@ -30,14 +30,13 @@ class Metadata:
 
     def convertMarc(self, metadata):
         #TODO presat surnameFirst+convertOrigin
-        #TODO 264 a 260 se vzájemně nahrazují a doplňují
         ret = {}
         mandatory = {
                 '502': tag502.convertTag502, #kvalifikační práce
                 '100': tag100.convertTag100, #autor
                 '245': tag245.convertTag245, #titul, autor #TODO kontrola dle mailu od Iry, počkat na nový export 
                 '260': tag260.convertTag260, #místo vydání a datum 
-                '710': tag710.convertTag710, #fakulta, katedra #TODO kontrola dle mailu, počkat na nový export
+                '710': tag710.convertTag710, #fakulta, katedra #TODO nový mail
                 }
         obligatory = {
                 '655': tag655.convertTag655, # druh práce #TODO ignorovat v 9/9 případů lhal
@@ -46,6 +45,11 @@ class Metadata:
                 '246': tag246.convertTag246, # titulek v překladu  
                 '650': tag650.convertTag650, # keywords (bez kontroly obsahu) 
                 }
+
+        # Jaro potvrdil následůjící postup
+        if '264' in metadata.keys():
+            assert '260' not in metadata.keys()
+            metadata['260'] = metadata['264']
 
         for tag in mandatory.keys():
             if not tag in metadata.keys():
