@@ -62,8 +62,6 @@ class Metadata:
             if not tag in metadata.keys():
                 continue
             ret = allTags[tag](metadata[tag], self.oai_id, self.categorize)
-            if ret == None: #TODO smazat, to by se děje jen při chybách
-                return
             self.metadata[tag] = ret
        
 
@@ -82,6 +80,10 @@ class Metadata:
             self.categorize.categorize_item(self.oai_id,"No degre")
 
         # němčina 42606, azbuka 135200
+        #print(self.oai_id)
+        #if self.oai_id in ['42606','135200']:
+        #    print(self.metadata)
+
         self.lang = self.__getMetadata('lang')
         if not self.lang:
             error_msg = "No language found in 041 and 520."

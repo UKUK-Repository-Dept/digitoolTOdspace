@@ -27,7 +27,7 @@ def convertTag260(tag,oai_id,categorize):
             assert 1900 < int(year) < 2019, year
             ret['year'] = tag['c'][0]
         else:
-            print(year)
+            categorize.categorize_item(oai_id,"260 Divný rok {}".format(year))
     
     for k in tag.keys():
         assert k in 'abc'

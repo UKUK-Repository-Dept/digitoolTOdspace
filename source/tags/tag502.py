@@ -12,7 +12,7 @@ def convertCorrectTag502(tag502, oai_id, categorize):
     level = level.strip()
     if not level in catalogue.levelToTitle.keys():
         categorize.categorize_item(oai_id,"502: Unknown thesis level {}".format(level))
-        return
+        return ret
     else:
         ret['degree'] = level
     name = name[:-1].strip()
@@ -22,7 +22,7 @@ def convertCorrectTag502(tag502, oai_id, categorize):
         ret['degreeTitle'] = name
     if origin.count(',') != 1:
         categorize.categorize_item(oai_id,"502: {}x ',' in '{}'".format(origin.count(','),tag502))
-        return
+        return ret
     origin, year = origin.split(",")
     year = year.strip()
     assert 1919 < int(year) < 2019
@@ -32,21 +32,21 @@ def convertCorrectTag502(tag502, oai_id, categorize):
     return ret 
 
 def convertTag502(tag502, oai_id, categorize):
-    #print(tag502)
+    ret = {}
     tag502 = tag502['a']
     if len(tag502) > 1:
         categorize.categorize_item(oai_id,"More than one tag 502")
-        return
+        return ret
  
     tag = tag502[0].strip()
 
     if not "--" in tag:
         categorize.categorize_item(oai_id,"502: No -- split.")
-        return
+        return ret
     
     if not ( tag[-4:].isdigit() and tag [-5] in [' ',','] ):
         error_msg = "502: Not valid year in {}".format(tag)
         categorize.categorize_item(oai_id,error_msg)
-        return
+        return ret
 
     return convertCorrectTag502(tag, oai_id, categorize)
