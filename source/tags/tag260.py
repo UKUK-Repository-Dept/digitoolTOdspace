@@ -17,10 +17,9 @@ def convertTag260(tag,oai_id,categorize):
         return ret
     ret['place'] = tag['a'][0]
 
-    if 'b' in tag.keys():
-        #print(oai_id,tag['b'])
-        pass # ignorovat nebo ne?
-    
+    if not 'c' in tag.keys():
+        categorize.categorize_item(oai_id,"260 Není podpole 'c'")
+        return ret
     if 'c' in tag.keys():
         assert len(tag['c']) == 1
         year = tag['c'][0]

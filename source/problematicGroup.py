@@ -80,6 +80,10 @@ def weird_attachements(oai_ids, digitoolXML, categorize):
         if 'marc' in originalMetadataXML.keys():
             m.convertMarc(originalMetadataXML['marc'])
             attachements = list(digitoolXML.get_attachements(oai_id))
+            #TODO smazat
+            if not m.degree:
+                continue
+
             descriptions = convertor.generate_description(oai_id,attachements,m.degree)
         else:
             pass #TODO raise Exception('no marc')
@@ -89,10 +93,12 @@ def aleph(oai_ids, digitoolXML, categorize):
     for metadata in records:
         oai_id = None
         for tag in metadata.keys():
-            #if '856' in tag:
-            #    oai_id = metadata[tag]['u'][0].split('=')[-1]
-            if '001' in tag:
-                oai_id = metadata[tag]
+            # digitool
+            if '856' in tag:
+                oai_id = metadata[tag]['u'][0].split('=')[-1]
+            # aleph
+#            if '001' in tag:
+#                oai_id = metadata[tag]
         #print(oai_id)
         #if not '502- - ' in metadata.keys():
         #    continue

@@ -12,7 +12,7 @@ import problematicGroup as bugs
 import logging
 
 #xml_dirname = "2019-08-06"
-xml_dirname = "2019-08-06"
+xml_dirname = "2019-08-30"
 digitool_category = "oai_kval"
 
 
@@ -25,9 +25,9 @@ categories = {
     'all_problems_for_hanka': bugs.all_attachements,
     'all_items_in_oai': bugs.oai,
     'attachments_not_linked_to_oai': bugs.forgot_attachements,
-    'ittems_without_attachement': bugs.no_attachements,
+    'ittems_without_attachments': bugs.no_attachements,
     'not_in_aleph': bugs.not_in_aleph,
-    'weird_attachements': bugs.weird_attachements,
+    'weird_attachments': bugs.weird_attachements,
     'no_502': bugs.no502,
     'only_dc': bugs.only_dc,
     'not_valid_502': bugs.tag502,

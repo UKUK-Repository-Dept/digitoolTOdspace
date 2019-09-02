@@ -48,9 +48,10 @@ class FilenameConvertor:
                 attachement.append((filename,filetype,matchSide))
                 continue
             if matchMain != None:
-                if degree and matchMain != degree[0]:
-                    err_msg = "Nesedí druh práce soubor:{} vs metadata:{}".format(matchMain,degree[0])
-                    #self.categorize.categorize_item(oai_id, err_msg)
+                if degree and matchMain != degree:
+                    err_msg = "Different degree file: {} metadata: {}".format(matchMain,degree)
+                    #print(oai_id, err_msg) #TODO smazat, odkomentovat
+                    self.categorize.categorize_item(oai_id, err_msg)
             mainFiles.append((filename,filetype))
         
         if len(mainFiles) > 2:

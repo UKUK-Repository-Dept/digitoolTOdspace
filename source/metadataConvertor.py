@@ -23,6 +23,11 @@ class Metadata:
                 continue
             if result and result != self.metadata[tag][name]:
                 error_msg = 'Different {} {}:"{}" {}: "{}"'.format(name, resultTag, result, tag, self.metadata[tag][name])
+                #TODO smazat
+                #if name == 'lang':
+                #    print(error_msg)
+                if name == 'degree':
+                    print(self.oai_id,error_msg)
                 self.categorize.categorize_item(self.oai_id,error_msg)
             result = self.metadata[tag][name]
             resultTag = tag
@@ -34,13 +39,13 @@ class Metadata:
         mandatory = {
                 '502': tag502.convertTag502, #kvalifikační práce
                 '100': tag100.convertTag100, #autor
-                '245': tag245.convertTag245, #titul,autor #TODO kontrola dle mailu od Iry, počkat na nový export 
-                '260': tag260.convertTag260, #místo vydání a datum (vyhazovat jen překlepy) # kontrola dle mailu, počkat na nový export
+                '245': tag245.convertTag245, #titul, autor #TODO kontrola dle mailu od Iry, počkat na nový export 
+                '260': tag260.convertTag260, #místo vydání a datum 
                 '710': tag710.convertTag710, #fakulta, katedra #TODO kontrola dle mailu, počkat na nový export
                 }
         obligatory = {
-                '655': tag655.convertTag655, # TODO čekám na mail
-                '520': tag520.convertTag520, # abstrakt #TODO čekám na mail
+                '655': tag655.convertTag655, # druh práce #TODO ignorovat v 9/9 případů lhal
+                '520': tag520.convertTag520, # abstrakt #TODO dořešit jazyky
                 '041': tag041.convertTag041, # jazyk 
                 '246': tag246.convertTag246, # titulek v překladu  
                 '650': tag650.convertTag650, # keywords (bez kontroly obsahu) 
@@ -67,12 +72,18 @@ class Metadata:
         if not faculty: 
             self.categorize.categorize_item(self.oai_id,"No faculty")
         
-        author = self.__getMetadata('author')
-        if not author: 
-            raise Exception('No author')
+        # TODO lepši normalizace autora
+        #author = self.__getMetadata('author')
+        #if not author: 
+        #    raise Exception('No author')
         
         self.degree = self.__getMetadata('degree')
         if not self.degree: 
             self.categorize.categorize_item(self.oai_id,"No degre")
 
+        # němčina 42606, azbuka 135200
+        self.lang = self.__getMetadata('lang')
+        if not self.lang:
+            error_msg = "No language found in 041 and 520."
+            self.categorize.categorize_item(self.oai_id,error_msg)
         #TODO lang alternative_lang

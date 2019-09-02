@@ -10,7 +10,7 @@ def convertTag520(tag520,oai_id,categorize):
         else:
             raise Exception('520: no language')
         if  len(tag520['a']) > 2:
-            return ret #TODO
+            return ret #TODO domluva o jazycích
             #print(oai_id,tag520)
         for abstract in tag520['a']:
             if len(abstract) < 100:

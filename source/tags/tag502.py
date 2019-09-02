@@ -21,7 +21,7 @@ def convertCorrectTag502(tag502, oai_id, categorize):
     else:
         ret['degreeTitle'] = name
     if origin.count(',') != 1:
-        categorize.categorize_item(oai_id,"{}x ',' in {}".format(origin.count(','),tag502))
+        categorize.categorize_item(oai_id,"502: {}x ',' in '{}'".format(origin.count(','),tag502))
         return
     origin, year = origin.split(",")
     year = year.strip()
@@ -32,7 +32,7 @@ def convertCorrectTag502(tag502, oai_id, categorize):
     return ret 
 
 def convertTag502(tag502, oai_id, categorize):
-
+    #print(tag502)
     tag502 = tag502['a']
     if len(tag502) > 1:
         categorize.categorize_item(oai_id,"More than one tag 502")
