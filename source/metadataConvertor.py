@@ -83,7 +83,7 @@ class Metadata:
         #print(self.oai_id)
         #if self.oai_id in ['42606','135200']:
         #    print(self.metadata)
-
+        # TODO pole 008 znak 35-37
         self.lang = self.__getMetadata('lang')
         if not self.lang:
             error_msg = "No language found in 041 and 520."
