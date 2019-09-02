@@ -61,8 +61,8 @@ def __splitPeople(oai_id, source):
                         hui = True #TODO smazat
                         continue
             #TODO ten seznam je fakt dlouhý
-            if not hui:
-                print(oai_id,person)
+            #if not hui:
+            #    print(oai_id,person)
 
 def convertTag245(tag245, oai_id, categorize):
     ret = {}
