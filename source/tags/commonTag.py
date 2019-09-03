@@ -5,13 +5,6 @@ def getFaculty(department):
         if department in catalogue.faculty[faculty]:
             return faculty
 
-def surnameFirst(name):
-    s = name.split()
-    if len(s) == 2:
-        return s[1]+', '+s[0]
-    else: 
-        return name
-
 def convertOrigin(origin, oai_id, categorize):
     ret = {}
     origin = origin.strip()

@@ -24,7 +24,8 @@ def convertTag260(tag,oai_id,categorize):
         assert len(tag['c']) == 1
         year = tag['c'][0]
         if len(year) == 4: # nebo šechny??
-            assert 1900 < int(year) < 2019, year
+            #TODO zakomentovani kvuli digitoolu /weird attachement
+            #assert 1900 < int(year) < 2019, year
             ret['year'] = tag['c'][0]
         else:
             #TODO 'standartizace'

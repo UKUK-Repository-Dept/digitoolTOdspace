@@ -36,7 +36,7 @@ def __splitPeople(oai_id, source):
         return {'author': source}
     else:
         author, others = source.split(';',1)
-        ret =  {'author': source}
+        ret =  {'author': author}
         if 'Univer' in source:
             return ret #TODO odstranit
         others.replace('[',' ')
@@ -63,6 +63,7 @@ def __splitPeople(oai_id, source):
             #TODO ten seznam je fakt dlouhý
             #if not hui:
             #    print(oai_id,person)
+        return ret
 
 def convertTag245(tag245, oai_id, categorize):
     ret = {}
@@ -82,12 +83,12 @@ def convertTag245(tag245, oai_id, categorize):
     #author
     if 'c' in tag245:
         assert len(tag245['c']) == 1
-        __splitPeople(oai_id,tag245['c'][0])
+        ret.update(__splitPeople(oai_id,tag245['c'][0]))
     else:
         pass #TODO
         #print(oai_id,'245: no author')
     
     for key in tag245.keys():
-        if not key in 'abchnp':
+        if not key in 'abchnp6':
             raise Exception('Unknown key {}',format(key))
     return ret

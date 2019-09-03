@@ -97,8 +97,8 @@ def aleph(oai_ids, digitoolXML, categorize):
                 digittol_id = metadata[tag]['u'][0].split('=')[-1]
             if '001' in tag:
                 aleph_id = metadata[tag]
-        #oai_id = "{},{}".format(aleph_id,digittol_id)
-        oai_id = aleph_id
+        oai_id = "{},{}".format(aleph_id,digittol_id)
+        #oai_id = aleph_id
         #oai_id = digittol_id
         m = Metadata(categorize, oai_id)
         m.convertMarc(metadata)
