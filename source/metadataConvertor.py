@@ -31,6 +31,7 @@ class Metadata:
     def convertMarc(self, metadata):
         #TODO presat surnameFirst+convertOrigin
         ret = {}
+        print(metadata)
         mandatory = {
                 '502': tag502.convertTag502, #kvalifikační práce
                 '100': tag100.convertTag100, #autor

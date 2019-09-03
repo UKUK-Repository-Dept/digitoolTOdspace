@@ -72,7 +72,9 @@ faculty = {
         'Katedra amerických studií',
         'Katedra německých a rakouských studií',
         'Katedra mezinárodních vztahů',
-        'Katedra sociologie', ],
+        'Katedra sociologie', 
+        'Katedra sociologie (1966-1971)',
+        ],
     'Pedagogická fakulta': [ 
         'Katedra speciální pedagogiky', 
         'Katedra výtvarné výchovy', 
