@@ -21,6 +21,7 @@ def convertCorrectTag502(tag502, oai_id, categorize):
     else:
         ret['degreeTitle'] = name
     if origin.count(',') != 1:
+        print(oai_id,tag502)
         categorize.categorize_item(oai_id,"502: {}x ',' in '{}'".format(origin.count(','),tag502))
         return ret
     origin, year = origin.split(",")

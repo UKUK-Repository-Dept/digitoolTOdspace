@@ -39,6 +39,11 @@ def tag502(oai_ids, digitoolXML, categorize):
                 continue
             convertTag502(metadata['502- - '],oai_id,categorize)
 
+def __parse_ignore_file(filaname):
+    with open(filename) as f:
+        for line in f:
+            print(line)
+
 def forgot_attachements(oai_ids, digitoolXML, categorize):
     attachements = []
     for oai_id in oai_ids:
@@ -51,6 +56,8 @@ def forgot_attachements(oai_ids, digitoolXML, categorize):
         if not row[:-1] in attachements:
             oai_id = row.split("_")[0]
             categorize.categorize_item(oai_id,"{} nemá metadata".format(row[:-1]))
+
+
 
 def no_attachements(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
