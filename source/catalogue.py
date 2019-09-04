@@ -1,7 +1,7 @@
 levelToTitle = {
     "Bakalářská práce": [ "Bc.", ],
-    "Diplomová práce": [ "Mgr.", ],
-    "Rigorózní práce": [ "PhDr.", 'JUDr.', 'RNDr.', 'PharmDr.', 'MUDr.', "ThDr.", ],
+    "Diplomová práce": [ "Mgr.", "MUDr." ],
+    "Rigorózní práce": [ "PhDr.", 'ThLic.', 'JUDr.', 'RNDr.', 'PharmDr.', 'MUDr.', "ThDr.", ],
     "Dizertační práce": [ 'ThD.', "PhD.", ],
     "Habilitační práce": [ "Doc.", ],
     }

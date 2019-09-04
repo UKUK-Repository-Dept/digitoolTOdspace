@@ -35,7 +35,7 @@ def convertTag502(tag502, oai_id, categorize):
     ret = {}
     tag502 = tag502['a']
     if len(tag502) > 1:
-        categorize.categorize_item(oai_id,"More than one tag 502")
+        categorize.categorize_item(oai_id,"502: More than one tag 502")
         return ret
  
     tag = tag502[0].strip()

@@ -1,31 +1,31 @@
 import  tags.commonTag
+import re
 
+#TODO špatně žere práce
 rules = {
         'advisor': [
-            'vedoucí práce',
-            'vedoucí diplomové práce',
-            'školitel práce',
-            'vedoucí bakalářské práce',
-            'vedoucí rigorózní práce',
-            'ved. dipl. práce',
-            'ved. práce',
-            'škol. rig. práce',
-            'ved. bakal. práce',
-            'školitel disertační práce',
-            'ved. bak. práce',
-
-
-
-            #'vedoucí',
-            #'školitel',
+            'ved.*áce',
+            'ved.*ace',
+            'ško.*áce',
+            'ved.*vedoucí',
+            'vedoucí:',
+            'vedoucí diplomové',
+            'ved. dipl.',
+            'ved. dipl. p.',
+            'školitel',
             ],
-        'committe': [
-            #'oponent',
+        'commitee': [
+            'op.*áce',
+            'commitee',
+            'oponent',
             ],
         'consultant': [
-            'konzultant rigorózní práce',
-            'konzultant práce',
-            #'konzultant',
+            'odborný konzultant',
+            'kon.*áce',
+            'konzultantka',
+            'konzultanti',
+            'konzult\.',
+            'konzultant',
             ]
 }
 
@@ -49,20 +49,18 @@ def __splitPeople(oai_id, source):
             if 'neuveden' in person:
                 continue #Iry souhlasí
             if len(person) == 0:
-                #print(oai_id, source)
-                continue #TODO
-            hui = False
+                continue #zakončeni středníkem a nic dál
+            person = person.replace('[','').replace(']','')
             if person[0] == ' ':
                 person = person[1:]
             for role in rules.keys():
                 for name in rules[role]:
-                    if name in person.lower():
-                        #ret.setdefault(role, []).append('osoba TODO')
-                        hui = True #TODO smazat
+                    if re.match(name,person.lower()):
+                        span = re.match(name,person.lower()).span()
+                        assert span[0] == 0
+                        personName = person[span[1]:].strip()
+                        ret[role] = personName
                         continue
-            #TODO ten seznam je fakt dlouhý
-            #if not hui:
-            #    print(oai_id,person)
         return ret
 
 def convertTag245(tag245, oai_id, categorize):

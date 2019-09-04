@@ -15,7 +15,7 @@ class Metadata:
         self.categorize = categorize
         self.oai_id = oai_id
 
-    def __getMetadata(self, name):
+    def __getMetadata(self, tagName):
         def comparePeople(name1,name2):
             def normaliseName(name):
                 name = sorted(name.replace(',','').replace('-',' ').split())
@@ -35,16 +35,18 @@ class Metadata:
         result  = None
         resultTag = None
         for tag in self.metadata:
-            if not name in  self.metadata[tag].keys():
+            if not tagName in  self.metadata[tag].keys():
                 continue
-            if name == 'author' and not comparePeople(result,self.metadata[tag][name]):
-                error_msg = 'Different {} {}:"{}" {}: "{}"'.format(name, resultTag, result, tag, self.metadata[tag][name])
-                print(self.oai_id,error_msg)
+            result2 = self.metadata[tag][tagName]
+            error_msg = 'Different {} {}:"{}" {}: "{}"'.format(tagName, resultTag, result, tag, result2)
+            personTagNames = ['author','advisor','committe','consultant']
+            if tagName in personTagNames and not comparePeople(result,result2):
+                # TODO ručne projít před finálním exportem
+                #print(self.oai_id,error_msg)
                 self.categorize.categorize_item(self.oai_id,error_msg)
-            elif result and result != self.metadata[tag][name]:
-                error_msg = 'Different {} {}:"{}" {}: "{}"'.format(name, resultTag, result, tag, self.metadata[tag][name])
+            elif result and result != result2:
                 self.categorize.categorize_item(self.oai_id,error_msg)
-            result = self.metadata[tag][name]
+            result = result2
             resultTag = tag
         return result
 
@@ -59,7 +61,7 @@ class Metadata:
                 '710': tag710.convertTag710, #fakulta, katedra #TODO nový mail
                 }
         obligatory = {
-                #700 (lidi) 710 sekuntarní autorský údaje
+                '700': tag700.convertTag700, # vedoucí, oponent,.. #TODO napsat
                 '655': tag655.convertTag655, # druh práce #TODO ignorovat v 9/9 případů lhal
                 '520': tag520.convertTag520, # abstrakt #TODO dořešit jazyky
                 '041': tag041.convertTag041, # jazyk 
@@ -91,11 +93,15 @@ class Metadata:
         if not faculty: 
             self.categorize.categorize_item(self.oai_id,"No faculty")
         
-        # TODO lepši normalizace autora
         author = self.__getMetadata('author')
         if not author: 
             raise Exception('No author')
-        
+        advisor = self.__getMetadata('advisor')
+        commitee = self.__getMetadata('commitee')
+        advisor = self.__getMetadata('advisor')
+        #TODO 'advisor' 'committe' 'consultant'
+
+
         self.degree = self.__getMetadata('degree')
         if not self.degree: 
             self.categorize.categorize_item(self.oai_id,"No degre")
