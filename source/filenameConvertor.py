@@ -18,7 +18,7 @@ class FilenameConvertor:
     side = [
             ( ['vedouci'], "Posudek vedoucího" ),
             ( ['opon'], "Posudek oponenta" ),
-            ( ['Priloh','pril','foto','příloh','grafy','summary','config','Dodatky','clanek','posud','Resume','install','manual'], "Příloha" ),
+            ( ['Priloh','pril','foto','příloh','_Obr','_teze','grafy','summary','config','Dodatky','clanek','posud','Resume','install','manual'], "Příloha" ),
             ( ['chyby'], "Chyby" ),
             ( ['literatura','lit'], "Literatura" ),
         ]
@@ -51,7 +51,7 @@ class FilenameConvertor:
                 if degree and matchMain != degree:
                     err_msg = "Different degree file: {} metadata: {}".format(matchMain,degree)
                     #print(oai_id, err_msg) #TODO smazat, odkomentovat
-                    self.categorize.categorize_item(oai_id, err_msg)
+                    #self.categorize.categorize_item(oai_id, err_msg)
             mainFiles.append((filename,filetype))
         
         if len(mainFiles) > 2:
@@ -62,6 +62,7 @@ class FilenameConvertor:
                     else:
                         attachement.append((f,t,'Příloha'))
             else:
+                print(mainFiles)
                 self.categorize.categorize_item(oai_id, "příliš mnoho souboru vypadá jako text práce")
         elif len(mainFiles) == 0:
             #self.categorize.categorize_item(oai_id, "všechny soubory vypadají jako přílohy")
@@ -77,6 +78,7 @@ class FilenameConvertor:
             filename1, filetype1 = mainFiles[0]
             filename2, filetype2 = mainFiles[1]
             if filetype1 == filetype2 == 'application/pdf':
+                print(filename2,filename1)
                 self.categorize.categorize_item(oai_id, "příliš mnoho souboru vypadá jako text práce")
                 return
             if filetype1 != 'application/pdf' and filetype2 != 'application/pdf':

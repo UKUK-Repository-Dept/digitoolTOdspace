@@ -39,12 +39,16 @@ def tag502(oai_ids, digitoolXML, categorize):
                 continue
             convertTag502(metadata['502- - '],oai_id,categorize)
 
-def __parse_ignore_file(filaname):
+def __parse_ignore_file(filename):
     with open(filename) as f:
         for line in f:
-            print(line)
+            if len(line) < 3:
+                continue
+            oai_id = line.split()[0]
+            yield oai_id
 
 def forgot_attachements(oai_ids, digitoolXML, categorize):
+    ignore = list(__parse_ignore_file('zaznamy'))
     attachements = []
     for oai_id in oai_ids:
         attachements += list(zip(*digitoolXML.get_attachements(oai_id)))[0]
@@ -55,7 +59,10 @@ def forgot_attachements(oai_ids, digitoolXML, categorize):
             continue
         if not row[:-1] in attachements:
             oai_id = row.split("_")[0]
-            categorize.categorize_item(oai_id,"{} nemá metadata".format(row[:-1]))
+            if oai_id in ignore:
+                pass #víme že nemají zaznámy
+            else:
+                categorize.categorize_item(oai_id,"{} nemá metadata".format(row[:-1]))
 
 
 
@@ -66,6 +73,7 @@ def no_attachements(oai_ids, digitoolXML, categorize):
             categorize.categorize_item(oai_id,"bez přílohy")
 
 def only_dc(oai_ids, digitoolXML, categorize):
+    ignore = list(__parse_ignore_file('zaznamy'))
     for oai_id in oai_ids:
         mark = False
         dc = False
@@ -75,6 +83,7 @@ def only_dc(oai_ids, digitoolXML, categorize):
                 mark = True
             if 'dc' in originalMetadataXML.keys():
                 dc = True
+        #if not mark and dc and (oai_id not in ignore):
         if not mark and dc:
             categorize.categorize_item(oai_id,"má dc, nemá marc")
             

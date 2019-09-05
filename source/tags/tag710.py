@@ -23,7 +23,7 @@ def convertTag710(tag710,oai_id,categorize):
             if department in catalogue.faculty[faculty]:
                 ret['department'] = department
             else:
-                err_msg = "710: Unknown departemnt {} at faculty {}".format(departemnt, faculty)
+                err_msg = "710: Unknown departemnt {} at faculty {}".format(department, faculty)
                 categorize.categorize_item(oai_id,err_msg)
         elif len(tag710['b']) == 1:
             pass

@@ -11,8 +11,7 @@ import aleph
 import problematicGroup as bugs
 import logging
 
-#xml_dirname = "2019-08-06"
-xml_dirname = "2019-08-30"
+xml_dirname = "2019-09-04"
 digitool_category = "oai_kval"
 
 
