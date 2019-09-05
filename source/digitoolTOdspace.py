@@ -12,6 +12,7 @@ import problematicGroup as bugs
 import logging
 
 xml_dirname = "2019-09-04"
+#xml_dirname = "Cerge/2019-09-05"
 digitool_category = "oai_kval"
 
 

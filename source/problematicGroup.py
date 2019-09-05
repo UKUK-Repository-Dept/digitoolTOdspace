@@ -51,8 +51,11 @@ def forgot_attachements(oai_ids, digitoolXML, categorize):
     ignore = list(__parse_ignore_file('zaznamy'))
     attachements = []
     for oai_id in oai_ids:
+        #TODO kvuli Cerge
+        #if list(digitoolXML.get_attachements(oai_id)):
+        #    continue
         attachements += list(zip(*digitoolXML.get_attachements(oai_id)))[0]
-    for row in open( digitoolXML.xml_dirname.split('/')[0]+"/ls_streams.txt" ,"r"):
+    for row in open( digitoolXML.dirname+"/ls_streams.txt" ,"r"):
         if '_index.html' in row:
             continue
         if '_thumbnail.jpg' in row:
