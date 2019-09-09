@@ -71,10 +71,7 @@ class DigitoolXML:
                             metadata[index][code].append(subfield.text)
             return metadata
         def parseDC(value):
-            try:
-                tree = ET.fromstring(value)
-            except:
-                return #TODO v dalsim exportu smazat
+            tree = ET.fromstring(value)
             for field in tree:
                 yield (field.tag,field.text)
         logging.debug("Getting metadata of {}.".format(oai_id))        

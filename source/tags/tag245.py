@@ -1,7 +1,6 @@
 import  tags.commonTag
 import re
 
-#TODO špatně žere práce
 rules = {
         'advisor': [
             'ved.*áce',
@@ -32,13 +31,13 @@ rules = {
 def __splitPeople(oai_id, source):
     if not ';' in source:
         if ':' in source or ',' in source:
-            pass #TODO odstranit
+            pass # kašlem na to 
         return {'author': source}
     else:
         author, others = source.split(';',1)
         ret =  {'author': author}
         if 'Univer' in source:
-            return ret #TODO odstranit
+            return ret #kašlem na to
         others.replace('[',' ')
         others.replace(']',' ')
         if ';' in others:
@@ -54,13 +53,14 @@ def __splitPeople(oai_id, source):
             if person[0] == ' ':
                 person = person[1:]
             for role in rules.keys():
+                done = False
                 for name in rules[role]:
-                    if re.match(name,person.lower()):
+                    if not done and re.match(name,person.lower()):
                         span = re.match(name,person.lower()).span()
                         assert span[0] == 0
                         personName = person[span[1]:].strip()
                         ret[role] = personName
-                        continue
+                        done = True
         return ret
 
 def convertTag245(tag245, oai_id, categorize):
@@ -75,7 +75,8 @@ def convertTag245(tag245, oai_id, categorize):
         assert len(tag245['b']) == 1
         title = tag245['a'][0] + ' ' + tag245['b'][0]
     #TODO '/' 'bakalářská práce'
-    #print(oai_id, title)
+    #if "práce" in title:
+    #    print(oai_id, title)
     ret['title'] = title
 
     #author
@@ -83,8 +84,7 @@ def convertTag245(tag245, oai_id, categorize):
         assert len(tag245['c']) == 1
         ret.update(__splitPeople(oai_id,tag245['c'][0]))
     else:
-        pass #TODO
-        #print(oai_id,'245: no author')
+        pass #autor tady je jen bonusový
     
     for key in tag245.keys():
         if not key in 'abchnp6':

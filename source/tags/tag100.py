@@ -20,8 +20,9 @@ def convertTag100(tag100,oai_id,categorize):
         if not tag100['4'][0] in ['dis','aut','ths']:
             pass
     if '7' in tag100.keys():
-        pass 
+        pass
+    # TODO cerge ma 'u'
     for key in tag100.keys():
-        if not key in 'acdq47':
-            raise Exception("Unkown key")
+        if not key in 'acdq47u':
+            raise Exception("Unkown key {}".format(key))
     return ret

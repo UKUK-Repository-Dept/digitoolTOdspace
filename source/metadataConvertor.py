@@ -16,18 +16,30 @@ class Metadata:
         self.oai_id = oai_id
 
     def __getMetadata(self, tagName):
+        
         def comparePeople(name1,name2):
             def normaliseName(name):
-                name = sorted(name.replace(',','').replace('-',' ').split())
-                return name
+                name = name.replace(':','')
+                names = sorted(name.replace(',',' ').replace('-',' ').split())
+                for name in names:
+                    if 'vypracoval' in name:
+                        continue
+                    name = name.strip()
+                    yield name
             if name1 == None:
                 return True
-            name1 = normaliseName(name1)
-            name2 = normaliseName(name2)
+            name1 = list(normaliseName(name1))
+            name2 = list(normaliseName(name2))
             if not len(name1) == len(name2):
                return False
             for i in range(len(name1)):
-                if not name1[i] == name2[i]:
+                if len(name1[i]) > len(name2[i]):
+                    first, second = name2[i], name1[i]
+                else:
+                    first, second = name1[i], name2[i]
+                if len(first) == 2 and first[1] == '.' and first[0] == second[0]: 
+                    continue #iniciály
+                if not first == second:
                     return False
             return True
 
@@ -61,7 +73,7 @@ class Metadata:
                 '710': tag710.convertTag710, #fakulta, katedra #TODO nový mail
                 }
         obligatory = {
-                '700': tag700.convertTag700, # vedoucí, oponent,.. #TODO napsat
+                '700': tag700.convertTag700, # vedoucí, oponent,.. #TODO roky ve stejném poli hlásit?
                 '655': tag655.convertTag655, # druh práce #TODO ignorovat v 9/9 případů lhal
                 '520': tag520.convertTag520, # abstrakt #TODO dořešit jazyky
                 '041': tag041.convertTag041, # jazyk 
@@ -97,8 +109,10 @@ class Metadata:
         if not author: 
             raise Exception('No author')
         advisor = self.__getMetadata('advisor')
+        #if '700' in self.metadata.keys() and 'advisor' in self.metadata['700'] and not 'advisor' in self.metadata['245']:
+        #    print('700')
         commitee = self.__getMetadata('commitee')
-        advisor = self.__getMetadata('advisor')
+        consultant = self.__getMetadata('consultant')
         #TODO 'advisor' 'committe' 'consultant'
 
 

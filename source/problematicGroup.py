@@ -52,8 +52,9 @@ def forgot_attachements(oai_ids, digitoolXML, categorize):
     attachements = []
     for oai_id in oai_ids:
         #TODO kvuli Cerge
-        #if list(digitoolXML.get_attachements(oai_id)):
-        #    continue
+        if list(digitoolXML.get_attachements(oai_id))==[]:
+            print(oai_id,end=', ')
+            continue
         attachements += list(zip(*digitoolXML.get_attachements(oai_id)))[0]
     for row in open( digitoolXML.dirname+"/ls_streams.txt" ,"r"):
         if '_index.html' in row:
