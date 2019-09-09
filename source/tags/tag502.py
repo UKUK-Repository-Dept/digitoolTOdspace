@@ -25,7 +25,7 @@ def convertCorrectTag502(tag502, oai_id, categorize):
         return ret
     origin, year = origin.split(",")
     year = year.strip()
-    assert 1919 < int(year) < 2019
+    assert 190 < int(year[:3]) < 202, year
     ret['year'] = year
     ret['university'] = 'Univerzita Karlova'
     ret = { **ret, **convertOrigin(origin, oai_id, categorize) }
@@ -44,9 +44,4 @@ def convertTag502(tag502, oai_id, categorize):
         categorize.categorize_item(oai_id,"502: No -- split.")
         return ret
     
-    if not ( tag[-4:].isdigit() and tag [-5] in [' ',','] ):
-        error_msg = "502: Not valid year in {}".format(tag)
-        categorize.categorize_item(oai_id,error_msg)
-        return ret
-
     return convertCorrectTag502(tag, oai_id, categorize)
