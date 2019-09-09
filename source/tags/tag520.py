@@ -13,7 +13,7 @@ def convertTag520(tag520,oai_id,categorize):
             return ret #TODO domluva o jazycích
             #print(oai_id,tag520)
         for abstract in tag520['a']:
-            if len(abstract) < 100:
+            if len(abstract) < 80:
                 categorize.categorize_item(oai_id,"520: Too short abstract '{}'".format(abstract))
                 return ret
         ret['abstract'] = tag520['a'][0]

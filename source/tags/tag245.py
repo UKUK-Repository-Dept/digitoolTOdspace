@@ -74,9 +74,10 @@ def convertTag245(tag245, oai_id, categorize):
     else:
         assert len(tag245['b']) == 1
         title = tag245['a'][0] + ' ' + tag245['b'][0]
-    #TODO '/' 'bakalářská práce'
+    #TODO 'bakalářská práce' čekám jestli to Iry opravý
     #if "práce" in title:
     #    print(oai_id, title)
+    title = title.replace('\\','').replace('/','')
     ret['title'] = title
 
     #author
