@@ -53,10 +53,10 @@ class Metadata:
             error_msg = 'Different {} {}:"{}" {}: "{}"'.format(tagName, resultTag, result, tag, result2)
             personTagNames = ['author','advisor','committe','consultant']
             if tagName in personTagNames and not comparePeople(result,result2):
-                # TODO ručne projít před finálním exportem
+                pass # TODO ručne projít před finálním exportem
                 #print(self.oai_id,error_msg)
-                self.categorize.categorize_item(self.oai_id,error_msg)
-            elif result and result != result2:
+                #self.categorize.categorize_item(self.oai_id,error_msg)
+            elif tagName not in personTagNames and result and result != result2:
                 self.categorize.categorize_item(self.oai_id,error_msg)
             result = result2
             resultTag = tag
