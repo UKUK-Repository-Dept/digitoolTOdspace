@@ -22,14 +22,21 @@ def convertTag260(tag,oai_id,categorize):
         return ret
     if 'c' in tag.keys():
         assert len(tag['c']) == 1
-        year = tag['c'][0]
-        if len(year) == 4: # nebo šechny??
-            #TODO zakomentovani kvuli digitoolu /weird attachement
-            #assert 1900 < int(year) < 2019, year
-            ret['year'] = tag['c'][0]
+        year = tag['c'][0] 
+        #dohodlá normazizace
+        if year[0] == '[' and year[-1] == ']': 
+            year = year[1:-1] 
+        if year == 'asi 1968':
+            year = '1968?'
+        if len(year) == 4 or (len(year) == 5 and year[4] == '?') and year[:4].isdigit():
+            if year[3] == '?': #hack ať abych kontrolovala i přibližné roky
+                yearHack = year[:3] + '0' 
+            else:
+                yearHack = year[:4]
+            assert 1900 < int(yearHack) < 2019, year
+            ret['year'] = year
         else:
-            #TODO 'standartizace'
-            categorize.categorize_item(oai_id,"260 Divný rok {}".format(year))
+            categorize.categorize_item(oai_id,"260 Neuzavřená závorka {}".format(year))
     
     for k in tag.keys():
         assert k in 'abc'

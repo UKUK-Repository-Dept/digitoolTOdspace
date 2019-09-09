@@ -51,7 +51,7 @@ class Metadata:
                 continue
             result2 = self.metadata[tag][tagName]
             error_msg = 'Different {} {}:"{}" {}: "{}"'.format(tagName, resultTag, result, tag, result2)
-            personTagNames = ['author','advisor','committe','consultant']
+            personTagNames = ['author','advisor','commitee','consultant']
             if tagName in personTagNames and not comparePeople(result,result2):
                 pass # TODO ručne projít před finálním exportem
                 #print(self.oai_id,error_msg)
@@ -70,13 +70,13 @@ class Metadata:
                 '245': tag245.convertTag245, #titul, autor #TODO kontrola dle mailu od Iry, počkat na nový export 
                 '260': tag260.convertTag260, #místo vydání a datum 
                 '502': tag502.convertTag502, #kvalifikační práce
-                '710': tag710.convertTag710, #fakulta, katedra #TODO nový mail
+                #'710': tag710.convertTag710, #fakulta, katedra #TODO nový mail,povinny
                 }
         obligatory = {
                 '008': otherTag.convertTag008,#jazyk na pozici 35-37
                 '041': tag041.convertTag041,  # jazyk 
-                '246': tag246.convertTag246,  # titulek v překladu  
-                '520': tag520.convertTag520,  # abstrakt #TODO dořešit jazyky
+                '246': tag246.convertTag246,  # titulek v překladu #TODO upozornit na chybějící podpole s jazykem 
+                #'520': tag520.convertTag520,  # abstrakt #TODO dořešit jazyky
                 #'526': otherTag.convertTag526,# předmět TODO jen devět kousku
                 '600': otherTag.convertTag600,# keywords osoba
                 '610': otherTag.convertTag610,# keywords organizace
@@ -85,7 +85,7 @@ class Metadata:
                 '650': tag650.convertTag650,  # keywords 
                 '651': otherTag.convertTag651,# keywords zeměpis
                 #'655': tag655.convertTag655,  # druh práce ignorujeme 9/9 případů lhal
-                '700': tag700.convertTag700,  # vedoucí, oponent,.. #TODO roky ve stejném poli hlásit?
+                '700': tag700.convertTag700,  # vedoucí, oponent,.. #TODO roky ve stejném poli hlásit!
                 }
 
         # Jaro potvrdil následůjící postup
@@ -109,7 +109,8 @@ class Metadata:
 
 
         faculty = self.__getMetadata('faculty')
-        if not faculty: 
+        if not faculty:
+            #print(metadata)
             self.categorize.categorize_item(self.oai_id,"No faculty")
         
         author = self.__getMetadata('author')
