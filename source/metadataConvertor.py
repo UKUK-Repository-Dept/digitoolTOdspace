@@ -84,7 +84,7 @@ class Metadata:
                 '648': otherTag.convertTag648,# keywords období
                 '650': tag650.convertTag650,  # keywords 
                 '651': otherTag.convertTag651,# keywords zeměpis
-                '655': tag655.convertTag655,  # druh práce #TODO ignorovat? v 9/9 případů lhal
+                #'655': tag655.convertTag655,  # druh práce ignorujeme 9/9 případů lhal
                 '700': tag700.convertTag700,  # vedoucí, oponent,.. #TODO roky ve stejném poli hlásit?
                 }
 
@@ -116,6 +116,7 @@ class Metadata:
         if not author: 
             raise Exception('No author')
         advisor = self.__getMetadata('advisor')
+        #TODO ruční kontrola
         #if '700' in self.metadata.keys() and 'advisor' in self.metadata['700'] and not 'advisor' in self.metadata['245']:
         #    print('700')
         commitee = self.__getMetadata('commitee')

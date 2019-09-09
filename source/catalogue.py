@@ -12,6 +12,15 @@ categoryToTypeTitle = {
     "dizertační práce": "Dizertační práce",
     "habilitační práce": "Habilitační práce",
     }
+    
+convertLang = {
+    'cze': 'cs_CZ',
+    'slo': 'sk_SK',
+    'fre': 'fr_FR',
+    'eng': 'en_US',
+    'ger': 'de_DE',
+    'pol': 'pl_PL',
+    }
 
 
 institutToFaculty = {

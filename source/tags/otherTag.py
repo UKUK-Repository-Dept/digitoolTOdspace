@@ -1,15 +1,8 @@
+import catalogue
 
 def convertTag008(tag008,oai_id,categorize):
     lang = tag008[35:38]
-    convert = {
-            'cze': 'cs_CZ',
-            'slo': 'sk_SK',
-            'fre': 'fr_FR',
-            'eng': 'en_US',
-            'ger': 'de_DE',
-            'pol': 'pl_PL',
-            }
-    return {'lang': convert[lang]}
+    return {'lang': catalogue.convertLang[lang]}
 
 def convertTag526(tag526,oai_id,categorize):
     return {} #jen 9ks
