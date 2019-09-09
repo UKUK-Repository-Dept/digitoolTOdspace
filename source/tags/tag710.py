@@ -5,8 +5,10 @@ def convertTag710(tag710,oai_id,categorize):
     ret = {}
     if 'a' in tag710.keys(): #univerzita nebo fakulta
         if len(tag710['a']) > 1:
-            categorize.categorize_item(oai_id,"710: More than one university {}".format(tag710['a']))
-            return ret
+            assert 'Jabok' in tag710['a'][1]
+            tag710['a'] = tag710['a'][:1]
+            #kašlu na Jabok
+            #categorize.categorize_item(oai_id,"710: More than one university {}".format(tag710['a']))
         faculty = tag710['a'][0].replace('.','')
         if faculty[:18] == 'Univerzita Karlova':
             faculty = faculty[18:]
@@ -14,6 +16,7 @@ def convertTag710(tag710,oai_id,categorize):
             if faculty in catalogue.faculty.keys():
                 ret['faculty'] = faculty
             else:
+                #print(oai_id,tag710) TODO samazat tu práci
                 categorize.categorize_item(oai_id,"710: Unknown faculty {}".format(faculty))
                 return ret
     if 'b' in tag710.keys():
@@ -26,15 +29,28 @@ def convertTag710(tag710,oai_id,categorize):
                 err_msg = "710: Unknown departemnt {} at faculty {}".format(department, faculty)
                 categorize.categorize_item(oai_id,err_msg)
         elif len(tag710['b']) == 1:
-            pass
-            #faculty = tag710['b'][0]
-            #assert faculty in catalogue.faculty.keys(), faculty
-            #ret['faculty'] = faculty
+            faculty = tag710['b'][0]
+            if faculty in catalogue.faculty.keys():
+                ret['faculty'] = faculty
+            else:
+                department = faculty
+                faculty = commonTag.getFaculty(department)
+                if faculty:
+                    ret['faculty'] = faculty
+                    ret['department'] = department
+                else:
+                    pass #TODO ta plzeň
+                    #print(oai_id,tag710)
         elif len(tag710['b']) == 2:
             faculty = tag710['b'][0].replace('.','')
             department = tag710['b'][1]
             if faculty in catalogue.faculty.keys():
                 ret['faculty'] = faculty
+            elif faculty in catalogue.institutToFaculty.keys():
+                insitut = faculty
+                faculty = catalogue.institutToFaculty[faculty]
+                ret['faculty'] = faculty
+                ret['department'] = insitut
             else:
                 categorize.categorize_item(oai_id,"710: Unknown faculty {}".format(faculty))
                 return ret
