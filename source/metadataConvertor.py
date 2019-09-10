@@ -50,10 +50,7 @@ def getTopic(categorize, oai_id, topic, metadata):
     return result1
 
 class Metadata:
-    
     metadata = {}
-    
-
     def convertMarc(self, categorize, oai_id, metadataOrigin):
         metadata = {}
         mandatory = {
@@ -98,31 +95,31 @@ class Metadata:
         return self.metadata
        
 
-    def createDC(self, categorize, oai_id, metadataOrigin):
-        metadataReturn = []
-        faculty = getTopic(categorize, oai_id, 'faculty', metadataOrigin)
-        if not faculty:
-            categorize.categorize_item(oai_id,"No faculty")
-        
-        author = getTopic(categorize, oai_id, 'author', metadataOrigin)
-        if not author: 
-            raise Exception('No author')
-        metadataReturn.append({ "key": "dc.contributor.author", "value": "LAST, FIRST" },)
-        advisor = getTopic(categorize, oai_id, 'advisor', metadataOrigin)
-        #TODO ruční kontrola
-        commitee = getTopic(categorize, oai_id, 'commitee', metadataOrigin)
-        consultant = getTopic(categorize, oai_id, 'consultant', metadataOrigin)
-        #TODO 'advisor' 'committe' 'consultant'
+def createDC(categorize, oai_id, metadataOrigin):
+    metadataReturn = []
+    faculty = getTopic(categorize, oai_id, 'faculty', metadataOrigin)
+    if not faculty:
+        categorize.categorize_item(oai_id,"No faculty")
+    
+    author = getTopic(categorize, oai_id, 'author', metadataOrigin)
+    if not author: 
+        raise Exception('No author')
+    metadataReturn.append({ "key": "dc.contributor.author", "value": "LAST, FIRST" },)
+    advisor = getTopic(categorize, oai_id, 'advisor', metadataOrigin)
+    #TODO ruční kontrola
+    commitee = getTopic(categorize, oai_id, 'commitee', metadataOrigin)
+    consultant = getTopic(categorize, oai_id, 'consultant', metadataOrigin)
+    #TODO 'advisor' 'committe' 'consultant'
 
 
-        self.degree = getTopic(categorize, oai_id, 'degree', metadataOrigin)
-        if not self.degree: 
-            categorize.categorize_item(oai_id,"No degre")
+    degree = getTopic(categorize, oai_id, 'degree', metadataOrigin)
+    if not degree: 
+        categorize.categorize_item(oai_id,"No degre")
 
-        # němčina 42606, azbuka 135200
-        self.lang = getTopic(categorize, oai_id, 'lang', metadataOrigin)
-        if not self.lang:
-            error_msg = "No language found in 041 and 520."
-            categorize.categorize_item(oai_id,error_msg)
-        #TODO lang alternative_lang
-        return {"metadata": metadataReturn }
+    # němčina 42606, azbuka 135200
+    lang = getTopic(categorize, oai_id, 'lang', metadataOrigin)
+    if not lang:
+        error_msg = "No language found in 041 and 520."
+        categorize.categorize_item(oai_id,error_msg)
+    #TODO lang alternative_lang
+    return {"metadata": metadataReturn }

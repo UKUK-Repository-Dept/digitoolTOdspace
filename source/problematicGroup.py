@@ -122,7 +122,7 @@ def aleph(oai_ids, digitoolXML, categorize):
         #oai_id = digittol_id
         m = metadataConvertor.Metadata()
         metadataTopic = m.convertMarc(categorize, oai_id, metadata)
-        metadataReturn = m.createDC(categorize, oai_id, metadataTopic)
+        metadataReturn = metadataConvertor.createDC(categorize, oai_id, metadataTopic)
         #print(metadataReturn)
 
 def not_in_aleph(oai_ids, digitoolXML, categorize):
