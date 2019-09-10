@@ -2,56 +2,57 @@ import re
 from tags import * 
 import catalogue
 
+def comparePeople(name1,name2):
+    def normaliseName(name):
+        name = name.replace(':','')
+        names = sorted(name.replace(',',' ').replace('-',' ').split())
+        for name in names:
+            if 'vypracoval' in name:
+                continue
+            name = name.strip()
+            yield name
+    if name1 == None:
+        return True
+    name1 = list(normaliseName(name1))
+    name2 = list(normaliseName(name2))
+    if not len(name1) == len(name2):
+       return False
+    for i in range(len(name1)):
+        if len(name1[i]) > len(name2[i]):
+            first, second = name2[i], name1[i]
+        else:
+            first, second = name1[i], name2[i]
+        if len(first) == 2 and first[1] == '.' and first[0] == second[0]: 
+            continue #iniciály
+        if not first == second:
+            return False
+    return True
+
+
+def getTopic(categorize, oai_id, topic, metadata):
+    #TODO v neshodě vrací to poslední, nikoliv autoritaivní 
+    result1  = None
+    tag1 = None
+    for tag2 in metadata:
+        if not topic in metadata[tag2].keys():
+            continue
+        result2 = metadata[tag2][topic]
+        error_msg = 'Different {} {}:"{}" {}: "{}"'.format(topic, tag1, result1, tag2, result2)
+        personTopics = ['author','advisor','commitee','consultant']
+        if topic in personTopics and not comparePeople(result1,result2):
+            pass # TODO ručne projít před finálním exportem
+            #print(oai_id,error_msg)
+            #categorize.categorize_item(oai_id,error_msg)
+        elif topic not in personTopics and result1 and result1 != result2:
+            categorize.categorize_item(oai_id,error_msg)
+        result1 = result2
+        tag1 = tag2
+    return result1
+
 class Metadata:
     
     metadata = {}
     
-    def __getMetadata(self, categorize, oai_id, topic, metadata):
-        #TODO v neshodě vrací to poslední, nikoliv autoritaivní 
-        def __comparePeople(name1,name2):
-            def normaliseName(name):
-                name = name.replace(':','')
-                names = sorted(name.replace(',',' ').replace('-',' ').split())
-                for name in names:
-                    if 'vypracoval' in name:
-                        continue
-                    name = name.strip()
-                    yield name
-            if name1 == None:
-                return True
-            name1 = list(normaliseName(name1))
-            name2 = list(normaliseName(name2))
-            if not len(name1) == len(name2):
-               return False
-            for i in range(len(name1)):
-                if len(name1[i]) > len(name2[i]):
-                    first, second = name2[i], name1[i]
-                else:
-                    first, second = name1[i], name2[i]
-                if len(first) == 2 and first[1] == '.' and first[0] == second[0]: 
-                    continue #iniciály
-                if not first == second:
-                    return False
-            return True
-
-
-        result1  = None
-        tag1 = None
-        for tag2 in metadata:
-            if not topic in metadata[tag2].keys():
-                continue
-            result2 = metadata[tag2][topic]
-            error_msg = 'Different {} {}:"{}" {}: "{}"'.format(topic, tag1, result1, tag2, result2)
-            personTopics = ['author','advisor','commitee','consultant']
-            if topic in personTopics and not __comparePeople(result1,result2):
-                pass # TODO ručne projít před finálním exportem
-                #print(oai_id,error_msg)
-                #categorize.categorize_item(oai_id,error_msg)
-            elif topic not in personTopics and result1 and result1 != result2:
-                categorize.categorize_item(oai_id,error_msg)
-            result1 = result2
-            tag1 = tag2
-        return result1
 
     def convertMarc(self, categorize, oai_id, metadataOrigin):
         metadata = {}
@@ -97,31 +98,29 @@ class Metadata:
         return self.metadata
        
 
-
-
     def createDC(self, categorize, oai_id, metadataOrigin):
         metadataReturn = []
-        faculty = self.__getMetadata(categorize, oai_id, 'faculty', metadataOrigin)
+        faculty = getTopic(categorize, oai_id, 'faculty', metadataOrigin)
         if not faculty:
             categorize.categorize_item(oai_id,"No faculty")
         
-        author = self.__getMetadata(categorize, oai_id, 'author', metadataOrigin)
+        author = getTopic(categorize, oai_id, 'author', metadataOrigin)
         if not author: 
             raise Exception('No author')
         metadataReturn.append({ "key": "dc.contributor.author", "value": "LAST, FIRST" },)
-        advisor = self.__getMetadata(categorize, oai_id, 'advisor', metadataOrigin)
+        advisor = getTopic(categorize, oai_id, 'advisor', metadataOrigin)
         #TODO ruční kontrola
-        commitee = self.__getMetadata(categorize, oai_id, 'commitee', metadataOrigin)
-        consultant = self.__getMetadata(categorize, oai_id, 'consultant', metadataOrigin)
+        commitee = getTopic(categorize, oai_id, 'commitee', metadataOrigin)
+        consultant = getTopic(categorize, oai_id, 'consultant', metadataOrigin)
         #TODO 'advisor' 'committe' 'consultant'
 
 
-        self.degree = self.__getMetadata(categorize, oai_id, 'degree', metadataOrigin)
+        self.degree = getTopic(categorize, oai_id, 'degree', metadataOrigin)
         if not self.degree: 
             categorize.categorize_item(oai_id,"No degre")
 
         # němčina 42606, azbuka 135200
-        self.lang = self.__getMetadata(categorize, oai_id, 'lang', metadataOrigin)
+        self.lang = getTopic(categorize, oai_id, 'lang', metadataOrigin)
         if not self.lang:
             error_msg = "No language found in 041 and 520."
             categorize.categorize_item(oai_id,error_msg)

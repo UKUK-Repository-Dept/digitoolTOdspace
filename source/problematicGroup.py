@@ -1,5 +1,5 @@
 from filenameConvertor import FilenameConvertor
-from metadataConvertor import Metadata
+import metadataConvertor
 from categorize import Categorize
 from tags.tag502 import convertTag502
 from aleph import openAleph
@@ -120,7 +120,7 @@ def aleph(oai_ids, digitoolXML, categorize):
         oai_id = "{},{}".format(aleph_id,digittol_id)
         #oai_id = aleph_id
         #oai_id = digittol_id
-        m = Metadata()
+        m = metadataConvertor.Metadata()
         metadataTopic = m.convertMarc(categorize, oai_id, metadata)
         metadataReturn = m.createDC(categorize, oai_id, metadataTopic)
         #print(metadataReturn)
