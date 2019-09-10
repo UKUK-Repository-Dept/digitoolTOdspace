@@ -121,7 +121,8 @@ def aleph(oai_ids, digitoolXML, categorize):
         #oai_id = aleph_id
         #oai_id = digittol_id
         m = Metadata(categorize, oai_id)
-        m.convertMarc(metadata)
+        metadataReturn = m.convertMarc(metadata)
+        #print(metadataReturn)
 
 def not_in_aleph(oai_ids, digitoolXML, categorize):
     records = openAleph("dtl_2006.xml")

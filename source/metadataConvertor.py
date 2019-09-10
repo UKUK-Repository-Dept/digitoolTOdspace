@@ -4,11 +4,7 @@ import catalogue
 
 class Metadata:
     
-    example_return = {"metadata":[ 
-                { "key": "dc.contributor.author", "value": "LAST, FIRST" }, 
-                { "key": "dc.description.abstract", "language": "pt_BR", "value": "ABSTRACT" }, 
-                { "key": "dc.title", "language": "pt_BR", "value": "Pokus" } 
-                ]}
+    metadataReturn = []
     metadata = {}
     
     def __init__(self, categorize, oai_id):
@@ -120,6 +116,7 @@ class Metadata:
         author = self.__getMetadata('author')
         if not author: 
             raise Exception('No author')
+        self.metadataReturn.append({ "key": "dc.contributor.author", "value": "LAST, FIRST" },)
         advisor = self.__getMetadata('advisor')
         #TODO ruční kontrola
         #if '700' in self.metadata.keys() and 'advisor' in self.metadata['700'] and not 'advisor' in self.metadata['245']:
@@ -143,3 +140,4 @@ class Metadata:
             error_msg = "No language found in 041 and 520."
             self.categorize.categorize_item(self.oai_id,error_msg)
         #TODO lang alternative_lang
+        return {"metadata": self.metadataReturn }
