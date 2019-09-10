@@ -37,10 +37,10 @@ class Metadata:
 
         result1  = None
         tag1 = None
-        for tag2 in self.metadata:
-            if not topic in self.metadata[tag2].keys():
+        for tag2 in metadata:
+            if not topic in metadata[tag2].keys():
                 continue
-            result2 = self.metadata[tag2][topic]
+            result2 = metadata[tag2][topic]
             error_msg = 'Different {} {}:"{}" {}: "{}"'.format(topic, tag1, result1, tag2, result2)
             personTopics = ['author','advisor','commitee','consultant']
             if topic in personTopics and not __comparePeople(result1,result2):
