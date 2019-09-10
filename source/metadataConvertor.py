@@ -6,7 +6,7 @@ class Metadata:
     
     metadata = {}
     
-    def __getMetadata(self, categorize, oai_id, topic):
+    def __getMetadata(self, categorize, oai_id, topic, metadata):
         #TODO v neshodě vrací to poslední, nikoliv autoritaivní 
         def __comparePeople(name1,name2):
             def normaliseName(name):
@@ -96,28 +96,28 @@ class Metadata:
             self.metadata[tag] = allTags[tag](metadataOrigin[tag], oai_id, categorize)
        
 
-
-        faculty = self.__getMetadata(categorize, oai_id, 'faculty')
+        metadata = self.metadata
+        faculty = self.__getMetadata(categorize, oai_id, 'faculty', metadata)
         if not faculty:
             #print(oai_id)
             #print(metadata)
             #print(self.metadata)
             categorize.categorize_item(oai_id,"No faculty")
         
-        author = self.__getMetadata(categorize, oai_id, 'author')
+        author = self.__getMetadata(categorize, oai_id, 'author', metadata)
         if not author: 
             raise Exception('No author')
         metadataReturn.append({ "key": "dc.contributor.author", "value": "LAST, FIRST" },)
-        advisor = self.__getMetadata(categorize, oai_id, 'advisor')
+        advisor = self.__getMetadata(categorize, oai_id, 'advisor', metadata)
         #TODO ruční kontrola
         #if '700' in self.metadata.keys() and 'advisor' in self.metadata['700'] and not 'advisor' in self.metadata['245']:
         #    print('700')
-        commitee = self.__getMetadata(categorize, oai_id, 'commitee')
-        consultant = self.__getMetadata(categorize, oai_id, 'consultant')
+        commitee = self.__getMetadata(categorize, oai_id, 'commitee', metadata)
+        consultant = self.__getMetadata(categorize, oai_id, 'consultant', metadata)
         #TODO 'advisor' 'committe' 'consultant'
 
 
-        self.degree = self.__getMetadata(categorize, oai_id, 'degree')
+        self.degree = self.__getMetadata(categorize, oai_id, 'degree', metadata)
         if not self.degree: 
             categorize.categorize_item(oai_id,"No degre")
 
@@ -126,7 +126,7 @@ class Metadata:
         #if oai_id in ['42606','135200']:
         #    print(self.metadata)
         # TODO pole 008 znak 35-37
-        self.lang = self.__getMetadata(categorize, oai_id, 'lang')
+        self.lang = self.__getMetadata(categorize, oai_id, 'lang', metadata)
         if not self.lang:
             error_msg = "No language found in 041 and 520."
             categorize.categorize_item(oai_id,error_msg)
