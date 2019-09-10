@@ -1,5 +1,4 @@
 import catalogue 
-from tags.commonTag import convertOrigin
 
 def convertCorrectTag502(tag502, oai_id, categorize):
     ret = {}
@@ -27,8 +26,33 @@ def convertCorrectTag502(tag502, oai_id, categorize):
     year = year.strip()
     assert 190 < int(year[:3]) < 202, year
     ret['year'] = year
-    ret['university'] = 'Univerzita Karlova'
-    ret = { **ret, **convertOrigin(origin, oai_id, categorize) }
+    
+    origin = origin.strip()
+    if "Univerzita Karlova. " == origin[:20]:
+        origin = origin[20:]
+    faculty, department = None, None
+    if origin[1] == '.': #lékařské fakulty 1/2
+        origin = origin[0] + '$' + origin[2:]
+    if '.' in origin:
+        faculty, department = origin.split(".",1)
+    else:
+        faculty, department = origin, None
+    if '$' in faculty: #lékařské fakluty 2/2
+        faculty = faculty.replace('$','.')
+    if faculty in catalogue.faculty:
+        ret['faculty'] = faculty
+    else:
+        #print(faculty, tag502)
+        #categorize.categorize_item(oai_id,"Unknown faculty {}".format(faculty))
+        return ret
+    if department:
+        department = department.strip()
+        if department in catalogue.faculty[faculty]:
+            ret['department'] = department
+        else:
+            pass 
+            #print("{} '{}' '{}'".format(oai_id,faculty, department))
+            #categorize.categorize_item(oai_id,"Unknown department {}".format(department))
     return ret 
 
 def convertTag502(tag502, oai_id, categorize):

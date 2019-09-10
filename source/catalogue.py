@@ -36,6 +36,8 @@ faculty = {
         'Katedra pomocných věd historických a archivního studia',
         'Ústav etnologie',
         'Ústav románských studií',
+        'Katedra historie',
+        'Katedra obecné a pedagogické psychologie',
         'Knihovna andragogiky a kulturologie',
         'Katedra sociální práce a vzdělávání dospělých',
         'Katedra andragogiky a sociální práce',
@@ -95,6 +97,7 @@ faculty = {
         'Katedra výtvarné výchovy', 
         'Katedra pedagogické a školní psychologie',
         'Katedra pedagogické psychologie',
+        'Katedra psychologie',
         'Katedra obecné a pedagogické psychologie',
         'Katedra informačních technologií a technické výchovy',
         ],
@@ -132,6 +135,7 @@ faculty = {
         'Katedra biblická',
         ],
     'Komenského bohoslovecká fakulta v Praze': [],
+    'Komenského bohoslovecká evangelická fakulta': [],
     'Evangelická teologická fakulta': [ 
             'Katedra filosofie', 'Katedra sociální teologie', 'Katedra Starého zákona', 
             'Katedra systematické teologie', 'Katedra teologické etiky', 'Katedra sociální pedagogiky',
@@ -148,10 +152,16 @@ faculty = {
         'Ústav formální a aplikované lingvistiky',
         'Katedra geofyziky',
         ],
-    '1 lékařská fakulta': [],
-    '2 lékařská fakulta': [],
-    '3 lékařská fakulta': ['Klinika otorinolaryngologická'],
+    '1. lékařská fakulta': ['Ústav patologické fyziologie'],
+    '2. lékařská fakulta': [],
+    '3. lékařská fakulta': ['Klinika otorinolaryngologická'],
     'Lékařská fakulta, 3.': [],
     'Lékařská fakulta, 2.': [],
     'Lékařská fakulta, 1': ['Ústav patologické fyziologie',],
     }
+
+def getFaculty(department):
+    for f in faculty.keys():
+        if department in faculty[f]:
+            return f
+

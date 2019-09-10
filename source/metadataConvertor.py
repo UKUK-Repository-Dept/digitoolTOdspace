@@ -63,6 +63,8 @@ class Metadata:
         return result
 
     def convertMarc(self, metadata):
+        #if self.oai_id != '001529410,1138075':
+        #    return
         self.degree = None #TODO smazat
         ret = {}
         mandatory = {
@@ -110,7 +112,9 @@ class Metadata:
 
         faculty = self.__getMetadata('faculty')
         if not faculty:
+            #print(self.oai_id)
             #print(metadata)
+            #print(self.metadata)
             self.categorize.categorize_item(self.oai_id,"No faculty")
         
         author = self.__getMetadata('author')

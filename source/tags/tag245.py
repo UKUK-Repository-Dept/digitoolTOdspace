@@ -1,4 +1,3 @@
-import  tags.commonTag
 import re
 
 rules = {
