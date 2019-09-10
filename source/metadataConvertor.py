@@ -54,7 +54,7 @@ class Metadata:
         return result1
 
     def convertMarc(self, categorize, oai_id, metadataOrigin):
-        metadataReturn = []
+        metadata = {}
         mandatory = {
                 '100': tag100.convertTag100, #autor
                 '245': tag245.convertTag245, #titul, autor #TODO kontrola dle mailu od Iry, počkat na nový export 
@@ -96,7 +96,11 @@ class Metadata:
             self.metadata[tag] = allTags[tag](metadataOrigin[tag], oai_id, categorize)
        
 
+
+
+    def createDC(self, categorize, oai_id, metadataOrigin):
         metadata = self.metadata
+        metadataReturn = []
         faculty = self.__getMetadata(categorize, oai_id, 'faculty', metadata)
         if not faculty:
             #print(oai_id)
