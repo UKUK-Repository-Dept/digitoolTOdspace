@@ -6,8 +6,8 @@ class Metadata:
     
     metadata = {}
     
-    def __getMetadata(self, categorize, oai_id, tagName):
-        
+    def __getMetadata(self, categorize, oai_id, topic):
+        #TODO v neshodě vrací to poslední, nikoliv autoritaivní 
         def __comparePeople(name1,name2):
             def normaliseName(name):
                 name = name.replace(':','')
@@ -35,23 +35,23 @@ class Metadata:
             return True
 
 
-        result  = None
-        resultTag = None
-        for tag in self.metadata:
-            if not tagName in  self.metadata[tag].keys():
+        result1  = None
+        tag1 = None
+        for tag2 in self.metadata:
+            if not topic in self.metadata[tag2].keys():
                 continue
-            result2 = self.metadata[tag][tagName]
-            error_msg = 'Different {} {}:"{}" {}: "{}"'.format(tagName, resultTag, result, tag, result2)
-            personTagNames = ['author','advisor','commitee','consultant']
-            if tagName in personTagNames and not __comparePeople(result,result2):
+            result2 = self.metadata[tag2][topic]
+            error_msg = 'Different {} {}:"{}" {}: "{}"'.format(topic, tag1, result1, tag2, result2)
+            personTopics = ['author','advisor','commitee','consultant']
+            if topic in personTopics and not __comparePeople(result1,result2):
                 pass # TODO ručne projít před finálním exportem
                 #print(oai_id,error_msg)
                 #categorize.categorize_item(oai_id,error_msg)
-            elif tagName not in personTagNames and result and result != result2:
+            elif topic not in personTopics and result1 and result1 != result2:
                 categorize.categorize_item(oai_id,error_msg)
-            result = result2
-            resultTag = tag
-        return result
+            result1 = result2
+            tag1 = tag2
+        return result1
 
     def convertMarc(self, categorize, oai_id, metadataOrigin):
         metadataReturn = []
