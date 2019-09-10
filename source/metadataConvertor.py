@@ -4,14 +4,12 @@ import catalogue
 
 class Metadata:
     
-    metadataReturn = []
     metadata = {}
     
     def __init__(self, categorize, oai_id):
         self.categorize = categorize
-        self.oai_id = oai_id
 
-    def __getMetadata(self, tagName):
+    def __getMetadata(self, oai_id, tagName):
         
         def comparePeople(name1,name2):
             def normaliseName(name):
@@ -50,19 +48,19 @@ class Metadata:
             personTagNames = ['author','advisor','commitee','consultant']
             if tagName in personTagNames and not comparePeople(result,result2):
                 pass # TODO ručne projít před finálním exportem
-                #print(self.oai_id,error_msg)
-                #self.categorize.categorize_item(self.oai_id,error_msg)
+                #print(oai_id,error_msg)
+                #self.categorize.categorize_item(oai_id,error_msg)
             elif tagName not in personTagNames and result and result != result2:
-                self.categorize.categorize_item(self.oai_id,error_msg)
+                self.categorize.categorize_item(oai_id,error_msg)
             result = result2
             resultTag = tag
         return result
 
-    def convertMarc(self, metadata):
-        #if self.oai_id != '001529410,1138075':
+    def convertMarc(self, oai_id, metadata):
+        #if oai_id != '001529410,1138075':
         #    return
         self.degree = None #TODO smazat
-        ret = {}
+        metadataReturn = []
         mandatory = {
                 '100': tag100.convertTag100, #autor
                 '245': tag245.convertTag245, #titul, autor #TODO kontrola dle mailu od Iry, počkat na nový export 
@@ -94,50 +92,49 @@ class Metadata:
         for tag in mandatory.keys():
             if not tag in metadata.keys():
                 error_msg = "No tag {} in metadata".format(tag)
-                self.categorize.categorize_item(self.oai_id,error_msg)
+                self.categorize.categorize_item(oai_id,error_msg)
                 return
         
         allTags = {**mandatory, **obligatory}
         for tag in allTags.keys():
             if not tag in metadata.keys():
                 continue
-            ret = allTags[tag](metadata[tag], self.oai_id, self.categorize)
-            self.metadata[tag] = ret
+            self.metadata[tag] = allTags[tag](metadata[tag], oai_id, self.categorize)
        
 
 
-        faculty = self.__getMetadata('faculty')
+        faculty = self.__getMetadata(oai_id, 'faculty')
         if not faculty:
-            #print(self.oai_id)
+            #print(oai_id)
             #print(metadata)
             #print(self.metadata)
-            self.categorize.categorize_item(self.oai_id,"No faculty")
+            self.categorize.categorize_item(oai_id,"No faculty")
         
-        author = self.__getMetadata('author')
+        author = self.__getMetadata(oai_id, 'author')
         if not author: 
             raise Exception('No author')
-        self.metadataReturn.append({ "key": "dc.contributor.author", "value": "LAST, FIRST" },)
-        advisor = self.__getMetadata('advisor')
+        metadataReturn.append({ "key": "dc.contributor.author", "value": "LAST, FIRST" },)
+        advisor = self.__getMetadata(oai_id, 'advisor')
         #TODO ruční kontrola
         #if '700' in self.metadata.keys() and 'advisor' in self.metadata['700'] and not 'advisor' in self.metadata['245']:
         #    print('700')
-        commitee = self.__getMetadata('commitee')
-        consultant = self.__getMetadata('consultant')
+        commitee = self.__getMetadata(oai_id, 'commitee')
+        consultant = self.__getMetadata(oai_id, 'consultant')
         #TODO 'advisor' 'committe' 'consultant'
 
 
-        self.degree = self.__getMetadata('degree')
+        self.degree = self.__getMetadata(oai_id, 'degree')
         if not self.degree: 
-            self.categorize.categorize_item(self.oai_id,"No degre")
+            self.categorize.categorize_item(oai_id,"No degre")
 
         # němčina 42606, azbuka 135200
-        #print(self.oai_id)
-        #if self.oai_id in ['42606','135200']:
+        #print(oai_id)
+        #if oai_id in ['42606','135200']:
         #    print(self.metadata)
         # TODO pole 008 znak 35-37
-        self.lang = self.__getMetadata('lang')
+        self.lang = self.__getMetadata(oai_id, 'lang')
         if not self.lang:
             error_msg = "No language found in 041 and 520."
-            self.categorize.categorize_item(self.oai_id,error_msg)
+            self.categorize.categorize_item(oai_id,error_msg)
         #TODO lang alternative_lang
-        return {"metadata": self.metadataReturn }
+        return {"metadata": metadataReturn }
