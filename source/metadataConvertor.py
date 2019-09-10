@@ -94,43 +94,34 @@ class Metadata:
             if not tag in metadataOrigin.keys():
                 continue
             self.metadata[tag] = allTags[tag](metadataOrigin[tag], oai_id, categorize)
+        return self.metadata
        
 
 
 
     def createDC(self, categorize, oai_id, metadataOrigin):
-        metadata = self.metadata
         metadataReturn = []
-        faculty = self.__getMetadata(categorize, oai_id, 'faculty', metadata)
+        faculty = self.__getMetadata(categorize, oai_id, 'faculty', metadataOrigin)
         if not faculty:
-            #print(oai_id)
-            #print(metadata)
-            #print(self.metadata)
             categorize.categorize_item(oai_id,"No faculty")
         
-        author = self.__getMetadata(categorize, oai_id, 'author', metadata)
+        author = self.__getMetadata(categorize, oai_id, 'author', metadataOrigin)
         if not author: 
             raise Exception('No author')
         metadataReturn.append({ "key": "dc.contributor.author", "value": "LAST, FIRST" },)
-        advisor = self.__getMetadata(categorize, oai_id, 'advisor', metadata)
+        advisor = self.__getMetadata(categorize, oai_id, 'advisor', metadataOrigin)
         #TODO ruční kontrola
-        #if '700' in self.metadata.keys() and 'advisor' in self.metadata['700'] and not 'advisor' in self.metadata['245']:
-        #    print('700')
-        commitee = self.__getMetadata(categorize, oai_id, 'commitee', metadata)
-        consultant = self.__getMetadata(categorize, oai_id, 'consultant', metadata)
+        commitee = self.__getMetadata(categorize, oai_id, 'commitee', metadataOrigin)
+        consultant = self.__getMetadata(categorize, oai_id, 'consultant', metadataOrigin)
         #TODO 'advisor' 'committe' 'consultant'
 
 
-        self.degree = self.__getMetadata(categorize, oai_id, 'degree', metadata)
+        self.degree = self.__getMetadata(categorize, oai_id, 'degree', metadataOrigin)
         if not self.degree: 
             categorize.categorize_item(oai_id,"No degre")
 
         # němčina 42606, azbuka 135200
-        #print(oai_id)
-        #if oai_id in ['42606','135200']:
-        #    print(self.metadata)
-        # TODO pole 008 znak 35-37
-        self.lang = self.__getMetadata(categorize, oai_id, 'lang', metadata)
+        self.lang = self.__getMetadata(categorize, oai_id, 'lang', metadataOrigin)
         if not self.lang:
             error_msg = "No language found in 041 and 520."
             categorize.categorize_item(oai_id,error_msg)
