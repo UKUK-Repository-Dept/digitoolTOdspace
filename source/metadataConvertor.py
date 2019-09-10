@@ -6,12 +6,9 @@ class Metadata:
     
     metadata = {}
     
-    def __init__(self, categorize, oai_id):
-        pass
-
     def __getMetadata(self, categorize, oai_id, tagName):
         
-        def comparePeople(name1,name2):
+        def __comparePeople(name1,name2):
             def normaliseName(name):
                 name = name.replace(':','')
                 names = sorted(name.replace(',',' ').replace('-',' ').split())
@@ -46,7 +43,7 @@ class Metadata:
             result2 = self.metadata[tag][tagName]
             error_msg = 'Different {} {}:"{}" {}: "{}"'.format(tagName, resultTag, result, tag, result2)
             personTagNames = ['author','advisor','commitee','consultant']
-            if tagName in personTagNames and not comparePeople(result,result2):
+            if tagName in personTagNames and not __comparePeople(result,result2):
                 pass # TODO ručne projít před finálním exportem
                 #print(oai_id,error_msg)
                 #categorize.categorize_item(oai_id,error_msg)
@@ -56,10 +53,7 @@ class Metadata:
             resultTag = tag
         return result
 
-    def convertMarc(self, categorize, oai_id, metadata):
-        #if oai_id != '001529410,1138075':
-        #    return
-        self.degree = None #TODO smazat
+    def convertMarc(self, categorize, oai_id, metadataOrigin):
         metadataReturn = []
         mandatory = {
                 '100': tag100.convertTag100, #autor
@@ -85,21 +79,21 @@ class Metadata:
                 }
 
         # Jaro potvrdil následůjící postup
-        if '264' in metadata.keys():
-            assert '260' not in metadata.keys()
-            metadata['260'] = metadata['264']
+        if '264' in metadataOrigin.keys():
+            assert '260' not in metadataOrigin.keys()
+            metadataOrigin['260'] = metadataOrigin['264']
 
         for tag in mandatory.keys():
-            if not tag in metadata.keys():
+            if not tag in metadataOrigin.keys():
                 error_msg = "No tag {} in metadata".format(tag)
                 categorize.categorize_item(oai_id,error_msg)
                 return
         
         allTags = {**mandatory, **obligatory}
         for tag in allTags.keys():
-            if not tag in metadata.keys():
+            if not tag in metadataOrigin.keys():
                 continue
-            self.metadata[tag] = allTags[tag](metadata[tag], oai_id, categorize)
+            self.metadata[tag] = allTags[tag](metadataOrigin[tag], oai_id, categorize)
        
 
 

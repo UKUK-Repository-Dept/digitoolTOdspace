@@ -120,7 +120,7 @@ def aleph(oai_ids, digitoolXML, categorize):
         oai_id = "{},{}".format(aleph_id,digittol_id)
         #oai_id = aleph_id
         #oai_id = digittol_id
-        m = Metadata(categorize, oai_id)
+        m = Metadata()
         metadataReturn = m.convertMarc(categorize, oai_id, metadata)
         #print(metadataReturn)
 
