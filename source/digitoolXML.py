@@ -43,6 +43,16 @@ class DigitoolXML:
         for new_id in subrecords:
             yield from self.get_relations(new_id,seen=seen)
 
+    def getList(self):
+        oai_ids = []
+        path = self.xml_dirname 
+        for filename in os.listdir(path):
+            with open(path+'/'+filename,'r') as f:
+                if "<name>descriptive</name>" in f.read():
+                    oai_id = filename.split('.')[0]
+                    oai_ids.append(oai_id)
+        return oai_ids
+
     def get_attachements(self, oai_id, seen=None):
         logging.debug("Getting attachement of {}.".format(oai_id))
         for relation in self.get_relations(oai_id):

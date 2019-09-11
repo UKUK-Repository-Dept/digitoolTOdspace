@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import os
 import click
-from digitoolOAI import Digitool
 from digitoolXML import DigitoolXML
 from dspace import Dspace
 from filenameConvertor import FilenameConvertor
@@ -42,7 +41,7 @@ def categorize(group,output,log):
     logging.getLogger().setLevel(loggingMap[log])
     dtx = DigitoolXML(xml_dirname)
     c = Categorize(dtx, output)
-    oai_ids = Digitool(digitool_category,xml_dirname).download_list()
+    oai_ids = dtx.getList()
     categories[group](oai_ids,dtx,c)
     print(c)
 
@@ -81,8 +80,6 @@ def dspace(dspace_admin_passwd, dspace_admin_username):
     ds.logout()
 
 def convertItem(oai_id, test):
-    dt = Digitool(digitool_category) 
-    record = dt.get_item(oai_id)
     
     dtx = DigitoolXML(xml_dirname)
     categorize = Categorize(dtx)
@@ -122,7 +119,7 @@ def convertitem(item):
 @click.option('--test/--no-test', default=False, help='Ask user to check convert')
 @click.option('--run/--no-run', default=False, help='Pushih converted data to server')
 def convert(dspace_admin_passwd, dspace_admin_username, test, run):
-    oai_ids = Digitool(digitool_category).download_list()
+    oai_ids = [] #TODO
     dtx = DigitoolXML(xml_dirname)
     categorize = Categorize(dtx)
     ds = Dspace(dspace_admin_username,dspace_admin_passwd)
