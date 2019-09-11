@@ -1,14 +1,11 @@
-dtl_2006.xml
-output.txt
 .*.swp
-export_vskp
-.vsdoce/*
 */__pycache__/*
 */*/__pycache__/*
-*2019*/
+env/*
+
+#exporty z digitoolu
 Cerge/*
 DUR01/*
-.vscode/*
-env/*
-TODO
-s-nahledy/
+
+#v xml jsou exporty od Jara
+*.xml

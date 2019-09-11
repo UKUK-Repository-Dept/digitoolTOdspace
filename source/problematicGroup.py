@@ -39,17 +39,8 @@ def tag502(oai_ids, digitoolXML, categorize):
                 continue
             convertTag502(metadata['502- - '],oai_id,categorize)
 
-def __parse_ignore_file(filename):
-    with open(filename) as f:
-        for line in f:
-            if len(line) < 3:
-                continue
-            oai_id = line.split()[0]
-            yield oai_id
 
 def forgot_attachements(oai_ids, digitoolXML, categorize):
-    ignore = list(__parse_ignore_file('zaznamy'))
-    ignore = []
     attachements = []
     for oai_id in oai_ids:
         #TODO kvuli Cerge
@@ -64,10 +55,7 @@ def forgot_attachements(oai_ids, digitoolXML, categorize):
             continue
         if not row[:-1] in attachements:
             oai_id = row.split("_")[0]
-            if oai_id in ignore:
-                pass #víme že nemají zaznámy
-            else:
-                categorize.categorize_item(oai_id,"{} nemá metadata".format(row[:-1]))
+            categorize.categorize_item(oai_id,"{} nemá metadata".format(row[:-1]))
 
 
 
