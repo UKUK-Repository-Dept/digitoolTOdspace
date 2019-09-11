@@ -40,12 +40,21 @@ class DigitoolXML:
 
     def getList(self):
         oai_ids = []
-        path = self.xml_dirname 
+        path = self.xml_dirname
+        seen = []
         for filename in os.listdir(path):
-            with open(path+'/'+filename,'r') as f:
-                if "<name>descriptive</name>" in f.read():
-                    oai_id = filename.split('.')[0]
-                    oai_ids.append(oai_id)
+            oai_id = filename.split('.')[0]
+            if oai_id in seen:
+                continue
+            else:
+                seen.append(oai_id)
+            marc = 0
+            for relation in self.get_relations(oai_id):
+                seen.append(relation)
+                originalMetadataXML = self.get_metadata(relation)
+                if 'marc' in originalMetadataXML.keys():
+                    marc += 1
+                    oai_ids.append(relation)
         return oai_ids
 
     def get_attachements(self, oai_id, seen=None):
