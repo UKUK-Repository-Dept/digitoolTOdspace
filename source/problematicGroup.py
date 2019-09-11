@@ -13,40 +13,9 @@ def oai(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
         categorize.categorize_item(oai_id,"je v oai")
 
-def marc(oai_ids, digitoolXML, categorize):
-    for oai_id in oai_ids:
-        originalMetadataXML = digitoolXML.get_metadata(oai_id)
-        if 'marc' in originalMetadataXML.keys():
-            m = Metadata(categorize, oai_id)
-            m.convertMarc(originalMetadataXML['marc'])
-
-def no502(oai_ids, digitoolXML, categorize):
-    for oai_id in oai_ids:
-        originalMetadataXML = digitoolXML.get_metadata(oai_id)
-        if 'marc' in originalMetadataXML.keys():
-            metadata = originalMetadataXML['marc']
-            if not '502- - ' in metadata.keys():
-                error_msg = "No tag 502"
-                categorize.categorize_item(oai_id,error_msg)
-                continue
-
-def tag502(oai_ids, digitoolXML, categorize):
-    for oai_id in oai_ids:
-        originalMetadataXML = digitoolXML.get_metadata(oai_id)
-        if 'marc' in originalMetadataXML.keys():
-            metadata = originalMetadataXML['marc']
-            if not '502- - ' in metadata.keys():
-                continue
-            convertTag502(metadata['502- - '],oai_id,categorize)
-
-
 def forgot_attachements(oai_ids, digitoolXML, categorize):
     attachements = []
     for oai_id in oai_ids:
-        #TODO kvuli Cerge
-        if list(digitoolXML.get_attachements(oai_id))==[]:
-            print(oai_id,end=', ')
-            continue
         attachements += list(zip(*digitoolXML.get_attachements(oai_id)))[0]
     for row in open( digitoolXML.dirname+"/ls_streams.txt" ,"r"):
         if '_index.html' in row:
@@ -58,7 +27,6 @@ def forgot_attachements(oai_ids, digitoolXML, categorize):
             categorize.categorize_item(oai_id,"{} nemá metadata".format(row[:-1]))
 
 
-
 def no_attachements(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
         attachements = list(digitoolXML.get_attachements(oai_id))
@@ -66,7 +34,6 @@ def no_attachements(oai_ids, digitoolXML, categorize):
             categorize.categorize_item(oai_id,"bez přílohy")
 
 def only_dc(oai_ids, digitoolXML, categorize):
-    ignore = list(__parse_ignore_file('zaznamy'))
     for oai_id in oai_ids:
         mark = False
         dc = False
@@ -116,7 +83,4 @@ def not_in_aleph(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
         originalMetadataXML = digitoolXML.get_metadata(oai_id)
         if not 'marc' in originalMetadataXML.keys():
-            #categorize.categorize_item(oai_id,"no marc")
-            continue
-        #if not '001' in originalMetadataXML['marc']:
-        #    print(originalMetadataXML['marc'])
+            categorize.categorize_item(oai_id,"no marc")

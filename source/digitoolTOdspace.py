@@ -23,14 +23,11 @@ def cli():
 categories = {
     'all_problems_for_hanka': bugs.all_attachements,
     'all_items_in_oai': bugs.oai,
-    'attachments_not_linked_to_oai': bugs.forgot_attachements,
+    'forgot_attachements': bugs.forgot_attachements,
     'ittems_without_attachments': bugs.no_attachements,
     'not_in_aleph': bugs.not_in_aleph,
     'weird_attachments': bugs.weird_attachements,
-    'no_502': bugs.no502,
     'only_dc': bugs.only_dc,
-    'not_valid_502': bugs.tag502,
-    'not_valid_marc': bugs.marc,
     'aleph': bugs.aleph,
     }
 output = ['no','list','id_on_row','with_reason']
@@ -116,15 +113,13 @@ def convertItem(oai_id, test):
 
 @cli.command()
 @click.option('--item', default=104691, help='Digitool OAI id of the item')
-@click.option('--test/--no-test', default=False, help='Ask user to check convert')
-def convert_item(item, test):
-    convertItem(item, test)
+def convertitem(item):
+    convertItem(item, False)
 
 @cli.command()
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
 @click.option('--dspace_admin_passwd', prompt='passwd', help='Dspace admin passwd')
 @click.option('--test/--no-test', default=False, help='Ask user to check convert')
-
 @click.option('--run/--no-run', default=False, help='Pushih converted data to server')
 def convert(dspace_admin_passwd, dspace_admin_username, test, run):
     oai_ids = Digitool(digitool_category).download_list()
