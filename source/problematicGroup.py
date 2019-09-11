@@ -49,6 +49,7 @@ def __parse_ignore_file(filename):
 
 def forgot_attachements(oai_ids, digitoolXML, categorize):
     ignore = list(__parse_ignore_file('zaznamy'))
+    ignore = []
     attachements = []
     for oai_id in oai_ids:
         #TODO kvuli Cerge
@@ -120,8 +121,7 @@ def aleph(oai_ids, digitoolXML, categorize):
         oai_id = "{},{}".format(aleph_id,digittol_id)
         #oai_id = aleph_id
         #oai_id = digittol_id
-        m = metadataConvertor.Metadata()
-        metadataTopic = m.convertMarc(categorize, oai_id, metadata)
+        metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, metadata)
         metadataReturn = metadataConvertor.createDC(categorize, oai_id, metadataTopic)
         #print(metadataReturn)
 

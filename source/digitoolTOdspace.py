@@ -5,13 +5,12 @@ from digitoolOAI import Digitool
 from digitoolXML import DigitoolXML
 from dspace import Dspace
 from filenameConvertor import FilenameConvertor
-from metadataConvertor import Metadata
 from categorize import Categorize
 import aleph
 import problematicGroup as bugs
 import logging
 
-xml_dirname = "2019-09-04"
+xml_dirname = "DUR01/2019-09-11"
 #xml_dirname = "Cerge/2019-09-05"
 digitool_category = "oai_kval"
 

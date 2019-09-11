@@ -49,50 +49,49 @@ def getTopic(categorize, oai_id, topic, metadata):
         tag1 = tag2
     return result1
 
-class Metadata:
+def convertMarc(categorize, oai_id, metadataOrigin):
     metadata = {}
-    def convertMarc(self, categorize, oai_id, metadataOrigin):
-        metadata = {}
-        mandatory = {
-                '100': tag100.convertTag100, #autor
-                '245': tag245.convertTag245, #titul, autor #TODO kontrola dle mailu od Iry, počkat na nový export 
-                '260': tag260.convertTag260, #místo vydání a datum 
-                '502': tag502.convertTag502, #kvalifikační práce
-                #'710': tag710.convertTag710, #fakulta, katedra #TODO nový mail,povinny
-                }
-        obligatory = {
-                '008': otherTag.convertTag008,#jazyk na pozici 35-37
-                '041': tag041.convertTag041,  # jazyk 
-                '246': tag246.convertTag246,  # titulek v překladu #TODO upozornit na chybějící podpole s jazykem 
-                #'520': tag520.convertTag520,  # abstrakt #TODO dořešit jazyky
-                #'526': otherTag.convertTag526,# předmět TODO jen devět kousku
-                '600': otherTag.convertTag600,# keywords osoba
-                '610': otherTag.convertTag610,# keywords organizace
-                '630': otherTag.convertTag630,# keywords knihy
-                '648': otherTag.convertTag648,# keywords období
-                '650': tag650.convertTag650,  # keywords 
-                '651': otherTag.convertTag651,# keywords zeměpis
-                #'655': tag655.convertTag655,  # druh práce ignorujeme 9/9 případů lhal
-                '700': tag700.convertTag700,  # vedoucí, oponent,.. #TODO roky ve stejném poli hlásit!
-                }
+    mandatory = {
+            '100': tag100.convertTag100, #autor
+            '245': tag245.convertTag245, #titul, autor #TODO kontrola dle mailu od Iry, počkat na nový export 
+            '260': tag260.convertTag260, #místo vydání a datum 
+            '502': tag502.convertTag502, #kvalifikační práce
+            #'710': tag710.convertTag710, #fakulta, katedra #TODO nový mail,povinny
+            }
+    obligatory = {
+            '008': otherTag.convertTag008,#jazyk na pozici 35-37
+            '041': tag041.convertTag041,  # jazyk 
+            '246': tag246.convertTag246,  # titulek v překladu #TODO upozornit na chybějící podpole s jazykem 
+            #'520': tag520.convertTag520,  # abstrakt #TODO dořešit jazyky
+            #'526': otherTag.convertTag526,# předmět TODO jen devět kousku
+            '600': otherTag.convertTag600,# keywords osoba
+            '610': otherTag.convertTag610,# keywords organizace
+            '630': otherTag.convertTag630,# keywords knihy
+            '648': otherTag.convertTag648,# keywords období
+            '650': tag650.convertTag650,  # keywords 
+            '651': otherTag.convertTag651,# keywords zeměpis
+            #'655': tag655.convertTag655,  # druh práce ignorujeme 9/9 případů lhal
+            '700': tag700.convertTag700,  # vedoucí, oponent,.. #TODO roky ve stejném poli hlásit!
+            }
 
-        # Jaro potvrdil následůjící postup
-        if '264' in metadataOrigin.keys():
-            assert '260' not in metadataOrigin.keys()
-            metadataOrigin['260'] = metadataOrigin['264']
+    # Jaro potvrdil následůjící postup
+    if '264' in metadataOrigin.keys():
+        assert '260' not in metadataOrigin.keys()
+        metadataOrigin['260'] = metadataOrigin['264']
 
-        for tag in mandatory.keys():
-            if not tag in metadataOrigin.keys():
-                error_msg = "No tag {} in metadata".format(tag)
-                categorize.categorize_item(oai_id,error_msg)
-                return
-        
-        allTags = {**mandatory, **obligatory}
-        for tag in allTags.keys():
-            if not tag in metadataOrigin.keys():
-                continue
-            self.metadata[tag] = allTags[tag](metadataOrigin[tag], oai_id, categorize)
-        return self.metadata
+    for tag in mandatory.keys():
+        if not tag in metadataOrigin.keys():
+            error_msg = "No tag {} in metadata".format(tag)
+            categorize.categorize_item(oai_id,error_msg)
+            return
+    
+    allTags = {**mandatory, **obligatory}
+    for tag in allTags.keys():
+        if not tag in metadataOrigin.keys():
+            continue
+        metadata[tag] = allTags[tag](metadataOrigin[tag], oai_id, categorize)
+    
+    return metadata
        
 
 def createDC(categorize, oai_id, metadataOrigin):
