@@ -22,26 +22,21 @@ class DigitoolXML:
         usage_type = root.findall("./*/*/usage_type")[0].text
         return usage_type in ['ARCHIVE','INDEX']
     
-    def get_relations(self, oai_id, seen=None):
-        if seen == None:
-            seen = [oai_id]
-            yield oai_id
-        subrecords = []
-        tree = ET.parse(self.xml_dirname+'/'+str(oai_id)+".xml")
-        root = tree.getroot()
-        for relations in root.findall("./*relations"):
-            for relation in relations:
-                relation_type = relation.find('type').text
-                pid = relation.find('pid').text
-                if pid in seen:
-                    continue
-                else:
-                    seen.append(pid)
-                    yield pid
-                subrecords.append(pid)
-        seen = seen + subrecords
-        for new_id in subrecords:
-            yield from self.get_relations(new_id,seen=seen)
+    def get_relations(self, oai_id):
+        seen = []
+        stack = [oai_id]
+        while len(stack) > 0:
+            oai_id = stack.pop()
+            if oai_id in seen:
+                continue
+            else:
+                seen.append(oai_id)
+            tree = ET.parse(self.xml_dirname+'/'+str(oai_id)+".xml")
+            root = tag(tag(tree.getroot(),'digital_entity'),'relations')
+            for relation in root:
+                relation_id = tag(relation,'pid').text
+                stack.append(relation_id)
+        return seen
 
     def getList(self):
         oai_ids = []
