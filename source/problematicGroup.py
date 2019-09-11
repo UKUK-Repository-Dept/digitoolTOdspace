@@ -76,7 +76,6 @@ def only_dc(oai_ids, digitoolXML, categorize):
                 mark = True
             if 'dc' in originalMetadataXML.keys():
                 dc = True
-        #if not mark and dc and (oai_id not in ignore):
         if not mark and dc:
             categorize.categorize_item(oai_id,"má dc, nemá marc")
             
@@ -111,7 +110,6 @@ def aleph(oai_ids, digitoolXML, categorize):
         #oai_id = digittol_id
         metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, metadata)
         metadataReturn = metadataConvertor.createDC(categorize, oai_id, metadataTopic)
-        #print(metadataReturn)
 
 def not_in_aleph(oai_ids, digitoolXML, categorize):
     records = openAleph("dtl_2006.xml")

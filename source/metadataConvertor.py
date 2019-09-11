@@ -62,7 +62,7 @@ def convertMarc(categorize, oai_id, metadataOrigin):
             '008': otherTag.convertTag008,#jazyk na pozici 35-37
             '041': tag041.convertTag041,  # jazyk 
             '246': tag246.convertTag246,  # titulek v překladu #TODO upozornit na chybějící podpole s jazykem 
-            #'520': tag520.convertTag520,  # abstrakt #TODO dořešit jazyky
+            '520': tag520.convertTag520,  # abstrakt #TODO dořešit jazyky
             #'526': otherTag.convertTag526,# předmět TODO jen devět kousku
             '600': otherTag.convertTag600,# keywords osoba
             '610': otherTag.convertTag610,# keywords organizace
@@ -96,6 +96,11 @@ def convertMarc(categorize, oai_id, metadataOrigin):
 
 def createDC(categorize, oai_id, metadataOrigin):
     metadataReturn = []
+    
+    title = getTopic(categorize, oai_id, 'title', metadataOrigin)
+    if not title: 
+        raise Exception('No title')
+    metadataReturn.append({ "key": "dc.title", "language": 'TODO', "value": title },)
     faculty = getTopic(categorize, oai_id, 'faculty', metadataOrigin)
     if not faculty:
         categorize.categorize_item(oai_id,"No faculty")
@@ -103,13 +108,22 @@ def createDC(categorize, oai_id, metadataOrigin):
     author = getTopic(categorize, oai_id, 'author', metadataOrigin)
     if not author: 
         raise Exception('No author')
-    metadataReturn.append({ "key": "dc.contributor.author", "value": "LAST, FIRST" },)
+    #TODO zkontrolovat že je to varianta 100 a strip
+    metadataReturn.append({ "key": "dc.contributor.author", "value": author },)
+   
+    abstract = getTopic(categorize, oai_id, 'abstract', metadataOrigin)
+    if abstract:
+        metadataReturn.append({ "key": "dc.description.abstract", "language": 'TODO', "value": abstract },)
+
     advisor = getTopic(categorize, oai_id, 'advisor', metadataOrigin)
     #TODO ruční kontrola
     commitee = getTopic(categorize, oai_id, 'commitee', metadataOrigin)
     consultant = getTopic(categorize, oai_id, 'consultant', metadataOrigin)
     #TODO 'advisor' 'committe' 'consultant'
 
+    year = getTopic(categorize, oai_id, 'year', metadataOrigin)
+    #if year and len(year) == 4 and '?' not in year and int(year) > 2006:
+    #    print(oai_id, year)
 
     degree = getTopic(categorize, oai_id, 'degree', metadataOrigin)
     if not degree: 
