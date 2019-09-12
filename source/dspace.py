@@ -2,6 +2,8 @@ import requests
 import json
 import xml.etree.ElementTree as ET
 import os
+import logging
+            
 
 class Dspace:
     url = "https://gull.is.cuni.cz/rest"
@@ -91,11 +93,14 @@ class Dspace:
             self.post_new_bitstream(dspace_id, filename, filetype, description)
     
     def delete_all_item(self, collection_id):
-        # Note tested on small collections
+        # Note: tested on small collections
         response = requests.get(
             self.url+'/collections/'+str(collection_id)+'/items', 
             headers=self.headers,
             )
+        if response.text == '':
+            logging.error("No collection {}.".format(collection_id))
+            return
         for item in json.loads(response.text):
             requests.delete(
                 self.url+'/items/'+str(item['id']), 

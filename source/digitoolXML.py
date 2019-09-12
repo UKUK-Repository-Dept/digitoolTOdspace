@@ -57,8 +57,8 @@ class DigitoolXML:
                     oai_ids.append(relation)
             #assert marc == 1 #TODO
             if marc == 0:
-                #print(oai_id, end =', ')
-                print(oai_id)
+                print(oai_id, end =', ')
+                #print(oai_id)
 
         return oai_ids
 

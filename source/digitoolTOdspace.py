@@ -14,8 +14,10 @@ xml_dirname = "DUR01/2019-09-12"
 digitool_category = "oai_kval"
 
 
+loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
 @click.group()
-def cli():
+@click.option('--log', default='error', type=click.Choice(loggingMap.keys()), help='Logging level')
+def cli(log):
     pass
 
 
@@ -30,13 +32,11 @@ categories = {
     'aleph': bugs.aleph,
     }
 output = ['no','list','id_on_row','with_reason']
-loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
 
 
 @cli.command()
 @click.option('--group', prompt='group', type=click.Choice(categories.keys()), help='Choose group to categorize')
 @click.option('--output', default='list', type=click.Choice(output), help='Output print format')
-@click.option('--log', default='error', type=click.Choice(loggingMap.keys()), help='Logging level')
 def categorize(group,output,log):
     logging.getLogger().setLevel(loggingMap[log])
     dtx = DigitoolXML(xml_dirname)
@@ -46,7 +46,6 @@ def categorize(group,output,log):
     print(c)
 
 @cli.command()
-@click.option('--log', default='error', type=click.Choice(loggingMap.keys()), help='Logging level')
 def statistic(log):
     logging.getLogger().setLevel(loggingMap[log])
     records = aleph.openAleph("dtl_2006.xml")
@@ -61,10 +60,11 @@ def statistic(log):
     for count, tag in statistic:
         print(tag,count)
 
+operations=['handle','new_item','delete_collection']
 @cli.command()
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
 @click.option('--dspace_admin_passwd', prompt='passwd', help='Dspace admin passwd')
-@click.option('--operation', prompt='operation', type=click.Choice('handle','new_item'))
+@click.option('--operation', prompt='operation', type=click.Choice(operations))
 def dspace(dspace_admin_passwd, dspace_admin_username, operation):
     metadata = {"metadata":[ 
                 { "key": "dc.contributor.author", "value": "LAST, FIRST" }, 
@@ -74,11 +74,10 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation):
     ds = Dspace(dspace_admin_username,dspace_admin_passwd)
     if operation == 'handle':
         ds.handle("123456789/86")
-    #ds.new_item(273,metadata,["lorem-ipsum.pdf"])
-    #ds.delete_all_item(273)
-    #ds.post_new_bitstream(5781,"lorem-ipsum.pdf")
-    #ds.delete_bitstream([6654,6655])
-    #ds.list_bitstream()
+    if operation == 'new_item':
+        ds.new_item(273,metadata,["lorem-ipsum.pdf"])
+    if operation == 'delete_collection':
+        ds.delete_all_item(273)
     ds.logout()
 
 def convertItem(oai_id, test):
