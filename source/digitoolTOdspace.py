@@ -9,7 +9,7 @@ import aleph
 import problematicGroup as bugs
 import logging
 
-xml_dirname = "DUR01/2019-09-11"
+xml_dirname = "DUR01/2019-09-12"
 #xml_dirname = "Cerge/2019-09-05"
 digitool_category = "oai_kval"
 
@@ -64,16 +64,18 @@ def statistic(log):
 @cli.command()
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
 @click.option('--dspace_admin_passwd', prompt='passwd', help='Dspace admin passwd')
-def dspace(dspace_admin_passwd, dspace_admin_username):
+@click.option('--operation', prompt='operation', type=click.Choice('handle','new_item'))
+def dspace(dspace_admin_passwd, dspace_admin_username, operation):
     metadata = {"metadata":[ 
                 { "key": "dc.contributor.author", "value": "LAST, FIRST" }, 
                 { "key": "dc.description.abstract", "language": "pt_BR", "value": "ABSTRACT" }, 
                 { "key": "dc.title", "language": "pt_BR", "value": "Od jinud" } 
                 ]}
     ds = Dspace(dspace_admin_username,dspace_admin_passwd)
-    #ds.handle("123456789/23900")
+    if operation == 'handle':
+        ds.handle("123456789/86")
     #ds.new_item(273,metadata,["lorem-ipsum.pdf"])
-    ds.delete_all_item(273)
+    #ds.delete_all_item(273)
     #ds.post_new_bitstream(5781,"lorem-ipsum.pdf")
     #ds.delete_bitstream([6654,6655])
     #ds.list_bitstream()
