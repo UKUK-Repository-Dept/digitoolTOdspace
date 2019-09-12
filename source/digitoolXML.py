@@ -55,6 +55,10 @@ class DigitoolXML:
                 if 'marc' in originalMetadataXML.keys():
                     marc += 1
                     oai_ids.append(relation)
+            #assert marc == 1 #TODO
+            #if marc > 1:
+            #    print(oai_id, end =', ')
+
         return oai_ids
 
     def get_attachements(self, oai_id, seen=None):
