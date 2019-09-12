@@ -80,7 +80,13 @@ def aleph(oai_ids, digitoolXML, categorize):
 
 def not_in_aleph(oai_ids, digitoolXML, categorize):
     records = openAleph("dtl_2006.xml")
+    aleph_ids = []
+    for metadata in records:
+        aleph_ids.append(metadata['001'])
     for oai_id in oai_ids:
-        originalMetadataXML = digitoolXML.get_metadata(oai_id)
-        if not 'marc' in originalMetadataXML.keys():
-            categorize.categorize_item(oai_id,"no marc")
+        metadata = digitoolXML.get_metadata(oai_id)['marc']
+        aleph_id = metadata['001']
+        if aleph_id in aleph_ids:
+            pass
+        else:
+            pass

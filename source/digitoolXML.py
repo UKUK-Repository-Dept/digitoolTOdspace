@@ -77,9 +77,9 @@ class DigitoolXML:
             metadata = {}
             tree = ET.fromstring(value)
             for field in tree:
-                if field.tag == '{http://www.loc.gov/MARC21/slim}datafield':
+                tag = field.attrib
+                if field.tag in '{http://www.loc.gov/MARC21/slim}datafield':
                     for subfield in field:
-                        tag = field.attrib
                         #index = str(tag['tag'])+'-'+str(tag['ind1'])+'-'+str(tag['ind2'])
                         index = tag['tag']
                         if subfield.text != None:
@@ -87,6 +87,9 @@ class DigitoolXML:
                             metadata.setdefault(index,{})
                             metadata[index].setdefault(code,[])
                             metadata[index][code].append(subfield.text)
+                if field.tag == '{http://www.loc.gov/MARC21/slim}controlfield':
+                    index = tag['tag']
+                    metadata[index] = field.text
             return metadata
         def parseDC(value):
             tree = ET.fromstring(value)
