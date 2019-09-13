@@ -63,4 +63,7 @@ def convertTag710(tag710,oai_id,categorize):
     for key in tag710.keys():
         if not key in 'ab47':
             raise Exception("Unkown key")
+    if ret == {}:
+        err_msg = "710: No faculty found in "+str(tag710)
+        categorize.categorize_item(oai_id,err_msg)
     return ret

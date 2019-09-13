@@ -44,7 +44,7 @@ def getTopic(categorize, oai_id, topic, metadata):
             #print(oai_id,error_msg)
             #categorize.categorize_item(oai_id,error_msg)
         elif topic not in personTopics and result1 and result1 != result2:
-            if topic == 'lang':
+            if topic in ['lang','faculty']:
                 continue #TODO
             categorize.categorize_item(oai_id,error_msg)
         result1 = result2

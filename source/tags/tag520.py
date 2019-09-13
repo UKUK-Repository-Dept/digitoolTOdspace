@@ -32,7 +32,7 @@ def convertTag520(tag520,oai_id,categorize):
     if '9' in tag520.keys():
         ret['lang'] = tag520['9'][0]
     if 'b' in tag520.keys():
-        categorize.categorize_item(oai_id,"520: Abstract in digitool '{}'".format(abstract))
+        pass #všichni už maji přěkopirovany abstrakt z digitoolu do aleph
     for key in tag520.keys():
         if not key in 'ab89':
             raise Exception("520: Unkown key {}".format(key))

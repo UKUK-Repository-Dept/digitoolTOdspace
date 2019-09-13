@@ -5,6 +5,8 @@ def convertTag041(tag041,oai_id,categorize):
         lang = tag041['a'][0]
         ret['lang'] = catalogue.convertLang[lang]
     if 'b' in tag041.keys():
-        #TODO konvertovat
-        ret['alternative_lang'] = tag041['b']
+        langs = []
+        for l in tag041['b']:
+            langs.append(catalogue.convertLang[l])
+        ret['alternative_lang'] = langs
     return ret

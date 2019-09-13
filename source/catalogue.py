@@ -2,7 +2,7 @@ levelToTitle = {
     "Bakalářská práce": [ "Bc.", ],
     "Diplomová práce": [ "Mgr.", "MUDr." ],
     "Rigorózní práce": [ "PhDr.", 'ThLic.', 'JUDr.', 'RNDr.', 'PharmDr.', 'MUDr.', "ThDr.", ],
-    "Dizertační práce": [ 'ThD.', "PhD.", 'Ph.D.' ],
+    "Dizertační práce": [ 'ThD.','Th.D.', "PhD.", 'Ph.D.' ],
     "Habilitační práce": [ "Doc.", ],
     }
 categoryToTypeTitle = {
@@ -20,6 +20,8 @@ convertLang = {
     'eng': 'en_US',
     'ger': 'de_DE',
     'pol': 'pl_PL',
+    'spa': 'es_ES',
+    'ita': 'it_IT',
     }
 
 
