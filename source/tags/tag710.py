@@ -33,7 +33,7 @@ def convertTag710(tag710,oai_id,categorize):
                 ret['faculty'] = faculty
             else:
                 department = faculty
-                faculty = commonTag.getFaculty(department)
+                faculty = catalogue.getFaculty(department)
                 if faculty:
                     ret['faculty'] = faculty
                     ret['department'] = department

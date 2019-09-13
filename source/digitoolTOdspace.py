@@ -9,7 +9,7 @@ import aleph
 import problematicGroup as bugs
 import logging
 
-xml_dirname = "DUR01/2019-09-12"
+xml_dirname = "DUR01/2019-09-13"
 #xml_dirname = "Cerge/2019-09-05"
 digitool_category = "oai_kval"
 
@@ -37,6 +37,7 @@ output = ['no','list','id_on_row','with_reason']
 @cli.command()
 @click.option('--group', prompt='group', type=click.Choice(categories.keys()), help='Choose group to categorize')
 @click.option('--output', default='list', type=click.Choice(output), help='Output print format')
+@click.option('--log', default='error', type=click.Choice(loggingMap.keys()), help='Logging level')
 def categorize(group,output,log):
     logging.getLogger().setLevel(loggingMap[log])
     dtx = DigitoolXML(xml_dirname)
@@ -82,13 +83,10 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
         ds.delete_all_item(279)
     ds.logout()
 
-def convertItem(oai_id, test):
+def convertItem(dtx, categorize, oai_id, test):
     
-    dtx = DigitoolXML(xml_dirname)
-    categorize = Categorize(dtx)
     originalMetadata = dtx.get_metadata(oai_id)
     if 'marc' in originalMetadata.keys():
-        pass
         c = Metadata(categorize,oai_id)
         convertedMetadata = c.convertMarc(originalMetadata['marc'])
     else:
@@ -122,14 +120,15 @@ def convertitem(item):
 @click.option('--test/--no-test', default=False, help='Ask user to check convert')
 @click.option('--run/--no-run', default=False, help='Pushih converted data to server')
 def convert(dspace_admin_passwd, dspace_admin_username, test, run):
-    oai_ids = [] #TODO
+    #logging.getLogger().setLevel(loggingMap[log])
     dtx = DigitoolXML(xml_dirname)
+    oai_ids = dtx.getList()
     categorize = Categorize(dtx)
     ds = Dspace(dspace_admin_username,dspace_admin_passwd)
 
     problems = []
     for oai_id in oai_ids:
-        checked, convertedMetadata, attachements = convertItem(oai_id, test)
+        checked, convertedMetadata, attachements = convertItem(dtx, categorize, oai_id, test)
         if not checked:
             problems.append(oai_id)
         if run:

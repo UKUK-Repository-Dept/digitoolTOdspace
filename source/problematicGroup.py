@@ -86,7 +86,11 @@ def not_in_aleph(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
         metadata = digitoolXML.get_metadata(oai_id)['marc']
         aleph_id = metadata['001']
-        if aleph_id in aleph_ids:
-            pass
-        else:
-            pass
+        if aleph_id[:3] in ['fsv','mff','jin','auk'] and '000'+aleph_id[3:] in aleph_ids:
+            aleph_id = '000'+aleph_id[3:]
+        if aleph_id[:3] in ['etf'] and aleph_id[3:] in aleph_ids:
+            aleph_id = aleph_id[3:]
+        if aleph_id[:2] in ['ff','pf'] and '000'+aleph_id[2:] in aleph_ids:
+            aleph_id = '000'+aleph_id[2:]
+        if aleph_id not in aleph_ids:
+            categorize.categorize_item(oai_id,"id {} neni v aleph exportu".format(aleph_id))

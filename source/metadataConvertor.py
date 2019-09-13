@@ -44,6 +44,8 @@ def getTopic(categorize, oai_id, topic, metadata):
             #print(oai_id,error_msg)
             #categorize.categorize_item(oai_id,error_msg)
         elif topic not in personTopics and result1 and result1 != result2:
+            if topic == 'lang':
+                continue #TODO
             categorize.categorize_item(oai_id,error_msg)
         result1 = result2
         tag1 = tag2
@@ -56,7 +58,7 @@ def convertMarc(categorize, oai_id, metadataOrigin):
             '245': tag245.convertTag245, #titul, autor #TODO kontrola dle mailu od Iry, počkat na nový export 
             '260': tag260.convertTag260, #místo vydání a datum 
             '502': tag502.convertTag502, #kvalifikační práce
-            #'710': tag710.convertTag710, #fakulta, katedra #TODO nový mail,povinny
+            '710': tag710.convertTag710, #fakulta, katedra #TODO nový mail,povinny
             }
     obligatory = {
             '008': otherTag.convertTag008,#jazyk na pozici 35-37
@@ -133,6 +135,7 @@ def createDC(categorize, oai_id, metadataOrigin):
     lang = getTopic(categorize, oai_id, 'lang', metadataOrigin)
     if not lang:
         error_msg = "No language found in 041 and 520."
-        categorize.categorize_item(oai_id,error_msg)
+        #TODO pořádně
+        #categorize.categorize_item(oai_id,error_msg)
     #TODO lang alternative_lang
     return {"metadata": metadataReturn }
