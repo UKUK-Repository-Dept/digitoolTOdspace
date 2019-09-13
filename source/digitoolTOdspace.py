@@ -13,7 +13,7 @@ import logging
 xml_dirname = "DUR01/2019-09-13"
 #xml_dirname = "Cerge/2019-09-05"
 digitool_category = "oai_kval"
-
+dspaceCollection = 279
 
 loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
 @click.group()
@@ -79,9 +79,9 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
         handle = arg[0]
         ds.handle(handle) # př "123456789/86"
     if operation == 'new_item':
-        ds.new_item(279,metadata,[("lorem-ipsum.pdf",'TODO','soubor')])
+        ds.new_item(dspaceCollection,metadata,[("lorem-ipsum.pdf",'TODO','soubor')])
     if operation == 'delete_collection':
-        ds.delete_all_item(279)
+        ds.delete_all_item(dspaceCollection)
     ds.logout()
 
 def convertItem(dtx, categorize, oai_id, originalMetadata, test):
@@ -95,10 +95,11 @@ def convertItem(dtx, categorize, oai_id, originalMetadata, test):
         click.clear()
         print("converting ",oai_id)
         print("\noriginalMetadata:")
-        #for i in originalMetadata:
-        #    c.printMetadata(originalMetadata[i])
-#        print('xml',originalMetadataXML)
+        for key in originalMetadata.keys():
+            print(key,originalMetadata[key])
         print("\nconvertedMetadata:")
+        for row in convertedMetadata['metadata']:
+            print(row)
         print("\nattachements:")
         print(attachements)
         checked = click.confirm("Is converting OK?", default=True)
@@ -128,7 +129,7 @@ def convert(dspace_admin_passwd, dspace_admin_username, test, run):
         alephData[metadata['001']] = metadata
     
     problems = []
-    for oai_id in oai_ids:
+    for oai_id in oai_ids[:5]:
         metadata = dtx.get_metadata(oai_id)['marc']
         aleph_id = metadata['001']
         if aleph_id not in alephData.keys():
@@ -138,7 +139,7 @@ def convert(dspace_admin_passwd, dspace_admin_username, test, run):
         if not checked:
             problems.append(oai_id)
         if run:
-            ds.new_item(273,converted_metadata,[("lorem-ipsum.pdf","application/pdf","Dokument")])
+            ds.new_item(dspaceCollection,convertedMetadata,[("lorem-ipsum.pdf","application/pdf","Dokument")])
     if test:
         click.clear()
         print("problems",problems)
