@@ -4,6 +4,7 @@ import click
 from digitoolXML import DigitoolXML
 from dspace import Dspace
 from filenameConvertor import FilenameConvertor
+import metadataConvertor
 from categorize import Categorize
 import aleph
 import problematicGroup as bugs
@@ -83,18 +84,15 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
         ds.delete_all_item(279)
     ds.logout()
 
-def convertItem(dtx, categorize, oai_id, test):
+def convertItem(dtx, categorize, oai_id, originalMetadata, test):
     
-    originalMetadata = dtx.get_metadata(oai_id)
-    if 'marc' in originalMetadata.keys():
-        c = Metadata(categorize,oai_id)
-        convertedMetadata = c.convertMarc(originalMetadata['marc'])
-    else:
-        raise Exception("No marc metadata in {}".format(oai_id))
-
+    metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, originalMetadata)
+    if metadataTopic == None: #TODO smazat
+        return (False, None, None) 
+    convertedMetadata = metadataConvertor.createDC(categorize, oai_id, metadataTopic)
     attachements = list(dtx.get_attachements(oai_id))
     if test:
-        #click.clear()
+        click.clear()
         print("converting ",oai_id)
         print("\noriginalMetadata:")
         #for i in originalMetadata:
@@ -103,8 +101,7 @@ def convertItem(dtx, categorize, oai_id, test):
         print("\nconvertedMetadata:")
         print("\nattachements:")
         print(attachements)
-        #checked = click.confirm("Is converting OK?", default=True)
-        checked = True
+        checked = click.confirm("Is converting OK?", default=True)
         return (checked, convertedMetadata, attachements)
     else:
         return (False, convertedMetadata, attachements)
@@ -125,10 +122,19 @@ def convert(dspace_admin_passwd, dspace_admin_username, test, run):
     oai_ids = dtx.getList()
     categorize = Categorize(dtx)
     ds = Dspace(dspace_admin_username,dspace_admin_passwd)
-
+    records = aleph.openAleph("dtl_2006.xml")
+    alephData = {}
+    for metadata in records:
+        alephData[metadata['001']] = metadata
+    
     problems = []
     for oai_id in oai_ids:
-        checked, convertedMetadata, attachements = convertItem(dtx, categorize, oai_id, test)
+        metadata = dtx.get_metadata(oai_id)['marc']
+        aleph_id = metadata['001']
+        if aleph_id not in alephData.keys():
+            continue #TODO tohle by nemelo na zaver nastat
+        originalMetadata = alephData[aleph_id]
+        checked, convertedMetadata, attachements = convertItem(dtx, categorize, oai_id, originalMetadata, test)
         if not checked:
             problems.append(oai_id)
         if run:
