@@ -76,6 +76,9 @@ class Dspace:
             self.url+'/handle/'+handle, 
             headers=self.headers, 
             )
+        if response.status_code == 404:
+            logging.error("No handle {}.".format(handle))
+            return
         handle_json = json.loads(response.text)
         for key in handle_json.keys():
             print(key,handle_json[key])
@@ -98,7 +101,7 @@ class Dspace:
             self.url+'/collections/'+str(collection_id)+'/items', 
             headers=self.headers,
             )
-        if response.text == '':
+        if response.status_code == 404:
             logging.error("No collection {}.".format(collection_id))
             return
         for item in json.loads(response.text):

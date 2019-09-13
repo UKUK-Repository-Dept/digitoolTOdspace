@@ -65,7 +65,8 @@ operations=['handle','new_item','delete_collection']
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
 @click.option('--dspace_admin_passwd', prompt='passwd', help='Dspace admin passwd')
 @click.option('--operation', prompt='operation', type=click.Choice(operations))
-def dspace(dspace_admin_passwd, dspace_admin_username, operation):
+@click.argument('arg', nargs=-1)
+def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
     metadata = {"metadata":[ 
                 { "key": "dc.contributor.author", "value": "LAST, FIRST" }, 
                 { "key": "dc.description.abstract", "language": "pt_BR", "value": "ABSTRACT" }, 
@@ -73,7 +74,8 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation):
                 ]}
     ds = Dspace(dspace_admin_username,dspace_admin_passwd)
     if operation == 'handle':
-        ds.handle("123456789/86")
+        handle = arg[0]
+        ds.handle(handle) # př "123456789/86"
     if operation == 'new_item':
         ds.new_item(273,metadata,["lorem-ipsum.pdf"])
     if operation == 'delete_collection':
