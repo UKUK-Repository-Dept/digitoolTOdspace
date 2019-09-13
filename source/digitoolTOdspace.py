@@ -77,9 +77,9 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
         handle = arg[0]
         ds.handle(handle) # př "123456789/86"
     if operation == 'new_item':
-        ds.new_item(273,metadata,["lorem-ipsum.pdf"])
+        ds.new_item(279,metadata,[("lorem-ipsum.pdf",'TODO','soubor')])
     if operation == 'delete_collection':
-        ds.delete_all_item(273)
+        ds.delete_all_item(279)
     ds.logout()
 
 def convertItem(oai_id, test):

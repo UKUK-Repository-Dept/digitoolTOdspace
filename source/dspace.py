@@ -89,6 +89,7 @@ class Dspace:
             headers=self.headers,
             json=metadata, 
             )
+        print(response.text)
         root = ET.fromstring(response.text)
         subtree=list(r for r in root if "id" in r.tag)[0]
         dspace_id = int(subtree.text)
