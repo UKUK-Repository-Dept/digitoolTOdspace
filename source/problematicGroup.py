@@ -2,7 +2,7 @@ from filenameConvertor import FilenameConvertor
 import metadataConvertor
 from categorize import Categorize
 from tags.tag502 import convertTag502
-from aleph import openAleph
+import aleph
 
 def all_attachements(oai_ids, dtx, c):
     forgot_attachements(oai_ids,dtx,c)
@@ -49,22 +49,26 @@ def only_dc(oai_ids, digitoolXML, categorize):
 
 def weird_attachements(oai_ids, digitoolXML, categorize):
     convertor = FilenameConvertor(categorize)
+    categorizeTrash = Categorize(digitoolXML, 'no')
+    records = aleph.openAleph("dtl_2006.xml")
     for oai_id in oai_ids:
-        originalMetadataXML = digitoolXML.get_metadata(oai_id)
-        m = Metadata(Categorize(digitoolXML,export='no'), oai_id)
-        if 'marc' in originalMetadataXML.keys():
-            m.convertMarc(originalMetadataXML['marc'])
-            attachements = list(digitoolXML.get_attachements(oai_id))
-            #TODO smazat
-            if not m.degree:
-                continue
+        metadataDigitool = digitoolXML.get_metadata(oai_id)['marc']
+        aleph_id = aleph.normalise(metadataDigitool['001'])
+        if not aleph_id in records.keys():
+            continue #TODO smazat po oprave
+        originalMetadata = records[aleph_id]
+        metadataTopic = metadataConvertor.convertMarc(categorizeTrash, oai_id, originalMetadata)
+        if metadataTopic == None:
+            continue #TODO smazat
+        degree = None
+        for topicName in metadataTopic.keys():
+            if 'degree' in metadataTopic[topicName].keys():
+                degree = metadataTopic[topicName]['degree']
+        attachements = list(digitoolXML.get_attachements(oai_id))
+        descriptions = convertor.generate_description(oai_id,attachements,degree)
 
-            descriptions = convertor.generate_description(oai_id,attachements,m.degree)
-        else:
-            pass #TODO raise Exception('no marc')
-
-def aleph(oai_ids, digitoolXML, categorize):
-    records = openAleph("dtl_2006.xml")
+def aleph_metadata(oai_ids, digitoolXML, categorize):
+    records = aleph.openAleph("dtl_2006.xml")
     for metadata in records:
         digittol_id, aleph_id = None, None
         for tag in metadata.keys():
@@ -79,18 +83,9 @@ def aleph(oai_ids, digitoolXML, categorize):
         metadataReturn = metadataConvertor.createDC(categorize, oai_id, metadataTopic)
 
 def not_in_aleph(oai_ids, digitoolXML, categorize):
-    records = openAleph("dtl_2006.xml")
-    aleph_ids = []
-    for metadata in records:
-        aleph_ids.append(metadata['001'])
+    records = aleph.openAleph("dtl_2006.xml")
     for oai_id in oai_ids:
         metadata = digitoolXML.get_metadata(oai_id)['marc']
-        aleph_id = metadata['001']
-        if aleph_id[:3] in ['fsv','mff','jin','auk'] and '000'+aleph_id[3:] in aleph_ids:
-            aleph_id = '000'+aleph_id[3:]
-        if aleph_id[:3] in ['etf'] and aleph_id[3:] in aleph_ids:
-            aleph_id = aleph_id[3:]
-        if aleph_id[:2] in ['ff','pf'] and '000'+aleph_id[2:] in aleph_ids:
-            aleph_id = '000'+aleph_id[2:]
-        if aleph_id not in aleph_ids:
+        aleph_id = aleph.normalise(metadata['001'])
+        if aleph_id not in records.keys():
             categorize.categorize_item(oai_id,"id {} neni v aleph exportu".format(aleph_id))

@@ -23,4 +23,16 @@ def openAleph(filename):
             else:
                 pass
         records.append(metadata)
-    return records
+    aleph_ids ={}
+    for metadata in records:
+        aleph_ids[metadata['001']] = metadata
+    return aleph_ids
+        
+def normalise(aleph_id):
+    if aleph_id[:3] in ['fsv','mff','jin','auk']:
+        aleph_id = '000'+aleph_id[3:]
+    if aleph_id[:3] in ['etf'] and aleph_id[3:]:
+        aleph_id = aleph_id[3:]
+    if aleph_id[:2] in ['ff','pf']:
+        aleph_id = '000'+aleph_id[2:]
+    return aleph_id

@@ -30,7 +30,7 @@ categories = {
     'not_in_aleph': bugs.not_in_aleph,
     'weird_attachments': bugs.weird_attachements,
     'only_dc': bugs.only_dc,
-    'aleph': bugs.aleph,
+    'aleph': bugs.aleph_metadata,
     }
 output = ['no','list','id_on_row','with_reason']
 
@@ -129,7 +129,8 @@ def convert(dspace_admin_passwd, dspace_admin_username, test, run):
         alephData[metadata['001']] = metadata
     
     problems = []
-    for oai_id in oai_ids[:5]:
+    #for oai_id in oai_ids[:5]:
+    for oai_id in oai_ids:
         metadata = dtx.get_metadata(oai_id)['marc']
         aleph_id = metadata['001']
         if aleph_id not in alephData.keys():
