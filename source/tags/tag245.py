@@ -28,9 +28,9 @@ rules = {
 }
 
 def __splitPeople(oai_id, source):
+    if ';' not in source and (':' in source or ',' in source):
+        source = source.replace(':',';').replace(',',';')
     if not ';' in source:
-        if ':' in source or ',' in source:
-            pass # kašlem na to 
         return {'author': source}
     else:
         author, others = source.split(';',1)

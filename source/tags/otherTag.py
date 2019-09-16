@@ -5,7 +5,7 @@ def convertTag008(tag008,oai_id,categorize):
     return {'lang': catalogue.convertLang[lang]}
 
 def convertTag526(tag526,oai_id,categorize):
-    return {} #jen 9ks
+    return {'keywords': tag526['a']} 
 
 def convertTag600(tag600,oai_id,categorize):
     return {'keywords': tag600['a']} 

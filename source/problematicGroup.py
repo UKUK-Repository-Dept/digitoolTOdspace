@@ -71,10 +71,7 @@ def aleph_metadata(oai_ids, digitoolXML, categorize):
     records = aleph.openAleph("dtl_2006.xml")
     for aleph_id in records.keys():
         metadata = records[aleph_id]
-        digittol_id, aleph_id = None, None
-        for tag in metadata.keys():
-            if '856' in tag:
-                digittol_id = metadata[tag]['u'][0].split('=')[-1]
+        digittol_id = metadata['856']['u'][0].split('=')[-1]
         oai_id = "{},{}".format(aleph_id,digittol_id)
         #oai_id = aleph_id
         #oai_id = digittol_id

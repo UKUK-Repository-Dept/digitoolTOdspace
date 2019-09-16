@@ -125,6 +125,8 @@ faculty = {
     'Husova československá evangelická bohoslovecká fakulta': [],
     'Husitská teologická fakulta': [
         'Katedra filosofie',
+        'Katedra církevních dějin',
+        'Katedra psychosociálních věd a speciální etiky',
         'Katedra pedagogiky a psychologie',
         'Katedra psychosociálních věd',
         'Katedra religionistiky',
