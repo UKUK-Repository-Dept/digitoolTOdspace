@@ -15,7 +15,6 @@ def convertTag710(tag710,oai_id,categorize):
             if faculty in catalogue.faculty.keys():
                 ret['faculty'] = faculty
             else:
-                #print(oai_id,tag710) TODO samazat tu práci
                 categorize.categorize_item(oai_id,"710: Unknown faculty {}".format(faculty))
                 return ret
     if 'b' in tag710.keys():
@@ -38,8 +37,7 @@ def convertTag710(tag710,oai_id,categorize):
                     ret['faculty'] = faculty
                     ret['department'] = department
                 else:
-                    pass #TODO ta plzeň
-                    #print(oai_id,tag710)
+                    categorize.categorize_item(oai_id,"710: Unknown faculty {}".format(tag710))
         elif len(tag710['b']) == 2:
             faculty = tag710['b'][0].replace('.','')
             department = tag710['b'][1]

@@ -117,6 +117,7 @@ faculty = {
         'Katedra elektronické kultury a sémiotiky',
         'Katedra obecné antropologie',
         'Katedra řízení a supervize v sociálních a zdravotnických organizacích', ],
+    'Evangelická telogická fakulta': [],
     'Husova evangelická bohoslovecká fakulta': [], #TODO vážně všechny tyhle Husovy',
     'Husova československá evangelická fakulta': [],
     'Husova československá bohoslovecká fakulta': [],

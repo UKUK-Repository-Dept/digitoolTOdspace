@@ -62,7 +62,7 @@ class FilenameConvertor:
                     else:
                         attachement.append((f,t,'Příloha'))
             else:
-                print(mainFiles)
+                #print(mainFiles)
                 self.categorize.categorize_item(oai_id, "příliš mnoho souboru vypadá jako text práce")
         elif len(mainFiles) == 0:
             #self.categorize.categorize_item(oai_id, "všechny soubory vypadají jako přílohy")
@@ -78,7 +78,7 @@ class FilenameConvertor:
             filename1, filetype1 = mainFiles[0]
             filename2, filetype2 = mainFiles[1]
             if filetype1 == filetype2 == 'application/pdf':
-                print(filename2,filename1)
+                #print(filename2,filename1)
                 self.categorize.categorize_item(oai_id, "příliš mnoho souboru vypadá jako text práce")
                 return
             if filetype1 != 'application/pdf' and filetype2 != 'application/pdf':
