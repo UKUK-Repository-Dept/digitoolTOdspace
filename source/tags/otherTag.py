@@ -1,5 +1,8 @@
 import catalogue
 
+def convertTag001(tag001,oai_id,categorize):
+    return {'aleph_id': tag001} 
+
 def convertTag008(tag008,oai_id,categorize):
     lang = tag008[35:38]
     return {'lang': catalogue.convertLang[lang]}

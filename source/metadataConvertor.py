@@ -46,6 +46,7 @@ def getTopic(categorize, oai_id, topic, metadata):
         elif topic not in personTopics and result1 and result1 != result2:
             if topic in ['lang','faculty']:
                 continue #TODO
+            #print(oai_id,error_msg)
             categorize.categorize_item(oai_id,error_msg)
         result1 = result2
         tag1 = tag2
@@ -54,6 +55,7 @@ def getTopic(categorize, oai_id, topic, metadata):
 def convertMarc(categorize, oai_id, metadataOrigin):
     metadata = {}
     mandatory = {
+            '001': otherTag.convertTag001,#aleph_id
             '100': tag100.convertTag100, #autor
             '245': tag245.convertTag245, #titul, autor #TODO bude se dělit nadpis podnadpis?
             '260': tag260.convertTag260, #místo vydání a datum 
@@ -99,10 +101,23 @@ def convertMarc(categorize, oai_id, metadataOrigin):
 def createDC(categorize, oai_id, metadataOrigin):
     metadataReturn = []
     
+    # němčina 42606, azbuka 135200
+    lang = getTopic(categorize, oai_id, 'lang', metadataOrigin)
+    if not lang:
+        error_msg = "No language found in 041 and 520."
+        #TODO pořádně
+        #categorize.categorize_item(oai_id,error_msg)
+    #TODO lang alternative_lang
+    
+    aleph_id = getTopic(categorize, oai_id, 'aleph_id', metadataOrigin)
+    metadataReturn.append({ "key": "dc.identifier.aleph", "value": aleph_id },)
+    
     title = getTopic(categorize, oai_id, 'title', metadataOrigin)
     if not title: 
         raise Exception('No title')
     metadataReturn.append({ "key": "dc.title", "language": 'TODO', "value": title },)
+    
+
     faculty = getTopic(categorize, oai_id, 'faculty', metadataOrigin)
     if not faculty:
         categorize.categorize_item(oai_id,"No faculty")
@@ -124,18 +139,11 @@ def createDC(categorize, oai_id, metadataOrigin):
     #TODO 'advisor' 'committe' 'consultant'
 
     year = getTopic(categorize, oai_id, 'year', metadataOrigin)
-    #if year and len(year) == 4 and '?' not in year and int(year) > 2006:
-    #    print(oai_id, year)
+    if year and (len(year) == 4 and '?' not in year and int(year) >= 2006):
+        categorize.categorize_item(oai_id,"Work in year {}".format(year))
 
     degree = getTopic(categorize, oai_id, 'degree', metadataOrigin)
     if not degree: 
         categorize.categorize_item(oai_id,"No degre")
 
-    # němčina 42606, azbuka 135200
-    lang = getTopic(categorize, oai_id, 'lang', metadataOrigin)
-    if not lang:
-        error_msg = "No language found in 041 and 520."
-        #TODO pořádně
-        #categorize.categorize_item(oai_id,error_msg)
-    #TODO lang alternative_lang
     return {"metadata": metadataReturn }

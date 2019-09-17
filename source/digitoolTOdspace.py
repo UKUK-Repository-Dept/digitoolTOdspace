@@ -10,7 +10,7 @@ import aleph
 import problematicGroup as bugs
 import logging
 
-xml_dirname = "DUR01/2019-09-13"
+xml_dirname = "DUR01/2019-09-17"
 #xml_dirname = "Cerge/2019-09-05"
 digitool_category = "oai_kval"
 dspaceCollection = 279
