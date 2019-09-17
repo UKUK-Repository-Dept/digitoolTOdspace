@@ -44,7 +44,7 @@ def getTopic(categorize, oai_id, topic, metadata):
             #print(oai_id,error_msg)
             #categorize.categorize_item(oai_id,error_msg)
         elif topic not in personTopics and result1 and result1 != result2:
-            if topic in ['lang','faculty']:
+            if topic in ['faculty']:
                 continue #TODO
             #print(oai_id,error_msg)
             categorize.categorize_item(oai_id,error_msg)
@@ -104,10 +104,9 @@ def createDC(categorize, oai_id, metadataOrigin):
     # němčina 42606, azbuka 135200
     lang = getTopic(categorize, oai_id, 'lang', metadataOrigin)
     if not lang:
-        error_msg = "No language found in 041 and 520."
-        #TODO pořádně
-        #categorize.categorize_item(oai_id,error_msg)
-    #TODO lang alternative_lang
+        error_msg = "No language found in 041 and 008."
+        categorize.categorize_item(oai_id,error_msg)
+    metadataReturn.append({ "key": "dc.language.iso", "value": lang },) #TODO value nebo lang?
     
     aleph_id = getTopic(categorize, oai_id, 'aleph_id', metadataOrigin)
     metadataReturn.append({ "key": "dc.identifier.aleph", "value": aleph_id },)
@@ -131,6 +130,7 @@ def createDC(categorize, oai_id, metadataOrigin):
     abstract = getTopic(categorize, oai_id, 'abstract', metadataOrigin)
     if abstract:
         metadataReturn.append({ "key": "dc.description.abstract", "language": 'TODO', "value": abstract },)
+    #TODO lang ma ve vlastni promene
 
     advisor = getTopic(categorize, oai_id, 'advisor', metadataOrigin)
     #TODO ruční kontrola
