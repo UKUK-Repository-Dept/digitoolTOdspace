@@ -62,6 +62,16 @@ def __splitPeople(oai_id, source):
                         done = True
         return ret
 
+delete = [
+        '; vedoucí práce Jiří Odehnal',
+        ' : disertační práce z oboru Starého zákona /',
+        ' : disertační práce /',
+        ' diplomová práce /',
+        ' : bakalářská práce /',
+        ' bakalářská práce /',
+        ' /',
+        ]
+
 def convertTag245(tag245, oai_id, categorize):
     ret = {}
 
@@ -69,13 +79,13 @@ def convertTag245(tag245, oai_id, categorize):
     assert 'a' in tag245
     assert len(tag245['a']) == 1
     if not 'b' in tag245:
-        title = tag245['a'][0]
+        title = tag245['a'][0].strip()
     else:
         assert len(tag245['b']) == 1
-        title = tag245['a'][0] + ' ' + tag245['b'][0]
-    #TODO 'bakalářská práce' čekám jestli to Iry opravý
-    #if "práce" in title:
-    #    print(oai_id, title)
+        title = tag245['a'][0].strip() + ' ' + tag245['b'][0].strip()
+    for d in delete:
+        if d in title:
+            title = title.replace(d,'')
     title = title.replace('\\','').replace('/','')
     ret['title'] = title
 

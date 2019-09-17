@@ -57,7 +57,7 @@ def convertMarc(categorize, oai_id, metadataOrigin):
     mandatory = {
             '001': otherTag.convertTag001,#aleph_id
             '100': tag100.convertTag100, #autor
-            '245': tag245.convertTag245, #titul, autor #TODO bude se dělit nadpis podnadpis?
+            '245': tag245.convertTag245, #titul, autor 
             '260': tag260.convertTag260, #místo vydání a datum 
             '502': tag502.convertTag502, #kvalifikační práce
             '710': tag710.convertTag710, #fakulta, katedra
