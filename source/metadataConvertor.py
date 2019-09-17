@@ -52,6 +52,16 @@ def getTopic(categorize, oai_id, topic, metadata):
         tag1 = tag2
     return result1
 
+def sumTopic(categorize, oai_id, topic, metadata):
+    result = []
+    for tag2 in metadata:
+        if not topic in metadata[tag2].keys():
+            continue
+        result = result + metadata[tag2][topic]
+    if result != []:
+        return result
+
+
 def convertMarc(categorize, oai_id, metadataOrigin):
     metadata = {}
     mandatory = {
@@ -98,7 +108,7 @@ def convertMarc(categorize, oai_id, metadataOrigin):
     return metadata
        
 
-def createDC(categorize, oai_id, metadataOrigin):
+def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     metadataReturn = []
     
     # němčina 42606, azbuka 135200
@@ -114,7 +124,16 @@ def createDC(categorize, oai_id, metadataOrigin):
     title = getTopic(categorize, oai_id, 'title', metadataOrigin)
     if not title: 
         raise Exception('No title')
-    metadataReturn.append({ "key": "dc.title", "language": 'TODO', "value": title },)
+    metadataReturn.append({ "key": "dc.title", "language": lang, "value": title },)
+    
+    title2 = getTopic(categorize, oai_id, 'alternative', metadataOrigin)
+    if title2:
+        lang2 = getTopic(categorize, oai_id, 'alternative_lang', metadataOrigin)
+        if not lang2:
+            pass
+            #print(lang, title2)
+            #for key in metadataDigitool.keys():
+            #    print(key, metadataDigitool[key])
     
 
     faculty = getTopic(categorize, oai_id, 'faculty', metadataOrigin)
@@ -130,6 +149,8 @@ def createDC(categorize, oai_id, metadataOrigin):
     abstract = getTopic(categorize, oai_id, 'abstract', metadataOrigin)
     if abstract:
         metadataReturn.append({ "key": "dc.description.abstract", "language": 'TODO', "value": abstract },)
+    langA = getTopic(categorize, oai_id, 'abstract_lang', metadataOrigin)
+
     #TODO lang ma ve vlastni promene
 
     advisor = getTopic(categorize, oai_id, 'advisor', metadataOrigin)
@@ -141,6 +162,10 @@ def createDC(categorize, oai_id, metadataOrigin):
     year = getTopic(categorize, oai_id, 'year', metadataOrigin)
     if year and (len(year) == 4 and '?' not in year and int(year) >= 2006):
         categorize.categorize_item(oai_id,"Work in year {}".format(year))
+    
+    keywords = sumTopic(categorize, oai_id, 'keywords', metadataOrigin)
+    #if keywords:
+    #    print(lang, keywords)
 
     degree = getTopic(categorize, oai_id, 'degree', metadataOrigin)
     if not degree: 
