@@ -75,9 +75,9 @@ def convertMarc(categorize, oai_id, metadataOrigin):
     obligatory = {
             '008': otherTag.convertTag008,#jazyk na pozici 35-37
             '041': tag041.convertTag041,  # jazyk 
-            '246': tag246.convertTag246,  # titulek v překladu #TODO upozornit na chybějící podpole s jazykem 
-            '520': tag520.convertTag520,  # abstrakt #TODO dořešit jazyky
-            '526': otherTag.convertTag526,# předmět TODO jen devět kousku
+            '246': tag246.convertTag246,  # titulek v překladu 
+            '520': tag520.convertTag520,  # abstrakt 
+            '526': otherTag.convertTag526,# obor a program
             '600': otherTag.convertTag600,# keywords osoba
             '610': otherTag.convertTag610,# keywords organizace
             '630': otherTag.convertTag630,# keywords knihy
@@ -103,6 +103,7 @@ def convertMarc(categorize, oai_id, metadataOrigin):
     for tag in allTags.keys():
         if not tag in metadataOrigin.keys():
             continue
+        #TODO opakujici se pole zapsat vickrat
         metadata[tag] = allTags[tag](metadataOrigin[tag], oai_id, categorize)
     
     return metadata
@@ -158,15 +159,20 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
         metadataReturn.append({ "key": "thesis.degree.discipline", "language": 'cs_CZ', "value": discipline },)
     program = getTopic(categorize, oai_id, 'program', metadataOrigin)
     if program:
-        metadataReturn.append({ "key": "thesis.degree.program", "language": 'cs_CZ', "value": discipline },)
+        metadataReturn.append({ "key": "thesis.degree.program", "language": 'cs_CZ', "value": program },)
+    
+    faculty = getTopic(categorize, oai_id, 'faculty', metadataOrigin)
+    assert faculty
+    metadataReturn.append({ "key": "dc.description.faculty", "language": 'cs_CZ', "value": faculty },)
+    collection = catalogue.facultyToCollection[faculty] #TODO využit
+    
+    deparment = getTopic(categorize, oai_id, 'deparment', metadataOrigin)
+    if deparment:
+        metadataReturn.append({ "key": "thesis.degree.deparment", "language": 'cs_CZ', "value": deparment },)
 
 
 
     #TODO mimo tabulku & nedodělané
-    faculty = getTopic(categorize, oai_id, 'faculty', metadataOrigin)
-    if not faculty:
-        categorize.categorize_item(oai_id,"No faculty")
-    
     author = getTopic(categorize, oai_id, 'author', metadataOrigin)
     if not author: 
         raise Exception('No author')

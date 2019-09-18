@@ -140,6 +140,7 @@ def convert(dspace_admin_passwd, dspace_admin_username, test, run):
         if not checked:
             problems.append(oai_id)
         if run:
+            #TODO strkat do správné kolekce
             ds.new_item(dspaceCollection,convertedMetadata,[("lorem-ipsum.pdf","application/pdf","Dokument")])
     if test:
         click.clear()
