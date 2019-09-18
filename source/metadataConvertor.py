@@ -142,6 +142,13 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     degreeTitle = getTopic(categorize, oai_id, 'degreeTitle', metadataOrigin)
     metadataReturn.append({ "key": "thesis.degree.name", "language": 'cs_CZ', "value": degreeTitle },)
 
+    abstract = getTopic(categorize, oai_id, 'abstract', metadataOrigin)
+    langA = getTopic(categorize, oai_id, 'abstract_lang', metadataOrigin)
+    metadataReturn.append({ "key": "dc.description.abstract", "language": langA, "value": abstract },)
+    
+
+
+    #TODO mimo tabulku
     faculty = getTopic(categorize, oai_id, 'faculty', metadataOrigin)
     if not faculty:
         categorize.categorize_item(oai_id,"No faculty")
@@ -151,19 +158,12 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
         raise Exception('No author')
     #TODO zkontrolovat že je to varianta 100 a strip
     metadataReturn.append({ "key": "dc.contributor.author", "value": author },)
-   
-    abstract = getTopic(categorize, oai_id, 'abstract', metadataOrigin)
-    if abstract:
-        metadataReturn.append({ "key": "dc.description.abstract", "language": 'TODO', "value": abstract },)
-    langA = getTopic(categorize, oai_id, 'abstract_lang', metadataOrigin)
-
-    #TODO lang ma ve vlastni promene
-
-    advisor = getTopic(categorize, oai_id, 'advisor', metadataOrigin)
+  
+    #TODO dalši lidé než authore a advisor ti zbytoví
     #TODO ruční kontrola
+    advisor = getTopic(categorize, oai_id, 'advisor', metadataOrigin)
     commitee = getTopic(categorize, oai_id, 'commitee', metadataOrigin)
     consultant = getTopic(categorize, oai_id, 'consultant', metadataOrigin)
-    #TODO 'advisor' 'committe' 'consultant'
 
     year = getTopic(categorize, oai_id, 'year', metadataOrigin)
     if year and (len(year) == 4 and '?' not in year and int(year) >= 2006):
@@ -172,9 +172,5 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     keywords = sumTopic(categorize, oai_id, 'keywords', metadataOrigin)
     #if keywords:
     #    print(lang, keywords)
-
-    degree = getTopic(categorize, oai_id, 'degree', metadataOrigin)
-    if not degree: 
-        categorize.categorize_item(oai_id,"No degre")
 
     return {"metadata": metadataReturn }

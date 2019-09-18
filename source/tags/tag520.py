@@ -30,8 +30,6 @@ def convertTag520(tag520,oai_id,categorize):
     ret['abstract'] = abstract
     if '8' in tag520.keys():
         ret['abstract_lang'] = catalogue.convertLang[tag520['8'][0]]
-    if '9' in tag520.keys():
-        ret['abstract_lang'] = catalogue.convertLang[tag520['9'][0]]
     if 'b' in tag520.keys():
         pass #všichni už maji přěkopirovany abstrakt z digitoolu do aleph
     for key in tag520.keys():
