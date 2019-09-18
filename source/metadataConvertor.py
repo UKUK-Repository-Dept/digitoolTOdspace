@@ -137,6 +137,11 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
             raise Exception('Unknown langue of alternative title')
         metadataReturn.append({ "key": "dc.title.translated", "language": lang2, "value": title2 },)
 
+    degree = getTopic(categorize, oai_id, 'degree', metadataOrigin)
+    metadataReturn.append({ "key": "dc.type", "language": 'cs_CZ', "value": degree },)
+    degreeTitle = getTopic(categorize, oai_id, 'degreeTitle', metadataOrigin)
+    metadataReturn.append({ "key": "thesis.degree.name", "language": 'cs_CZ', "value": degreeTitle },)
+
     faculty = getTopic(categorize, oai_id, 'faculty', metadataOrigin)
     if not faculty:
         categorize.categorize_item(oai_id,"No faculty")
