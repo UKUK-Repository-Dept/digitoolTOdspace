@@ -114,7 +114,7 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     if metadataOrigin == None:
         return metadataReturn #TODO na konci smazat
 
-    # němčina 42606, azbuka 135200
+    # němčina 42606, azbuka 135200 #TODO zkontrolovat
     lang = getTopic(categorize, oai_id, 'lang', metadataOrigin)
     if not lang:
         error_msg = "No language found in 041 and 008."

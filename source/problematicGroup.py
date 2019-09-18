@@ -54,8 +54,6 @@ def weird_attachements(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
         metadataDigitool = digitoolXML.get_metadata(oai_id)['marc']
         aleph_id = aleph.normalise(metadataDigitool['001'])
-        if not aleph_id in records.keys():
-            continue #TODO smazat po oprave
         originalMetadata = records[aleph_id]
         metadataTopic = metadataConvertor.convertMarc(categorizeTrash, oai_id, originalMetadata)
         if metadataTopic == None:
