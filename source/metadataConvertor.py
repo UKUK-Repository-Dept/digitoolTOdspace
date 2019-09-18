@@ -4,10 +4,10 @@ import catalogue
 
 def comparePeople(name1,name2):
     def normaliseName(name):
-        name = name.replace(':','')
+        name = name.replace(':','').replace('.','. ')
         names = sorted(name.replace(',',' ').replace('-',' ').split())
         for name in names:
-            if 'vypracoval' in name:
+            if name in ['vypracoval', 'vypracovala', 'p.', 'autorka', 'autor:', 'roz.', 'a', 'prcáe', 'sociolog', 'prác', 'práve', 'by']:
                 continue
             name = name.strip()
             yield name
@@ -22,7 +22,7 @@ def comparePeople(name1,name2):
             first, second = name2[i], name1[i]
         else:
             first, second = name1[i], name2[i]
-        if len(first) == 2 and first[1] == '.' and first[0] == second[0]: 
+        if len(first) == 2 and first[1] in ['.',','] and first[0] == second[0]: 
             continue #iniciály
         if not first == second:
             return False
@@ -111,7 +111,9 @@ def convertMarc(categorize, oai_id, metadataOrigin):
 
 def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     metadataReturn = []
-    
+    if metadataOrigin == None:
+        return metadataReturn #TODO na konci smazat
+
     # němčina 42606, azbuka 135200
     lang = getTopic(categorize, oai_id, 'lang', metadataOrigin)
     if not lang:

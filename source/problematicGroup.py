@@ -76,8 +76,6 @@ def aleph_metadata(oai_ids, digitoolXML, categorize):
         #oai_id = aleph_id
         #oai_id = digittol_id
         metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, metadata)
-        if metadataTopic == None:
-            continue #TODO smazat
         metadataReturn = metadataConvertor.createDC(categorize, oai_id, metadataTopic, metadata)
 
 def not_in_aleph(oai_ids, digitoolXML, categorize):
