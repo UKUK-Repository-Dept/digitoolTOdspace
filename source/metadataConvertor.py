@@ -148,6 +148,10 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     langA = getTopic(categorize, oai_id, 'abstract_lang', metadataOrigin)
     if abstract:
         metadataReturn.append({ "key": "dc.description.abstract", "language": langA, "value": abstract },)
+    abstract2 = getTopic(categorize, oai_id, 'alternative_abstract', metadataOrigin)
+    langA2 = getTopic(categorize, oai_id, 'alternative_abstract_lang', metadataOrigin)
+    if abstract2:
+        metadataReturn.append({ "key": "dc.description.abstract", "language": langA2, "value": abstract2 },)
    
     discipline = getTopic(categorize, oai_id, 'discipline', metadataOrigin)
     if discipline:
@@ -158,7 +162,7 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
 
 
 
-    #TODO mimo tabulku
+    #TODO mimo tabulku & nedodělané
     faculty = getTopic(categorize, oai_id, 'faculty', metadataOrigin)
     if not faculty:
         categorize.categorize_item(oai_id,"No faculty")
