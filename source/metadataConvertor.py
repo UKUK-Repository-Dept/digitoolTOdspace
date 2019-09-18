@@ -138,14 +138,24 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
         metadataReturn.append({ "key": "dc.title.translated", "language": lang2, "value": title2 },)
 
     degree = getTopic(categorize, oai_id, 'degree', metadataOrigin)
+    if not degree:
+        raise Exception('No degree')
     metadataReturn.append({ "key": "dc.type", "language": 'cs_CZ', "value": degree },)
     degreeTitle = getTopic(categorize, oai_id, 'degreeTitle', metadataOrigin)
     metadataReturn.append({ "key": "thesis.degree.name", "language": 'cs_CZ', "value": degreeTitle },)
 
     abstract = getTopic(categorize, oai_id, 'abstract', metadataOrigin)
     langA = getTopic(categorize, oai_id, 'abstract_lang', metadataOrigin)
-    metadataReturn.append({ "key": "dc.description.abstract", "language": langA, "value": abstract },)
-    
+    if abstract:
+        metadataReturn.append({ "key": "dc.description.abstract", "language": langA, "value": abstract },)
+   
+    discipline = getTopic(categorize, oai_id, 'discipline', metadataOrigin)
+    if discipline:
+        metadataReturn.append({ "key": "thesis.degree.discipline", "language": 'cs_CZ', "value": discipline },)
+    program = getTopic(categorize, oai_id, 'program', metadataOrigin)
+    if program:
+        metadataReturn.append({ "key": "thesis.degree.program", "language": 'cs_CZ', "value": discipline },)
+
 
 
     #TODO mimo tabulku

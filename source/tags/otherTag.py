@@ -8,7 +8,10 @@ def convertTag008(tag008,oai_id,categorize):
     return {'lang': catalogue.convertLang[lang]}
 
 def convertTag526(tag526,oai_id,categorize):
-    return {'keywords': tag526['a']} 
+    ret = {'discipline': tag526['a'][0] }
+    if len(tag526['a']) > 1:
+        ret['program'] = tag526['a'][1]
+    return ret
 
 def convertTag600(tag600,oai_id,categorize):
     return {'keywords': tag600['a']} 
