@@ -63,6 +63,8 @@ def weird_attachements(oai_ids, digitoolXML, categorize):
                     degree = metadataTopic[topicName]['degree']
         attachements = list(digitoolXML.get_attachements(oai_id))
         descriptions = convertor.generate_description(oai_id,attachements,degree)
+        if descriptions == None:
+            categorize.categorize_item(oai_id,"bez vystupu")
 
 def aleph_metadata(oai_ids, digitoolXML, categorize):
     records = aleph.openAleph("dtl_2006.xml")

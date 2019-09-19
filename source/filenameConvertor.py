@@ -82,7 +82,6 @@ class FilenameConvertor:
                 return attachement + [(filename1, filetype1, "Text práce"), (filename2, filetype2, "Text práce")]
             if filetype1 != 'application/pdf' and filetype2 != 'application/pdf':
                 self.categorize.categorize_item(oai_id, "text práce není v pdf")
-                return
             if filetype2 == 'application/pdf':
                 filename1, filename2 = filename2, filename1
                 filetype1, filetype2 = filetype2, filetype1
