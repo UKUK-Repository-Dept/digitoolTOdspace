@@ -111,7 +111,6 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     if metadataOrigin == None:
         return metadataReturn #TODO na konci smazat
 
-    # němčina 42606, azbuka 135200 #TODO zkontrolovat
     lang = getTopic(categorize, oai_id, 'lang', metadataOrigin)
     if not lang:
         error_msg = "No language found in 041 and 008."
@@ -184,7 +183,7 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     if consultant:
         pass #TODO 
 
-    #dalši lide
+    #další lide
     tip = getTopic(categorize, oai_id, 'tip', metadataOrigin)
     if tip:
         for person in tip:
@@ -208,10 +207,5 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     keywords = sumTopic(categorize, oai_id, 'keywords', metadataOrigin)
     #if keywords:
     #    print(lang, keywords)
-
-    # němčina 42606, azbuka 135200 #TODO zkontrolovat
-    if '42606' in oai_id:
-        print(metadata)
-        print(metadataDigitool)
 
     return {"metadata": metadataReturn }

@@ -36,7 +36,6 @@ class FilenameConvertor:
                     return match
 
     def generate_description(self, oai_id, files, degree):
-        #TODO některé kategorie asi nebudumene nulovat ale ignorovat
         attachement = []
         mainFiles = []
         for filename, filetype in files:
@@ -50,7 +49,7 @@ class FilenameConvertor:
             if matchMain != None:
                 if degree and matchMain != degree:
                     err_msg = "Different degree file: {} metadata: {}".format(matchMain,degree)
-                    #print(oai_id, err_msg) #TODO smazat, odkomentovat
+                    #print(oai_id, err_msg) #asi nebudeme konrolovat
                     #self.categorize.categorize_item(oai_id, err_msg)
             mainFiles.append((filename,filetype))
         
@@ -62,11 +61,14 @@ class FilenameConvertor:
                     else:
                         attachement.append((f,t,'Příloha'))
             else:
-                #print(mainFiles)
-                self.categorize.categorize_item(oai_id, "příliš mnoho souboru vypadá jako text práce")
+                for f,t in mainFiles:
+                    if t == 'application/pdf':
+                        attachement.append((f,t,'Text práce'))
+                    else:
+                        attachement.append((f,t,'Text práce v doc'))
+            return attachement
         elif len(mainFiles) == 0:
-            #self.categorize.categorize_item(oai_id, "všechny soubory vypadají jako přílohy")
-            pass
+            self.categorize.categorize_item(oai_id, "jen přílohy {}".format([n for n,t,p in attachement]))
         elif len(mainFiles) == 1:
             filename, filetype = mainFiles[0]
             if filetype != 'application/pdf': 
@@ -78,12 +80,9 @@ class FilenameConvertor:
             filename1, filetype1 = mainFiles[0]
             filename2, filetype2 = mainFiles[1]
             if filetype1 == filetype2 == 'application/pdf':
-                #print(filename2,filename1)
-                self.categorize.categorize_item(oai_id, "příliš mnoho souboru vypadá jako text práce")
-                return
+                return attachement + [(filename1, filetype1, "Text práce"), (filename2, filetype2, "Text práce")]
             if filetype1 != 'application/pdf' and filetype2 != 'application/pdf':
                 self.categorize.categorize_item(oai_id, "text práce není v pdf")
-                self.covertToPdf(mainFiles[0])
                 return
             if filetype2 == 'application/pdf':
                 filename1, filename2 = filename2, filename1
@@ -93,9 +92,6 @@ class FilenameConvertor:
             return attachement + [(filename1, filetype1, "Text práce"), (filename2, filetype2, "Text práce v doc")]
 
         #self.joinFiles(oai_id mainFiles)
-    
-    def covertToPdf(self, docFiles):
-        pass #print(docFiles)
     
     def joinFiles(self, mainFiles):
         if len(mainFiles) > 2:
@@ -115,7 +111,6 @@ class FilenameConvertor:
         if max(diff) > 1:
             for f,t in mainFiles:
                 pass
-                #print(f)
         else:
             if 'Bulan' in mainFiles[0][0]:
                 return
