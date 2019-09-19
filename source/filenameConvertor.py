@@ -18,9 +18,9 @@ class FilenameConvertor:
     side = [
             ( ['vedouci'], "Posudek vedoucího" ),
             ( ['opon'], "Posudek oponenta" ),
-            ( ['Priloh','pril','foto','příloh','_Obr','_teze','grafy','summary','config','Dodatky','clanek','posud','Resume','install','manual'], "Příloha" ),
+            ( ['Priloh','pril','foto','příloh','_Obr.','_teze','grafy','summary','config','Dodatky','clanek','posud','Resume','install','manual'], "Příloha" ),
             ( ['chyby'], "Chyby" ),
-            ( ['literatura','lit'], "Literatura" ),
+            ( ['literatura','_lit.'], "Literatura" ),
         ]
     main = [ # na poradi zalezi, pokud je zarovet RP a DP beru jako DP
         ( ['hab'], "Habilitační práce"),

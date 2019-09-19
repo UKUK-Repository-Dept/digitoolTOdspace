@@ -109,7 +109,7 @@ def convertMarc(categorize, oai_id, metadataOrigin):
 def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     metadataReturn = []
     if metadataOrigin == None:
-        return metadataReturn #TODO chybejici 502
+        return metadataReturn, 'au' #TODO chybejici 502
 
     lang = getTopic(categorize, oai_id, 'lang', metadataOrigin)
     if not lang:
@@ -162,7 +162,7 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     faculty = getTopic(categorize, oai_id, 'faculty', metadataOrigin)
     assert faculty
     metadataReturn.append({ "key": "dc.description.faculty", "language": 'cs_CZ', "value": faculty },)
-    collection = catalogue.facultyToCollection[faculty] #TODO využit
+    collection = catalogue.facultyToCollection[faculty] 
     
     deparment = getTopic(categorize, oai_id, 'deparment', metadataOrigin)
     if deparment:
@@ -208,4 +208,4 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     #if keywords:
     #    print(lang, keywords)
 
-    return {"metadata": metadataReturn }
+    return {"metadata": metadataReturn }, collection

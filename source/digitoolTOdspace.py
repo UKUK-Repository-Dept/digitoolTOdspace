@@ -84,11 +84,14 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
         ds.delete_all_item(dspaceCollection)
     ds.logout()
 
-def convertItem(dtx, categorize, oai_id, originalMetadata, test):
+def convertItem(dtx, categorize, oai_id, originalMetadata, test, run):
     
     metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, originalMetadata)
-    convertedMetadata = metadataConvertor.createDC(categorize, oai_id, metadataTopic, originalMetadata)
+    convertedMetadata, collection = metadataConvertor.createDC(categorize, oai_id, metadataTopic, originalMetadata)
     attachements = list(dtx.get_attachements(oai_id))
+    if run:
+        #ds.new_item(collection,convertedMetadata,attachements)
+        ds.new_item(dspaceCollection,convertedMetadata,[("lorem-ipsum.pdf","application/pdf","Dokument")])
     if test:
         click.clear()
         print("converting ",oai_id)
@@ -101,9 +104,7 @@ def convertItem(dtx, categorize, oai_id, originalMetadata, test):
         print("\nattachements:")
         print(attachements)
         checked = click.confirm("Is converting OK?", default=True)
-        return (checked, convertedMetadata, attachements)
-    else:
-        return (False, convertedMetadata, attachements)
+        return checked
 
 @cli.command()
 @click.option('--item', default=104691, help='Digitool OAI id of the item')
@@ -117,7 +118,6 @@ def convertitem(item):
 @click.option('--run/--no-run', default=False, help='Pushih converted data to server')
 def convert(dspace_admin_passwd, dspace_admin_username, test, run):
     #TODO aleph, weird_attachmement by měli být nulové a ostatní by tak měli zustat
-    #TODO správné přílohy
     #logging.getLogger().setLevel(loggingMap[log])
     dtx = DigitoolXML(xml_dirname)
     oai_ids = dtx.getList()
@@ -131,12 +131,9 @@ def convert(dspace_admin_passwd, dspace_admin_username, test, run):
         metadata = dtx.get_metadata(oai_id)['marc']
         aleph_id = aleph.normalise(metadata['001'])
         originalMetadata = records[aleph_id]
-        checked, convertedMetadata, attachements = convertItem(dtx, categorize, oai_id, originalMetadata, test)
+        checked = convertItem(dtx, categorize, oai_id, originalMetadata, test, run)
         if not checked:
             problems.append(oai_id)
-        if run:
-            #TODO strkat do správné kolekce
-            ds.new_item(dspaceCollection,convertedMetadata,[("lorem-ipsum.pdf","application/pdf","Dokument")])
     if test:
         click.clear()
         print("problems",problems)
