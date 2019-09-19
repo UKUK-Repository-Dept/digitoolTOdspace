@@ -30,7 +30,7 @@ def comparePeople(name1,name2):
 
 
 def getTopic(categorize, oai_id, topic, metadata):
-    #TODO v neshodě vrací to poslední, nikoliv autoritaivní 
+    #v neshodě vrací to poslední, nikoliv autoritaivní 
     result1  = None
     tag1 = None
     for tag2 in metadata:
@@ -109,7 +109,7 @@ def convertMarc(categorize, oai_id, metadataOrigin):
 def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     metadataReturn = []
     if metadataOrigin == None:
-        return metadataReturn #TODO na konci smazat
+        return metadataReturn #TODO chybejici 502
 
     lang = getTopic(categorize, oai_id, 'lang', metadataOrigin)
     if not lang:
@@ -181,7 +181,7 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
         metadataReturn.append({ "key": "dc.contributor.advisor","value": commitee },)
     consultant = getTopic(categorize, oai_id, 'consultant', metadataOrigin)
     if consultant:
-        pass #TODO 
+        pass #TODO kam patri konzultant 
 
     #další lide
     tip = getTopic(categorize, oai_id, 'tip', metadataOrigin)
@@ -195,7 +195,7 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
                 continue
             if consultant and comparePeople(person,consultant):
                 continue
-            pass #TODO ktery tag
+            pass #TODO kam patri ostatni lidi
             #print(person)
 
     #TODO mimo tabulku & nedodělané

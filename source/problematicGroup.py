@@ -56,12 +56,11 @@ def weird_attachements(oai_ids, digitoolXML, categorize):
         aleph_id = aleph.normalise(metadataDigitool['001'])
         originalMetadata = records[aleph_id]
         metadataTopic = metadataConvertor.convertMarc(categorizeTrash, oai_id, originalMetadata)
-        if metadataTopic == None:
-            continue #TODO smazat
         degree = None
-        for topicName in metadataTopic.keys():
-            if 'degree' in metadataTopic[topicName].keys():
-                degree = metadataTopic[topicName]['degree']
+        if metadataTopic != None:
+            for topicName in metadataTopic.keys():
+                if 'degree' in metadataTopic[topicName].keys():
+                    degree = metadataTopic[topicName]['degree']
         attachements = list(digitoolXML.get_attachements(oai_id))
         descriptions = convertor.generate_description(oai_id,attachements,degree)
 

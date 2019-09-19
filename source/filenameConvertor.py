@@ -73,7 +73,6 @@ class FilenameConvertor:
             filename, filetype = mainFiles[0]
             if filetype != 'application/pdf': 
                 self.categorize.categorize_item(oai_id, "text práce není v pdf")
-                self.covertToPdf(mainFiles[0])
             else:
                 return attachement + [(filename, filetype, "Text práce")]
         elif len(mainFiles) == 2:

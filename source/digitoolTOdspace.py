@@ -116,6 +116,8 @@ def convertitem(item):
 @click.option('--test/--no-test', default=False, help='Ask user to check convert')
 @click.option('--run/--no-run', default=False, help='Pushih converted data to server')
 def convert(dspace_admin_passwd, dspace_admin_username, test, run):
+    #TODO aleph, weird_attachmement by měli být nulové a ostatní by tak měli zustat
+    #TODO správné přílohy
     #logging.getLogger().setLevel(loggingMap[log])
     dtx = DigitoolXML(xml_dirname)
     oai_ids = dtx.getList()
