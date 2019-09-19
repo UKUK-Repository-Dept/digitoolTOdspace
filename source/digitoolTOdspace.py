@@ -79,7 +79,7 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
         handle = arg[0]
         ds.handle(handle) # př "123456789/86"
     if operation == 'new_item':
-        ds.new_item(dspaceCollection,metadata,[("lorem-ipsum.pdf",'TODO','soubor')])
+        ds.new_item(dspaceCollection,metadata,[("lorem-ipsum.pdf",'application/pdf','soubor')])
     if operation == 'delete_collection':
         ds.delete_all_item(dspaceCollection)
     ds.logout()
@@ -87,9 +87,7 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
 def convertItem(dtx, categorize, oai_id, originalMetadata, test):
     
     metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, originalMetadata)
-    if metadataTopic == None: #TODO smazat
-        return (False, None, None) 
-    convertedMetadata = metadataConvertor.createDC(categorize, oai_id, metadataTopic)
+    convertedMetadata = metadataConvertor.createDC(categorize, oai_id, metadataTopic, originalMetadata)
     attachements = list(dtx.get_attachements(oai_id))
     if test:
         click.clear()
@@ -124,18 +122,13 @@ def convert(dspace_admin_passwd, dspace_admin_username, test, run):
     categorize = Categorize(dtx)
     ds = Dspace(dspace_admin_username,dspace_admin_passwd)
     records = aleph.openAleph("dtl_2006.xml")
-    alephData = {}
-    for metadata in records:
-        alephData[metadata['001']] = metadata
     
     problems = []
     #for oai_id in oai_ids[:5]:
     for oai_id in oai_ids:
         metadata = dtx.get_metadata(oai_id)['marc']
-        aleph_id = metadata['001']
-        if aleph_id not in alephData.keys():
-            continue #TODO tohle by nemelo na zaver nastat
-        originalMetadata = alephData[aleph_id]
+        aleph_id = aleph.normalise(metadata['001'])
+        originalMetadata = records[aleph_id]
         checked, convertedMetadata, attachements = convertItem(dtx, categorize, oai_id, originalMetadata, test)
         if not checked:
             problems.append(oai_id)
