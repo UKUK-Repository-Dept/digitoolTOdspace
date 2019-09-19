@@ -40,13 +40,11 @@ def getTopic(categorize, oai_id, topic, metadata):
         error_msg = 'Different {} {}:"{}" {}: "{}"'.format(topic, tag1, result1, tag2, result2)
         personTopics = ['author','advisor','commitee','consultant']
         if topic in personTopics and not comparePeople(result1,result2):
-            pass # TODO ručne projít před finálním exportem
-            #print(oai_id,error_msg)
-            #categorize.categorize_item(oai_id,error_msg)
+            categorize.categorize_item(oai_id,error_msg)
         elif topic not in personTopics and result1 and result1 != result2:
             if topic in ['faculty']:
-                continue #TODO
-            #print(oai_id,error_msg)
+                #print(oai_id,error_msg)
+                continue #TODO zkonrolovat ze Iry opravila
             categorize.categorize_item(oai_id,error_msg)
         result1 = result2
         tag1 = tag2
@@ -103,7 +101,6 @@ def convertMarc(categorize, oai_id, metadataOrigin):
     for tag in allTags.keys():
         if not tag in metadataOrigin.keys():
             continue
-        #TODO opakujici se pole zapsat vickrat
         metadata[tag] = allTags[tag](metadataOrigin[tag], oai_id, categorize)
     
     return metadata
@@ -171,21 +168,38 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     deparment = getTopic(categorize, oai_id, 'deparment', metadataOrigin)
     if deparment:
         metadataReturn.append({ "key": "thesis.degree.deparment", "language": 'cs_CZ', "value": deparment },)
-
-
-
-    #TODO mimo tabulku & nedodělané
+    
     author = getTopic(categorize, oai_id, 'author', metadataOrigin)
+    metadataReturn.append({ "key": "dc.contributor.author", "value": author },)
     if not author: 
         raise Exception('No author')
-    #TODO zkontrolovat že je to varianta 100 a strip
-    metadataReturn.append({ "key": "dc.contributor.author", "value": author },)
-  
-    #TODO dalši lidé než authore a advisor ti zbytoví
-    #TODO ruční kontrola
+
     advisor = getTopic(categorize, oai_id, 'advisor', metadataOrigin)
+    if advisor:
+        metadataReturn.append({ "key": "dc.contributor.advisor","value": advisor },)
     commitee = getTopic(categorize, oai_id, 'commitee', metadataOrigin)
+    if commitee:
+        metadataReturn.append({ "key": "dc.contributor.advisor","value": commitee },)
     consultant = getTopic(categorize, oai_id, 'consultant', metadataOrigin)
+    if consultant:
+        pass #TODO 
+
+    #dalši lide
+    tip = getTopic(categorize, oai_id, 'tip', metadataOrigin)
+    if tip:
+        for person in tip:
+            if comparePeople(person,author):
+                continue
+            if advisor and comparePeople(person,advisor):
+                continue
+            if commitee and comparePeople(person,commitee):
+                continue
+            if consultant and comparePeople(person,consultant):
+                continue
+            pass #TODO ktery tag
+            #print(person)
+
+    #TODO mimo tabulku & nedodělané
 
     year = getTopic(categorize, oai_id, 'year', metadataOrigin)
     if year and (len(year) == 4 and '?' not in year and int(year) >= 2006):
@@ -194,5 +208,10 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     keywords = sumTopic(categorize, oai_id, 'keywords', metadataOrigin)
     #if keywords:
     #    print(lang, keywords)
+
+    # němčina 42606, azbuka 135200 #TODO zkontrolovat
+    if '42606' in oai_id:
+        print(metadata)
+        print(metadataDigitool)
 
     return {"metadata": metadataReturn }

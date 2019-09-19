@@ -31,10 +31,12 @@ def __splitPeople(oai_id, source):
     if ';' not in source and (':' in source or ',' in source):
         source = source.replace(':',';').replace(',',';')
     if not ';' in source:
-        return {'author': source}
+        #return {'author': source}
+        return {'tip': [source]}
     else:
         author, others = source.split(';',1)
-        ret =  {'author': author}
+        #ret =  {'author': author}
+        ret =  {'tip': [author]}
         if 'Univer' in source:
             return ret #kašlem na to
         others.replace('[',' ')
@@ -58,7 +60,8 @@ def __splitPeople(oai_id, source):
                         span = re.match(name,person.lower()).span()
                         assert span[0] == 0
                         personName = person[span[1]:].strip()
-                        ret[role] = personName
+                        #ret[role].append(personName)
+                        ret['tip'].append(personName)
                         done = True
         return ret
 

@@ -106,6 +106,8 @@ class DigitoolXML:
                 continue
             if metadataType.text == 'marc':
                 assert 'marc' not in res.keys()
+                if 'marc' in res.keys():
+                    print(oai_id)
                 res['marc'] = parseMarc(value.text)
             elif metadataType.text == 'dc':
                 res['dc'] = list(parseDC(value.text))
