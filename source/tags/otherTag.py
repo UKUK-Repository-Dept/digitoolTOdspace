@@ -14,17 +14,27 @@ def convertTag526(tag526,oai_id,categorize):
     return ret
 
 def convertTag600(tag600,oai_id,categorize):
-    return {'keywords': tag600['a']} 
+    if '2' in tag600:
+        return {'czenas': tag600['a']} 
+    else:
+        return {'keywords': tag600['a']} 
 
 def convertTag610(tag610,oai_id,categorize):
-    return {'keywords': tag610['a']} 
+    if '2' in tag610:
+        return {'czenas': tag610['a']} 
+    else:
+        return {'keywords': tag610['a']} 
 
 def convertTag630(tag630,oai_id,categorize):
     return {'keywords': tag630['a']} 
 
 def convertTag648(tag648,oai_id,categorize):
+    if '2' in tag648:
+        return {'czenas': tag648['a']} 
     return {'keywords': tag648['a']} 
 
 def convertTag651(tag651,oai_id,categorize):
+    if '2' in tag651:
+        return {'czenas': tag651['a']} 
     return {'keywords': tag651['a']} 
 

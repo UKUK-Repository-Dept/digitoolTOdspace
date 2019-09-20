@@ -181,7 +181,7 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
         metadataReturn.append({ "key": "dc.contributor.commitee","value": commitee },)
     consultant = getTopic(categorize, oai_id, 'consultant', metadataOrigin)
     if consultant:
-        metadataReturn.append({ "key": "dc.contributor","value": contributor },)
+        metadataReturn.append({ "key": "dc.contributor","value": consultant },)
 
     #další lide
     tip = getTopic(categorize, oai_id, 'tip', metadataOrigin)
@@ -202,9 +202,11 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
         metadataReturn.append({ "key": "dc.date.issued","value": year },)
         categorize.categorize_item(oai_id,"Work in year {}".format(year))
 
-    #TODO v dspace jsou oddělené sloupkami
     keywords = sumTopic(categorize, oai_id, 'keywords', metadataOrigin)
-    #if keywords:
-    #    print(lang, keywords)
+    if keywords:
+        metadataReturn.append({ "key": "dc.subject","value": keywords, "language": "cs_CZ" },)
+    czenas = sumTopic(categorize, oai_id, 'czenas', metadataOrigin)
+    if czenas:
+        metadataReturn.append({ "key": "dc.subject.czenas","value": czenas, "language": "cs_CZ" },)
 
     return {"metadata": metadataReturn }, collection
