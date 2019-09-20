@@ -24,6 +24,17 @@ convertLang = {
     'ita': 'it_IT',
     }
 
+langText = {
+    'cs_CZ': 'čeština',    
+    'sk_SK': 'slovenština',    
+    'fr_FR': 'francouština',    
+    'en_US': 'angličtina',    
+    'de_DE': 'němčina',    
+    'pl_PL': 'polština',    
+    'es_ES': 'španělština',    
+    'it_IT': 'italština',    
+    }
+
 
 institutToFaculty = {
     'Institut politologických studií': 'Fakulta sociálních věd', 

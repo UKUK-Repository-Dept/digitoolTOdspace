@@ -115,7 +115,7 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     if not lang:
         error_msg = "No language found in 041 and 008."
         categorize.categorize_item(oai_id,error_msg)
-    metadataReturn.append({ "key": "dc.language.iso", "value": lang },) #TODO value nebo lang?
+    metadataReturn.append({ "key": "dc.language.iso", "value": catalogue.langText[lang], "language": 'cs_CZ' },) 
     
     aleph_id = getTopic(categorize, oai_id, 'aleph_id', metadataOrigin)
     metadataReturn.append({ "key": "dc.identifier.aleph", "value": aleph_id },)
@@ -178,10 +178,10 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
         metadataReturn.append({ "key": "dc.contributor.advisor","value": advisor },)
     commitee = getTopic(categorize, oai_id, 'commitee', metadataOrigin)
     if commitee:
-        metadataReturn.append({ "key": "dc.contributor.advisor","value": commitee },)
+        metadataReturn.append({ "key": "dc.contributor.commitee","value": commitee },)
     consultant = getTopic(categorize, oai_id, 'consultant', metadataOrigin)
     if consultant:
-        pass #TODO kam patri konzultant 
+        metadataReturn.append({ "key": "dc.contributor","value": contributor },)
 
     #další lide
     tip = getTopic(categorize, oai_id, 'tip', metadataOrigin)
@@ -195,15 +195,14 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
                 continue
             if consultant and comparePeople(person,consultant):
                 continue
-            pass #TODO kam patri ostatni lidi
-            #print(person)
-
-    #TODO mimo tabulku & nedodělané
+            metadataReturn.append({ "key": "dc.contributor","value": person },)
 
     year = getTopic(categorize, oai_id, 'year', metadataOrigin)
     if year and (len(year) == 4 and '?' not in year and int(year) >= 2006):
+        metadataReturn.append({ "key": "dc.date.issued","value": year },)
         categorize.categorize_item(oai_id,"Work in year {}".format(year))
-    
+
+    #TODO v dspace jsou oddělené sloupkami
     keywords = sumTopic(categorize, oai_id, 'keywords', metadataOrigin)
     #if keywords:
     #    print(lang, keywords)
