@@ -200,6 +200,7 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     year = getTopic(categorize, oai_id, 'year', metadataOrigin)
     if year and (len(year) == 4 and '?' not in year and int(year) >= 2006):
         metadataReturn.append({ "key": "dc.date.issued","value": year },)
+        print(oai_id,year)
         categorize.categorize_item(oai_id,"Work in year {}".format(year))
 
     keywords = sumTopic(categorize, oai_id, 'keywords', metadataOrigin)

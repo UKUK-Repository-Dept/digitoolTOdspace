@@ -10,7 +10,7 @@ import aleph
 import problematicGroup as bugs
 import logging
 
-xml_dirname = "DUR01/2019-09-30"
+xml_dirname = "DUR01/2019-10-01"
 #xml_dirname = "Cerge/2019-09-05"
 digitool_category = "oai_kval"
 dspaceCollection = 279
@@ -126,8 +126,8 @@ def convert(dspace_admin_passwd, dspace_admin_username, test, run):
     records = aleph.openAleph("dtl_2006.xml")
     
     problems = []
-    #for oai_id in oai_ids[:5]:
-    for oai_id in oai_ids:
+    for oai_id in oai_ids[:5]:
+    #for oai_id in oai_ids:
         metadata = dtx.get_metadata(oai_id)['marc']
         aleph_id = aleph.normalise(metadata['001'])
         originalMetadata = records[aleph_id]

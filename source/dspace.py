@@ -96,16 +96,18 @@ class Dspace:
             self.post_new_bitstream(dspace_id, filename, filetype, description)
     
     def delete_all_item(self, collection_id):
-        # Note: tested on small collections
-        response = requests.get(
-            self.url+'/collections/'+str(collection_id)+'/items', 
-            headers=self.headers,
-            )
-        if response.status_code == 404:
-            logging.error("No collection {}.".format(collection_id))
-            return
-        for item in json.loads(response.text):
-            requests.delete(
-                self.url+'/items/'+str(item['id']), 
+        itemSize = 42
+        while itemSize > 0:
+            response = requests.get(
+                self.url+'/collections/'+str(collection_id)+'/items', 
                 headers=self.headers,
-            )
+                )
+            if response.status_code == 404:
+                logging.error("No collection {}.".format(collection_id))
+                return
+            itemSize = len(json.loads(response.text))
+            for item in json.loads(response.text):
+                requests.delete(
+                    self.url+'/items/'+str(item['id']), 
+                    headers=self.headers,
+                )
