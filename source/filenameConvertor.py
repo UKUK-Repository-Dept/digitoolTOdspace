@@ -35,7 +35,8 @@ class FilenameConvertor:
                 if tag in name:
                     return match
 
-    def generate_description(self, oai_id, files, degree):
+    #def generate_description(self, oai_id, files, degree):
+    def generate_description(self, oai_id, files):
         attachement = []
         mainFiles = []
         for filename, filetype in files:
@@ -46,9 +47,9 @@ class FilenameConvertor:
             if matchSide != None:
                 attachement.append((filename,filetype,matchSide))
                 continue
-            if matchMain != None:
-                if degree and matchMain != degree:
-                    err_msg = "Different degree file: {} metadata: {}".format(matchMain,degree)
+            #if matchMain != None:
+            #    if degree and matchMain != degree:
+                    #err_msg = "Different degree file: {} metadata: {}".format(matchMain,degree)
                     #print(oai_id, err_msg) #asi nebudeme konrolovat
                     #self.categorize.categorize_item(oai_id, err_msg)
             mainFiles.append((filename,filetype))

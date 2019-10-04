@@ -198,16 +198,17 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
             metadataReturn.append({ "key": "dc.contributor","value": person },)
 
     year = getTopic(categorize, oai_id, 'year', metadataOrigin)
-    if year and (len(year) == 4 and '?' not in year and int(year) >= 2006):
+    if year:
         metadataReturn.append({ "key": "dc.date.issued","value": year },)
-        print(oai_id,year)
+    if year and (len(year) == 4 and '?' not in year and int(year) >= 2006):
         categorize.categorize_item(oai_id,"Work in year {}".format(year))
 
+    #TODO s keywords to nejde nadrat do space
     keywords = sumTopic(categorize, oai_id, 'keywords', metadataOrigin)
-    if keywords:
-        metadataReturn.append({ "key": "dc.subject","value": keywords, "language": "cs_CZ" },)
+    #if keywords:
+    #    metadataReturn.append({ "key": "dc.subject","value": keywords, "language": "cs_CZ" },)
     czenas = sumTopic(categorize, oai_id, 'czenas', metadataOrigin)
-    if czenas:
-        metadataReturn.append({ "key": "dc.subject.czenas","value": czenas, "language": "cs_CZ" },)
+    #if czenas:
+    #    metadataReturn.append({ "key": "dc.subject.czenas","value": czenas, "language": "cs_CZ" },)
 
     return {"metadata": metadataReturn }, collection

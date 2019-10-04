@@ -3,22 +3,23 @@ import os
 import click
 from digitoolXML import DigitoolXML
 from dspace import Dspace
-from filenameConvertor import FilenameConvertor
+import filenameConvertor
 import metadataConvertor
 from categorize import Categorize
 import aleph
 import problematicGroup as bugs
 import logging
+import urllib3 #disable warnings about http an gull
 
 xml_dirname = "DUR01/2019-10-01"
 #xml_dirname = "Cerge/2019-09-05"
 digitool_category = "oai_kval"
-dspaceCollection = 279
+#dspaceCollection = 279 ten co se teď kontroluje
+dspaceCollection = 280
 
 loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
 @click.group()
-@click.option('--log', default='error', type=click.Choice(loggingMap.keys()), help='Logging level')
-def cli(log):
+def cli():
     pass
 
 
@@ -84,15 +85,14 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
         ds.delete_all_item(dspaceCollection)
     ds.logout()
 
-def convertItem(dtx, categorize, oai_id, originalMetadata, test, run):
+def convertItem(dtx, categorize, oai_id, originalMetadata, ds, run):
     
     metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, originalMetadata)
     convertedMetadata, collection = metadataConvertor.createDC(categorize, oai_id, metadataTopic, originalMetadata)
     attachements = list(dtx.get_attachements(oai_id))
-    if run:
-        #ds.new_item(collection,convertedMetadata,attachements)
-        ds.new_item(dspaceCollection,convertedMetadata,[("lorem-ipsum.pdf","application/pdf","Dokument")])
-    if test:
+    fc = filenameConvertor.FilenameConvertor(categorize)
+    attachementsDescription = fc.generate_description(oai_id,attachements)
+    if False:
         click.clear()
         print("converting ",oai_id)
         print("\noriginalMetadata:")
@@ -102,41 +102,39 @@ def convertItem(dtx, categorize, oai_id, originalMetadata, test, run):
         for row in convertedMetadata['metadata']:
             print(row)
         print("\nattachements:")
-        print(attachements)
-        checked = click.confirm("Is converting OK?", default=True)
-        return checked
-
-@cli.command()
-@click.option('--item', default=104691, help='Digitool OAI id of the item')
-def convertitem(item):
-    convertItem(item, False)
+        print(attachementsDescription)
+        #checked = click.confirm("Is converting OK?", default=True)
+    if run:
+        #ds.new_item(collection,convertedMetadata,attachementsDescription) #to zaverecne
+        ds.new_item(dspaceCollection,convertedMetadata,attachementsDescription)
+        #ds.new_item(dspaceCollection,convertedMetadata,[("lorem-ipsum.pdf","application/pdf","Dokument")])
 
 @cli.command()
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
 @click.option('--dspace_admin_passwd', prompt='passwd', help='Dspace admin passwd')
-@click.option('--test/--no-test', default=False, help='Ask user to check convert')
 @click.option('--run/--no-run', default=False, help='Pushih converted data to server')
-def convert(dspace_admin_passwd, dspace_admin_username, test, run):
+@click.option('--log', default='error', type=click.Choice(loggingMap.keys()), help='Logging level')
+def convert(dspace_admin_passwd, dspace_admin_username, run, log):
     #TODO aleph, weird_attachmement by měli být nulové a ostatní by tak měli zustat
-    #logging.getLogger().setLevel(loggingMap[log])
+    logging.getLogger().setLevel(loggingMap[log])
+    if log == 'error':
+        urllib3.disable_warnings()
     dtx = DigitoolXML(xml_dirname)
     oai_ids = dtx.getList()
     categorize = Categorize(dtx)
     ds = Dspace(dspace_admin_username,dspace_admin_passwd)
     records = aleph.openAleph("dtl_2006.xml")
     
-    problems = []
-    for oai_id in oai_ids[:5]:
-    #for oai_id in oai_ids:
-        metadata = dtx.get_metadata(oai_id)['marc']
-        aleph_id = aleph.normalise(metadata['001'])
+    for oai_id in oai_ids:
+    #for i in range(5):
+    #    oai_id = oai_ids[i]
+    #    print(i)
+    #for oai_id in [oai_ids[4]]:
+        
+        digitoolMetadata = dtx.get_metadata(oai_id)['marc']
+        aleph_id = aleph.normalise(digitoolMetadata['001'])
         originalMetadata = records[aleph_id]
-        checked = convertItem(dtx, categorize, oai_id, originalMetadata, test, run)
-        if not checked:
-            problems.append(oai_id)
-    if test:
-        click.clear()
-        print("problems",problems)
+        convertItem(dtx, categorize, oai_id, originalMetadata, ds, run)
     ds.logout()
 
 if __name__ == '__main__':

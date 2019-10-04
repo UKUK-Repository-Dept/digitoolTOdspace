@@ -48,7 +48,7 @@ class Dspace:
                 print(bitstream[key])
     
     def post_new_bitstream(self, item_id, filename, filetype, description=None):
-        files = {
+        files = { #TODO tady to nesmí být
             'file': open("lorem-ipsum.pdf",'rb')
         }
         params={
@@ -89,6 +89,9 @@ class Dspace:
             headers=self.headers,
             json=metadata, 
             )
+        if response.status_code == 500:
+            logging.error("Au {}. {}".format(response.text,metadata['001']))
+            return
         root = ET.fromstring(response.text)
         subtree=list(r for r in root if "id" in r.tag)[0]
         dspace_id = int(subtree.text)
