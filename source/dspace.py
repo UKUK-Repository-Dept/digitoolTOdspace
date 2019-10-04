@@ -90,7 +90,11 @@ class Dspace:
             json=metadata, 
             )
         if response.status_code == 500:
-            logging.error("Au {}. {}".format(response.text,metadata['001']))
+            for m in metadata['metadata']:
+                if m['key'] == 'dc.identifier.aleph':
+                    aleph_id = m['value']
+            logging.error("{}".format(aleph_id))
+            #logging.error("Au {}. {}".format(response.text,aleph_id))
             return
         root = ET.fromstring(response.text)
         subtree=list(r for r in root if "id" in r.tag)[0]

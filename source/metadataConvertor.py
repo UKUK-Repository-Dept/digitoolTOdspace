@@ -205,10 +205,10 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
 
     #TODO s keywords to nejde nadrat do space
     keywords = sumTopic(categorize, oai_id, 'keywords', metadataOrigin)
-    #if keywords:
-    #    metadataReturn.append({ "key": "dc.subject","value": keywords, "language": "cs_CZ" },)
+    if keywords:
+        metadataReturn.append({ "key": "dc.subject","value": keywords, "language": "cs_CZ" },)
     czenas = sumTopic(categorize, oai_id, 'czenas', metadataOrigin)
-    #if czenas:
-    #    metadataReturn.append({ "key": "dc.subject.czenas","value": czenas, "language": "cs_CZ" },)
+    if czenas:
+        metadataReturn.append({ "key": "dc.subject.czenas","value": czenas, "language": "cs_CZ" },)
 
     return {"metadata": metadataReturn }, collection
