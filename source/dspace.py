@@ -94,6 +94,7 @@ class Dspace:
                 if m['key'] == 'dc.identifier.aleph':
                     aleph_id = m['value']
             logging.error("{}".format(aleph_id))
+            print(metadata['metadata'])
             #logging.error("Au {}. {}".format(response.text,aleph_id))
             return
         root = ET.fromstring(response.text)
