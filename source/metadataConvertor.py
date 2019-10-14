@@ -178,7 +178,7 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
         metadataReturn.append({ "key": "dc.contributor.advisor","value": advisor },)
     commitee = getTopic(categorize, oai_id, 'commitee', metadataOrigin)
     if commitee:
-        metadataReturn.append({ "key": "dc.contributor.commitee","value": commitee },)
+        metadataReturn.append({ "key": "dc.contributor.referee","value": commitee },)
     consultant = getTopic(categorize, oai_id, 'consultant', metadataOrigin)
     if consultant:
         metadataReturn.append({ "key": "dc.contributor","value": consultant },)
@@ -204,10 +204,12 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
         categorize.categorize_item(oai_id,"Work in year {}".format(year))
 
     keywords = sumTopic(categorize, oai_id, 'keywords', metadataOrigin)
-    for keyword in keywords:
-        metadataReturn.append({ "key": "dc.subject","value": keyword, "language": "cs_CZ" },)
+    if keywords:
+        for keyword in keywords:
+            metadataReturn.append({ "key": "dc.subject","value": keyword, "language": "cs_CZ" },)
     czenas = sumTopic(categorize, oai_id, 'czenas', metadataOrigin)
-    for keyword in czenas:
-        metadataReturn.append({ "key": "dc.subject.czenas","value": keyword, "language": "cs_CZ" },)
+    if czenas:
+        for keyword in czenas:
+            metadataReturn.append({ "key": "dc.subject.czenas","value": keyword, "language": "cs_CZ" },)
 
     return {"metadata": metadataReturn }, collection

@@ -132,8 +132,8 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, log):
     #for oai_id in [oai_ids[4]]:
         
         digitoolMetadata = dtx.get_metadata(oai_id)['marc']
-        #aleph_id = aleph.normalise(digitoolMetadata['001'])
-        #if aleph_id != '000622658':
+        aleph_id = aleph.normalise(digitoolMetadata['001'])
+        #if aleph_id != '000732536':
         #    continue
         originalMetadata = records[aleph_id]
         convertItem(dtx, categorize, oai_id, originalMetadata, ds, run)
