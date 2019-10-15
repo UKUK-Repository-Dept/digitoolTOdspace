@@ -14,8 +14,7 @@ import urllib3 #disable warnings about http an gull
 xml_dirname = "DUR01/2019-10-01"
 #xml_dirname = "Cerge/2019-09-05"
 digitool_category = "oai_kval"
-#dspaceCollection = 279 ten co se teď kontroluje
-dspaceCollection = 280
+dspaceCollection = 279 
 
 loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
 @click.group()
@@ -122,7 +121,7 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, log):
     dtx = DigitoolXML(xml_dirname)
     oai_ids = dtx.getList()
     categorize = Categorize(dtx)
-    ds = Dspace(dspace_admin_username,dspace_admin_passwd)
+    ds = Dspace(dspace_admin_username,dspace_admin_passwd,xml_dirname=xml_dirname)
     records = aleph.openAleph("dtl_2006.xml")
     
     for oai_id in oai_ids:

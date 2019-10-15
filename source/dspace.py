@@ -12,7 +12,7 @@ class Dspace:
         }
 
 
-    def __init__(self, user, passwd):
+    def __init__(self, user, passwd, xml_dirname=""):
         self.user = user 
         self.passwd = passwd
         self.login = {
@@ -27,6 +27,7 @@ class Dspace:
         response.raise_for_status()
         self.token = response.text
         self.headers["rest-dspace-token"]= self.token
+        self.assets = xml_dirname + "/streams/"
     
     def logout(self):
         response = requests.post(
@@ -49,7 +50,7 @@ class Dspace:
     
     def post_new_bitstream(self, item_id, filename, filetype, description=None):
         files = { #TODO tady to nesmí být
-            'file': open("lorem-ipsum.pdf",'rb')
+            'file': open(self.assets + filename,'rb')
         }
         params={
             'name': filename,
