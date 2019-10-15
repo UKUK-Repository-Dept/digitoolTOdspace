@@ -6,11 +6,11 @@ levelToTitle = {
     "Habilitační práce": [ "Doc.", ],
     }
 categoryToTypeTitle = {
-    "bakalářské práce": "Bakalářská práce",
-    "diplomové práce": "Diplomová práce",
-    "rigorózní práce": "Rigorózní práce",
-    "dizertační práce": "Dizertační práce",
-    "habilitační práce": "Habilitační práce",
+    "bakalářské práce": "bakalářská práce",
+    "diplomové práce": "diplomová práce",
+    "rigorózní práce": "rigorózní práce",
+    "dizertační práce": "dizertační práce",
+    "habilitační práce": "habilitační práce",
     }
     
 convertLang = {
