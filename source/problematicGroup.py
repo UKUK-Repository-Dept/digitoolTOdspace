@@ -62,7 +62,7 @@ def weird_attachements(oai_ids, digitoolXML, categorize):
                 if 'degree' in metadataTopic[topicName].keys():
                     degree = metadataTopic[topicName]['degree']
         attachements = list(digitoolXML.get_attachements(oai_id))
-        descriptions = convertor.generate_description(oai_id,attachements,degree)
+        descriptions = convertor.generate_description(oai_id,attachements) #,degree)
         if descriptions == None:
             categorize.categorize_item(oai_id,"bez vystupu")
 

@@ -57,13 +57,14 @@ class Dspace:
             'description': description,
             'mineType': filetype,
         }
-        requests.post(
+        response = requests.post(
             self.url+'/items/'+str(item_id)+'/bitstreams/',
             headers=self.headers,
             files=files,
             verify=False,
             params=params,
         )
+        print(response.text)
     
     def delete_bitstream(self,delete):
         for d in delete:

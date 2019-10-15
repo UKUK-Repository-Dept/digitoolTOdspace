@@ -18,7 +18,9 @@ class FilenameConvertor:
     side = [
             ( ['vedouci'], "Posudek vedoucího" ),
             ( ['opon'], "Posudek oponenta" ),
-            ( ['Priloh','pril','foto','příloh','_Obr.','_teze','grafy','summary','config','Dodatky','clanek','posud','Resume','install','manual'], "Příloha" ),
+            ( ['posud'], "Posudek" ),
+            ( ['foto','příloh','_Obr.','_teze','grafy','summary','config','Dodatky','clanek','Resume','install','manual'], "Příloha" ),
+            ( ['Priloh','pril'], "Příloha" ),
             ( ['chyby'], "Chyby" ),
             ( ['literatura','_lit.'], "Literatura" ),
         ]
@@ -42,9 +44,11 @@ class FilenameConvertor:
         for filename, filetype in files:
             if '_index.html' in filename or '_thumbnail.jpg' in filename:
                 continue
-            matchMain = self.match(self.main, filename)
+            #matchMain = self.match(self.main, filename)
             matchSide = self.match(self.side, filename)
             if matchSide != None:
+                if matchSide == "Příloha?":
+                    print(filename)
                 attachement.append((filename,filetype,matchSide))
                 continue
             #if matchMain != None:
