@@ -115,7 +115,8 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     if not lang:
         error_msg = "No language found in 041 and 008."
         categorize.categorize_item(oai_id,error_msg)
-    metadataReturn.append({ "key": "dc.language.iso", "value": catalogue.langText[lang], "language": 'cs_CZ' },) 
+    metadataReturn.append({ "key": "dc.language", "value": catalogue.langText[lang], "language": 'cs_CZ' },) 
+    metadataReturn.append({ "key": "dc.language.iso", "value": lang },) 
     
     aleph_id = getTopic(categorize, oai_id, 'aleph_id', metadataOrigin)
     metadataReturn.append({ "key": "dc.identifier.aleph", "value": aleph_id },)
