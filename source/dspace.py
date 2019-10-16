@@ -64,7 +64,7 @@ class Dspace:
             verify=False,
             params=params,
         )
-        print(response.text)
+        #print(response.text)
     
     def delete_bitstream(self,delete):
         for d in delete:

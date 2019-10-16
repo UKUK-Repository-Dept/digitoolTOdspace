@@ -14,7 +14,7 @@ import urllib3 #disable warnings about http an gull
 xml_dirname = "DUR01/2019-10-01"
 #xml_dirname = "Cerge/2019-09-05"
 digitool_category = "oai_kval"
-dspaceCollection = 279 
+dspaceCollection = 280 
 
 loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
 @click.group()
