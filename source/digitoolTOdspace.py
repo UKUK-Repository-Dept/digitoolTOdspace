@@ -62,7 +62,7 @@ def statistic(log):
     for count, tag in statistic:
         print(tag,count)
 
-operations=['handle','new_item','delete_collection']
+operations=['handle','new_item','delete_collection','delete_bitstream']
 @cli.command()
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
 @click.option('--dspace_admin_passwd', prompt='passwd', help='Dspace admin passwd')
@@ -80,6 +80,9 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
         ds.handle(handle) # př "123456789/86"
     if operation == 'new_item':
         ds.new_item(dspaceCollection,metadata,[("lorem-ipsum.pdf",'application/pdf','soubor')])
+    if operation == 'delete_bitstream':
+        bitstream = arg[0]
+        ds.delete_bitstream(bitstream)
     if operation == 'delete_collection':
         ds.delete_all_item(dspaceCollection)
     ds.logout()
