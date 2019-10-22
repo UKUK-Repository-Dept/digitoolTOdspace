@@ -66,12 +66,14 @@ class Dspace:
         )
         #print(response.text)
     
-    def delete_bitstream(self,delete):
-        for d in delete:
-            requests.delete(
-                self.url+'/items/5781/bitstreams/'+str(d),
+    def delete_bitstream(self,bitstream):
+        response = requests.delete(
+                #self.url+'/items/5781/bitstreams/'+str(bitstream),
+                self.url+'/items/5775/',
+                #self.url+'/communities/66',
                 headers=self.headers,
                 )
+        print(response.text)
 
     def handle(self, handle):
         response = requests.get(
@@ -97,13 +99,32 @@ class Dspace:
                     aleph_id = m['value']
             logging.error("{}".format(aleph_id))
             print(metadata['metadata'])
-            #logging.error("Au {}. {}".format(response.text,aleph_id))
             return
         root = ET.fromstring(response.text)
         subtree=list(r for r in root if "id" in r.tag)[0]
         dspace_id = int(subtree.text)
         for filename, filetype, description in files:
             self.post_new_bitstream(dspace_id, filename, filetype, description)
+    
+    def total_size(self):
+        size = 0
+        offset = 0
+        while True:
+            #print(offset, size)
+            params={
+                'offset': offset,
+            }
+            offset += 100
+            response = requests.get(
+                self.url+'/bitstreams',
+                headers=self.headers,
+                params=params,
+                )
+            if len(json.loads(response.text)) == 0:
+                return size
+            for item in json.loads(response.text):
+                size += item['sizeBytes']
+                #print(item)
     
     def delete_all_item(self, collection_id):
         itemSize = 42

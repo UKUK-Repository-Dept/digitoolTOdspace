@@ -62,7 +62,7 @@ def statistic(log):
     for count, tag in statistic:
         print(tag,count)
 
-operations=['handle','new_item','delete_collection','delete_bitstream']
+operations=['handle','new_item','delete_collection','delete_bitstream','total_size']
 @cli.command()
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
 @click.option('--dspace_admin_passwd', prompt='passwd', help='Dspace admin passwd')
@@ -75,6 +75,11 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
                 { "key": "dc.title", "language": "pt_BR", "value": "Od jinud" } 
                 ]}
     ds = Dspace(dspace_admin_username,dspace_admin_passwd)
+    if operation == 'total_size':
+        # pozor na původní balíčky
+        # https://gull.is.cuni.cz/admin/item?administrative-continue=4c773a89622b298c69750d5f7537327a6b343850&submit_bitstreams
+        size = ds.total_size()
+        print(size/1000/1000/1000.0)
     if operation == 'handle':
         handle = arg[0]
         ds.handle(handle) # př "123456789/86"
