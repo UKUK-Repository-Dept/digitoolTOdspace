@@ -14,7 +14,7 @@ import urllib3 #disable warnings about http an gull
 xml_dirname = "DUR01/2019-10-01"
 #xml_dirname = "Cerge/2019-09-05"
 digitool_category = "oai_kval"
-dspaceCollection = 280 
+dspaceCollection = 279 
 
 loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
 @click.group()
@@ -89,6 +89,8 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
         bitstream = arg[0]
         ds.delete_bitstream(bitstream)
     if operation == 'delete_collection':
+        if len(arg) > 0:
+            dspaceColletion = int(arg[0])
         ds.delete_all_item(dspaceCollection)
     ds.logout()
 
@@ -133,15 +135,8 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, log):
     records = aleph.openAleph("dtl_2006.xml")
     
     for oai_id in oai_ids:
-    #for i in range(5):
-    #    oai_id = oai_ids[i]
-    #    print(i)
-    #for oai_id in [oai_ids[4]]:
-        
         digitoolMetadata = dtx.get_metadata(oai_id)['marc']
         aleph_id = aleph.normalise(digitoolMetadata['001'])
-        #if aleph_id != '000732536':
-        #    continue
         originalMetadata = records[aleph_id]
         convertItem(dtx, categorize, oai_id, originalMetadata, ds, run)
     ds.logout()

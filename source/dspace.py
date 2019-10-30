@@ -64,16 +64,42 @@ class Dspace:
             verify=False,
             params=params,
         )
-        #print(response.text)
+        tree = ET.fromstring(response.text)
+        for field in tree:
+            if field.tag == 'id':
+                bitstream_id = field.text
+        if 'Posudek' in description:
+            response = requests.get(
+                self.url+'/bitstreams/'+str(bitstream_id)+'/policy', 
+                headers=self.headers, 
+                )
+            policy_id = json.loads(response.text)[0]['id']
+            response = requests.delete(
+                self.url+'/bitstreams/'+str(bitstream_id)+'/policy/'+str(policy_id), 
+                headers=self.headers, 
+                )
+            response = requests.post(
+                self.url+'/bitstream/'+str(bitstream_id)+'/policy', 
+                headers=self.headers,
+                json=[{
+                    'action':'WITHDRAWN_READ',
+                    "epersonId":-1,
+                    "groupId":0,
+                    "resourceId":bitstream_id,
+                    "resourceType":"bitstream",
+                    "rpDescription":"Need check for personal data.",
+                    "rpName":"review",
+                    "rpType":"TYPE_CUSTOM",
+                    "startDate":'1111-01-01',
+                    "endDate":'9999-01-09',
+                    }], 
+                )
     
     def delete_bitstream(self,bitstream):
         response = requests.delete(
-                #self.url+'/items/5781/bitstreams/'+str(bitstream),
-                self.url+'/items/5775/',
-                #self.url+'/communities/66',
+                self.url+'/bitstreams/'+str(bitstream),
                 headers=self.headers,
                 )
-        print(response.text)
 
     def handle(self, handle):
         response = requests.get(
@@ -126,6 +152,24 @@ class Dspace:
                 size += item['sizeBytes']
                 #print(item)
     
+    def delete_item(self, item_id):
+        response = requests.get(
+            self.url+'/items/'+str(item_id)+'/bitstreams', 
+            headers=self.headers,
+            )
+        for item in json.loads(response.text):
+            self.delete_bitstream(item['id'])
+        response = requests.delete(
+                self.url+'/items/'+str(item_id)+'/metadata',
+                headers=self.headers,
+                )
+        response = requests.delete(
+                self.url+'/items/'+str(item_id),
+                headers=self.headers,
+                )
+
+
+    
     def delete_all_item(self, collection_id):
         itemSize = 42
         while itemSize > 0:
@@ -136,9 +180,11 @@ class Dspace:
             if response.status_code == 404:
                 logging.error("No collection {}.".format(collection_id))
                 return
+            print(response.text)
             itemSize = len(json.loads(response.text))
             for item in json.loads(response.text):
-                requests.delete(
-                    self.url+'/items/'+str(item['id']), 
-                    headers=self.headers,
-                )
+                self.delete_item(item['id'])
+                #requests.delete(
+                #    self.url+'/items/'+str(item['id']), 
+                #    headers=self.headers,
+                #)
