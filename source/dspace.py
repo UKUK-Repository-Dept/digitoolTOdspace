@@ -180,11 +180,6 @@ class Dspace:
             if response.status_code == 404:
                 logging.error("No collection {}.".format(collection_id))
                 return
-            print(response.text)
             itemSize = len(json.loads(response.text))
             for item in json.loads(response.text):
                 self.delete_item(item['id'])
-                #requests.delete(
-                #    self.url+'/items/'+str(item['id']), 
-                #    headers=self.headers,
-                #)
