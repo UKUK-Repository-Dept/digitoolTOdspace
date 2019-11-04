@@ -10,6 +10,7 @@ import aleph
 import problematicGroup as bugs
 import logging
 import urllib3 #disable warnings about http an gull
+import time
 
 xml_dirname = "DUR01/2019-10-01"
 #xml_dirname = "Cerge/2019-09-05"
@@ -134,11 +135,16 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, log):
     ds = Dspace(dspace_admin_username,dspace_admin_passwd,xml_dirname=xml_dirname)
     records = aleph.openAleph("dtl_2006.xml")
     
+    count = 0
+    #for oai_id in oai_ids:
     for oai_id in oai_ids:
+        count += 1
         digitoolMetadata = dtx.get_metadata(oai_id)['marc']
         aleph_id = aleph.normalise(digitoolMetadata['001'])
         originalMetadata = records[aleph_id]
         convertItem(dtx, categorize, oai_id, originalMetadata, ds, run)
+        if count % 1000 == 0:
+            time.sleep(1)
     ds.logout()
 
 if __name__ == '__main__':

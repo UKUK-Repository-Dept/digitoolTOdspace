@@ -3,10 +3,12 @@ import json
 import xml.etree.ElementTree as ET
 import os
 import logging
-            
+import time
+
 
 class Dspace:
     url = "https://gull.is.cuni.cz/rest"
+    #url = "https://dspace.cuni.cz/rest"
     headers= { 
         "content-type": "application/json",
         }
@@ -151,6 +153,7 @@ class Dspace:
             for item in json.loads(response.text):
                 size += item['sizeBytes']
                 #print(item)
+            time.sleep(0.1)
     
     def delete_item(self, item_id):
         response = requests.get(
@@ -180,6 +183,11 @@ class Dspace:
             if response.status_code == 404:
                 logging.error("No collection {}.".format(collection_id))
                 return
+            print(response.text)
             itemSize = len(json.loads(response.text))
             for item in json.loads(response.text):
                 self.delete_item(item['id'])
+                #requests.delete(
+                #    self.url+'/items/'+str(item['id']), 
+                #    headers=self.headers,
+                #)
