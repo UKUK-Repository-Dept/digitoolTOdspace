@@ -102,6 +102,10 @@ def convertItem(dtx, categorize, oai_id, originalMetadata, ds, run):
     attachements = list(dtx.get_attachements(oai_id))
     fc = filenameConvertor.FilenameConvertor(categorize)
     attachementsDescription = fc.generate_description(oai_id,attachements)
+    
+    if collection == 1:
+        raise Exception('Unknown faculty')
+
     if False:
         click.clear()
         print("converting ",oai_id)

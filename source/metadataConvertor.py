@@ -42,9 +42,6 @@ def getTopic(categorize, oai_id, topic, metadata):
         if topic in personTopics and not comparePeople(result1,result2):
             categorize.categorize_item(oai_id,error_msg)
         elif topic not in personTopics and result1 and result1 != result2:
-            if topic in ['faculty']:
-                #print(oai_id,error_msg)
-                continue #TODO zkonrolovat ze Iry opravila
             categorize.categorize_item(oai_id,error_msg)
         result1 = result2
         tag1 = tag2
@@ -108,8 +105,6 @@ def convertMarc(categorize, oai_id, metadataOrigin):
 
 def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     metadataReturn = []
-    if metadataOrigin == None:
-        return metadataReturn, 'au' #TODO chybejici 502
 
     lang = getTopic(categorize, oai_id, 'lang', metadataOrigin)
     if not lang:
@@ -163,7 +158,13 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     faculty = getTopic(categorize, oai_id, 'faculty', metadataOrigin)
     assert faculty
     metadataReturn.append({ "key": "dc.description.faculty", "language": 'cs_CZ', "value": faculty },)
-    collection = catalogue.facultyToCollection[faculty] 
+    
+    if degree in ["Bakalářská práce", "Diplomová práce", "Rigorózní práce", "Dizertační práce"]:
+        collection = catalogue.facultyToCollection[faculty][0]
+    elif degree in ["Habilitační práce"]:
+        collection = catalogue.facultyToCollection[faculty][1]
+    else: 
+        raise Exception("Need degree", degree)
     
     deparment = getTopic(categorize, oai_id, 'deparment', metadataOrigin)
     if deparment:
