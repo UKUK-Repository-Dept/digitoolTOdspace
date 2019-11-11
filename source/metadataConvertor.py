@@ -103,7 +103,7 @@ def convertMarc(categorize, oai_id, metadataOrigin):
     return metadata
        
 
-def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
+def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
     metadataReturn = []
 
     lang = getTopic(categorize, oai_id, 'lang', metadataOrigin)
@@ -160,9 +160,9 @@ def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     metadataReturn.append({ "key": "dc.description.faculty", "language": 'cs_CZ', "value": faculty },)
     
     if degree in ["Bakalářská práce", "Diplomová práce", "Rigorózní práce", "Dizertační práce"]:
-        collection = catalogue.facultyToCollection[faculty][0]
+        collection = catalogue.facultyToCollection[server][faculty][0]
     elif degree in ["Habilitační práce"]:
-        collection = catalogue.facultyToCollection[faculty][1]
+        collection = catalogue.facultyToCollection[server][faculty][1]
     else: 
         raise Exception("Need degree", degree)
     

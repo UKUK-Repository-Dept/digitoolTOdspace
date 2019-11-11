@@ -7,16 +7,15 @@ import time
 
 
 class Dspace:
-    url = "https://gull.is.cuni.cz/rest"
-    #url = "https://dspace.cuni.cz/rest"
     headers= { 
         "content-type": "application/json",
         }
 
 
-    def __init__(self, user, passwd, xml_dirname=""):
+    def __init__(self, server, user, passwd, xml_dirname=""):
         self.user = user 
         self.passwd = passwd
+        self.url = "https://"+server+".is.cuni.cz/rest"
         self.login = {
             'email': self.user,
             'password': self.passwd
@@ -121,7 +120,7 @@ class Dspace:
             headers=self.headers,
             json=metadata, 
             )
-        if response.status_code == 500:
+        if response.status_code in  [500,404]:
             for m in metadata['metadata']:
                 if m['key'] == 'dc.identifier.aleph':
                     aleph_id = m['value']

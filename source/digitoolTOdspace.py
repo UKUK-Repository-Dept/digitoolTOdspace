@@ -15,7 +15,8 @@ import time
 xml_dirname = "DUR01/2019-10-01"
 #xml_dirname = "Cerge/2019-09-05"
 digitool_category = "oai_kval"
-dspaceCollection = 279 
+server = "gull"
+#server = "dodo"
 
 loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
 @click.group()
@@ -63,7 +64,7 @@ def statistic(log):
     for count, tag in statistic:
         print(tag,count)
 
-operations=['handle','new_item','delete_collection','delete_bitstream','total_size']
+operations=['handle','delete_collection','delete_bitstream','total_size']
 @cli.command()
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
 @click.option('--dspace_admin_passwd', prompt='passwd', help='Dspace admin passwd')
@@ -75,7 +76,7 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
                 { "key": "dc.description.abstract", "language": "pt_BR", "value": "ABSTRACT" }, 
                 { "key": "dc.title", "language": "pt_BR", "value": "Od jinud" } 
                 ]}
-    ds = Dspace(dspace_admin_username,dspace_admin_passwd)
+    ds = Dspace(server,dspace_admin_username,dspace_admin_passwd)
     if operation == 'total_size':
         # pozor na původní balíčky
         # https://gull.is.cuni.cz/admin/item?administrative-continue=4c773a89622b298c69750d5f7537327a6b343850&submit_bitstreams
@@ -84,27 +85,28 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
     if operation == 'handle':
         handle = arg[0]
         ds.handle(handle) # př "123456789/86"
-    if operation == 'new_item':
-        ds.new_item(dspaceCollection,metadata,[("lorem-ipsum.pdf",'application/pdf','soubor')])
     if operation == 'delete_bitstream':
         bitstream = arg[0]
         ds.delete_bitstream(bitstream)
     if operation == 'delete_collection':
-        if len(arg) > 0:
-            dspaceColletion = int(arg[0])
-        ds.delete_all_item(dspaceCollection)
+        ds.delete_all_item(int(arg[0]))
     ds.logout()
 
 def convertItem(dtx, categorize, oai_id, originalMetadata, ds, run):
     
     metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, originalMetadata)
-    convertedMetadata, collection = metadataConvertor.createDC(categorize, oai_id, metadataTopic, originalMetadata)
+    convertedMetadata, collection = metadataConvertor.createDC(server,categorize, oai_id, metadataTopic, originalMetadata)
     attachements = list(dtx.get_attachements(oai_id))
     fc = filenameConvertor.FilenameConvertor(categorize)
     attachementsDescription = fc.generate_description(oai_id,attachements)
     
-    if collection == 1:
+    if collection == None:
         raise Exception('Unknown faculty')
+    
+    print(collection)
+    if collection not in [254, 282]:
+
+        return #TODO testuju jen lekarskou
 
     if False:
         click.clear()
@@ -119,9 +121,7 @@ def convertItem(dtx, categorize, oai_id, originalMetadata, ds, run):
         print(attachementsDescription)
         #checked = click.confirm("Is converting OK?", default=True)
     if run:
-        #ds.new_item(collection,convertedMetadata,attachementsDescription) #to zaverecne
-        ds.new_item(dspaceCollection,convertedMetadata,attachementsDescription)
-        #ds.new_item(dspaceCollection,convertedMetadata,[("lorem-ipsum.pdf","application/pdf","Dokument")])
+        ds.new_item(collection,convertedMetadata,attachementsDescription)
 
 @cli.command()
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
@@ -136,7 +136,7 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, log):
     dtx = DigitoolXML(xml_dirname)
     oai_ids = dtx.getList()
     categorize = Categorize(dtx)
-    ds = Dspace(dspace_admin_username,dspace_admin_passwd,xml_dirname=xml_dirname)
+    ds = Dspace(server,dspace_admin_username,dspace_admin_passwd,xml_dirname=xml_dirname)
     records = aleph.openAleph("dtl_2006.xml")
     
     count = 0
