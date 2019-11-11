@@ -69,32 +69,56 @@ class Dspace:
         for field in tree:
             if field.tag == 'id':
                 bitstream_id = field.text
-        if 'Posudek' in description:
-            response = requests.get(
-                self.url+'/bitstreams/'+str(bitstream_id)+'/policy', 
-                headers=self.headers, 
-                )
-            policy_id = json.loads(response.text)[0]['id']
-            response = requests.delete(
-                self.url+'/bitstreams/'+str(bitstream_id)+'/policy/'+str(policy_id), 
-                headers=self.headers, 
-                )
-            response = requests.post(
-                self.url+'/bitstream/'+str(bitstream_id)+'/policy', 
-                headers=self.headers,
-                json=[{
-                    'action':'WITHDRAWN_READ',
-                    "epersonId":-1,
-                    "groupId":0,
-                    "resourceId":bitstream_id,
-                    "resourceType":"bitstream",
-                    "rpDescription":"Need check for personal data.",
-                    "rpName":"review",
-                    "rpType":"TYPE_CUSTOM",
-                    "startDate":'1111-01-01',
-                    "endDate":'9999-01-09',
-                    }], 
-                )
+        # Delete default policy
+        response = requests.get(
+            self.url+'/bitstreams/'+str(bitstream_id)+'/policy', 
+            headers=self.headers, 
+            )
+        policy_id = json.loads(response.text)[0]['id']
+        response = requests.delete(
+            self.url+'/bitstreams/'+str(bitstream_id)+'/policy/'+str(policy_id), 
+            headers=self.headers, 
+            )
+
+        reviewPolicy = [{
+            'action':'READ',
+            "epersonId":-1,
+            "groupId":0,
+            "resourceId":bitstream_id,
+            "resourceType":"bitstream",
+            "rpDescription":"Need check for personal data.",
+            "rpName":"review",
+            "rpType":"TYPE_CUSTOM",
+            "startDate":'1111-01-01',
+            "endDate":'9999-01-09',
+            }]
+       
+        group = 76 # gull IPshibAuthenticatedUniMember
+        textPolicy = [{
+            'action':'READ',
+            "epersonId":-1,
+            "groupId":group,
+            "resourceId":bitstream_id,
+            "resourceType":"bitstream",
+            "rpDescription":"Thesis can by viewd only by people signed by Shibbolet and from specific IP address.",
+            "rpName":"thesis",
+            "rpType":"TYPE_CUSTOM",
+            "startDate":'1111-01-01',
+            "endDate":'9999-01-09',
+            }] 
+
+        #if 'Posudek' in description:
+        if 'loha' in description:
+            policy = reviewPolicy
+        else:
+            policy = textPolicy
+
+        policy = [{"id":317127,"action":"READ","epersonId":-1,"groupId":0,"resourceId":47166,"resourceType":"bitstream","rpDescription":None,"rpName":None,"rpType":"TYPE_INHERITED","startDate":None,"endDate":None}]
+        response = requests.post(
+            self.url+'/bitstream/'+str(bitstream_id)+'/policy', 
+            headers=self.headers,
+            json=policy,
+            )
     
     def delete_bitstream(self,bitstream):
         response = requests.delete(

@@ -11,6 +11,7 @@ import problematicGroup as bugs
 import logging
 import urllib3 #disable warnings about http an gull
 import time
+from sap import createArchive
 
 xml_dirname = "DUR01/2019-10-01"
 #xml_dirname = "Cerge/2019-09-05"
@@ -92,7 +93,7 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
         ds.delete_all_item(int(arg[0]))
     ds.logout()
 
-def convertItem(dtx, categorize, oai_id, originalMetadata, ds, run):
+def convertItem(dtx, categorize, oai_id, originalMetadata, ds, run, archive):
     
     metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, originalMetadata)
     convertedMetadata, collection = metadataConvertor.createDC(server,categorize, oai_id, metadataTopic, originalMetadata)
@@ -103,10 +104,8 @@ def convertItem(dtx, categorize, oai_id, originalMetadata, ds, run):
     if collection == None:
         raise Exception('Unknown faculty')
     
-    print(collection)
     if collection not in [254, 282]:
-
-        return #TODO testuju jen lekarskou
+        return #TODO testuju jen husitskou
 
     if False:
         click.clear()
@@ -122,13 +121,16 @@ def convertItem(dtx, categorize, oai_id, originalMetadata, ds, run):
         #checked = click.confirm("Is converting OK?", default=True)
     if run:
         ds.new_item(collection,convertedMetadata,attachementsDescription)
+    if archive:
+        createArchive(convertedMetadata,attachementsDescription)
 
 @cli.command()
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
 @click.option('--dspace_admin_passwd', prompt='passwd', help='Dspace admin passwd')
-@click.option('--run/--no-run', default=False, help='Pushih converted data to server')
+@click.option('--run/--no-run', default=False, help='Push to converted data to server')
+@click.option('--archive/--no-archive', default=False, help='Create Simlpe Archive Formate')
 @click.option('--log', default='error', type=click.Choice(loggingMap.keys()), help='Logging level')
-def convert(dspace_admin_passwd, dspace_admin_username, run, log):
+def convert(dspace_admin_passwd, dspace_admin_username, run, archive, log):
     #TODO aleph, weird_attachmement by měli být nulové a ostatní by tak měli zustat
     logging.getLogger().setLevel(loggingMap[log])
     if log == 'error':
@@ -146,7 +148,7 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, log):
         digitoolMetadata = dtx.get_metadata(oai_id)['marc']
         aleph_id = aleph.normalise(digitoolMetadata['001'])
         originalMetadata = records[aleph_id]
-        convertItem(dtx, categorize, oai_id, originalMetadata, ds, run)
+        convertItem(dtx, categorize, oai_id, originalMetadata, ds, run, archive)
         if count % 1000 == 0:
             time.sleep(1)
     ds.logout()
