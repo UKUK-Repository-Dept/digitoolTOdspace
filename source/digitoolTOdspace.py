@@ -122,7 +122,7 @@ def convertItem(dtx, categorize, oai_id, originalMetadata, ds, run, archive):
     if run:
         ds.new_item(collection,convertedMetadata,attachementsDescription)
     if archive:
-        createArchive(convertedMetadata,attachementsDescription)
+        createArchive(oai_id, xml_dirname, convertedMetadata, attachementsDescription)
 
 @cli.command()
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
