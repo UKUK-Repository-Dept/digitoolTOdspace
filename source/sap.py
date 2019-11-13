@@ -18,15 +18,121 @@ def createArchive(oai_id, xml_dirname, metadata, attachements):
     
     m = Metadata()
     for row in metadata['metadata']:
-        key = row['key']
-        if key.split('.')[0] == 'dc':
-            pass
-        elif key.split('.')[0] == 'thesis':
-            #print(key)
-            pass
+        key = row['key'].split('.')
+        if key[0] == 'dc':
+            if key[1] == 'language' and len(key) == 2:
+                ET.SubElement(m.dc, "dcvalue", 
+                        element='language', 
+                        qualifier='none', 
+                        language = row['language']
+                        ).text = row['value']
+            elif key[1] == 'type' and len(key) == 2:
+                ET.SubElement(m.dc, "dcvalue", 
+                        element='type', 
+                        qualifier='none', 
+                        language = row['language']
+                        ).text = row['value']
+            elif key[1] == 'contributor' and len(key) == 2:
+                ET.SubElement(m.dc, "dcvalue", 
+                        element='contributor', 
+                        qualifier='none', 
+                        ).text = row['value']
+            elif key[1] == 'title' and len(key) == 2:
+                ET.SubElement(m.dc, "dcvalue", 
+                        element='title', 
+                        qualifier='none', 
+                        language = row['language']
+                        ).text = row['value']
+            elif key[1] == 'subject' and len(key) == 2:
+                ET.SubElement(m.dc, "dcvalue", 
+                        element='subject', 
+                        qualifier='none', 
+                        langueage = row['language']
+                        ).text = row['value']
+            elif key[1] == 'language' and key[2] == 'iso':
+                ET.SubElement(m.dc, "dcvalue", 
+                        element='language', 
+                        qualifier='iso'
+                        ).text = row['value']
+            elif key[1] == 'title' and key[2] == 'translated':
+                ET.SubElement(m.dc, "dcvalue", 
+                        element='language', 
+                        qualifier='translated',
+                        langueage = row['language']
+                        ).text = row['value']
+            elif key[1] == 'identifier' and key[2] == 'aleph':
+                ET.SubElement(m.dc, "dcvalue", 
+                        element='identifier', 
+                        qualifier='aleph'
+                        ).text = row['value']
+            elif key[1] == 'description' and key[2] == 'abstract':
+                ET.SubElement(m.dc, "dcvalue", 
+                        element='description', 
+                        qualifier='abstract',
+                        language = row['language']
+                        ).text = row['value']
+            elif key[1] == 'description' and key[2] == 'faculty':
+                ET.SubElement(m.dc, "dcvalue", 
+                        element='description', 
+                        qualifier='faculty',
+                        language = row['language']
+                        ).text = row['value']
+            elif key[1] == 'subject' and key[2] == 'czenas':
+                ET.SubElement(m.dc, "dcvalue", 
+                        element='subject', 
+                        qualifier='czenas',
+                        language = row['language']
+                        ).text = row['value']
+            elif key[1] == 'contributor' and key[2] == 'author':
+                ET.SubElement(m.dc, "dcvalue", 
+                        element='contributor', 
+                        qualifier='author'
+                        ).text = row['value']
+            elif key[1] == 'contributor' and key[2] == 'referee':
+                ET.SubElement(m.dc, "dcvalue", 
+                        element='contributor', 
+                        qualifier='referee'
+                        ).text = row['value']
+            elif key[1] == 'contributor' and key[2] == 'advisor':
+                ET.SubElement(m.dc, "dcvalue", 
+                        element='contributor', 
+                        qualifier='advisor'
+                        ).text = row['value']
+            elif key[1] == 'date' and key[2] == 'issued':
+                ET.SubElement(m.dc, "dcvalue", 
+                        element='date', 
+                        qualifier='issued'
+                        ).text = row['value']
+            else:
+                print(key)
+                #TODO
+                #raise Exception("Not implemented")
+        elif key[0] == 'thesis':
+            if key[1] == 'degree' and key[2] == 'name':
+                ET.SubElement(m.thesis, "dcvalue", 
+                        element='degree', 
+                        qualifier='name', 
+                        langueage = row['language']
+                        ).text = row['value']
+            elif key[1] == 'degree' and key[2] == 'discipline':
+                ET.SubElement(m.thesis, "dcvalue", 
+                        element='degree', 
+                        qualifier='discipline', 
+                        langueage = row['language']
+                        ).text = row['value']
+            elif key[1] == 'degree' and key[2] == 'program':
+                ET.SubElement(m.thesis, "dcvalue", 
+                        element='degree', 
+                        qualifier='program', 
+                        langueage = row['language']
+                        ).text = row['value']
+            else:
+                print(key)
+                #TODO
+                #raise Exception("Not implemented")
         else:
             raise Exception('Key {} do not has a category'.format(key))
-    print(m)
+    #print(m)
 
     return
 
