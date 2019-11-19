@@ -1,17 +1,23 @@
 import os
 import xml.etree.cElementTree as ET
+import shutil
 
 class Metadata:
     def __init__(self):
         self.dc = ET.Element("dublin_core")
         self.thesis = ET.Element("dublin_core", schema="thesis")
-        #tree = ET.ElementTree(self.dc)
-        #tree.write('hui')
 
     def __str__(self):
         s = ET.tostring(self.dc).decode() + "\n"
         s += ET.tostring(self.thesis).decode()
         return s
+
+    def save(self, directory):
+        tree = ET.ElementTree(self.dc)
+        tree.write(directory+'/dublin_core.xml')
+        tree = ET.ElementTree(self.thesis)
+        tree.write(directory+'/metadata_thesis.xml')
+
 
 def createArchive(oai_id, xml_dirname, metadata, attachements):
     outputDirectory = 'output/' + str(oai_id)
@@ -47,7 +53,7 @@ def createArchive(oai_id, xml_dirname, metadata, attachements):
                 ET.SubElement(m.dc, "dcvalue", 
                         element='subject', 
                         qualifier='none', 
-                        langueage = row['language']
+                        language = row['language']
                         ).text = row['value']
             elif key[1] == 'language' and key[2] == 'iso':
                 ET.SubElement(m.dc, "dcvalue", 
@@ -56,9 +62,9 @@ def createArchive(oai_id, xml_dirname, metadata, attachements):
                         ).text = row['value']
             elif key[1] == 'title' and key[2] == 'translated':
                 ET.SubElement(m.dc, "dcvalue", 
-                        element='language', 
+                        element='title', 
                         qualifier='translated',
-                        langueage = row['language']
+                        language = row['language']
                         ).text = row['value']
             elif key[1] == 'identifier' and key[2] == 'aleph':
                 ET.SubElement(m.dc, "dcvalue", 
@@ -104,45 +110,40 @@ def createArchive(oai_id, xml_dirname, metadata, attachements):
                         qualifier='issued'
                         ).text = row['value']
             else:
-                print(key)
-                #TODO
-                #raise Exception("Not implemented")
+                raise Exception("Not implemented")
         elif key[0] == 'thesis':
             if key[1] == 'degree' and key[2] == 'name':
                 ET.SubElement(m.thesis, "dcvalue", 
                         element='degree', 
                         qualifier='name', 
-                        langueage = row['language']
+                        language = row['language']
                         ).text = row['value']
             elif key[1] == 'degree' and key[2] == 'discipline':
                 ET.SubElement(m.thesis, "dcvalue", 
                         element='degree', 
                         qualifier='discipline', 
-                        langueage = row['language']
+                        language = row['language']
                         ).text = row['value']
             elif key[1] == 'degree' and key[2] == 'program':
                 ET.SubElement(m.thesis, "dcvalue", 
                         element='degree', 
                         qualifier='program', 
-                        langueage = row['language']
+                        language = row['language']
                         ).text = row['value']
             else:
-                print(key)
-                #TODO
-                #raise Exception("Not implemented")
+                raise Exception("Not implemented")
         else:
             raise Exception('Key {} do not has a category'.format(key))
-    #print(m)
-
-    return
 
     if not os.path.exists(outputDirectory):
         os.mkdir(outputDirectory)
     
+    m.save(outputDirectory)
+
     f = open(outputDirectory+'/contents','w')
     for filename, filetype, description in attachements:
         filepath = xml_dirname + '/streams/' + filename
-        os.system('cp '+filepath+' '+outputDirectory)
+        os.system("cp '"+filepath+"' "+outputDirectory)
         row = filename + '\t'
         row += 'bundle:ORIGINAL\t'
         row += 'permissits:-r '
@@ -154,4 +155,6 @@ def createArchive(oai_id, xml_dirname, metadata, attachements):
         row += '\n'
         f.write(row)
     f.close()
+
+    #shutil.make_archive(outputDirectory, 'zip', outputDirectory)
 

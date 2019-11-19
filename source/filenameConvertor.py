@@ -75,7 +75,7 @@ class FilenameConvertor:
         elif len(mainFiles) == 0:
             ret = []
             for filename, filetype, trash in attachement:
-                ret.append((filename, filename, ret))
+                ret.append((filename, filename, "Text práce"))
             return ret
         elif len(mainFiles) == 1:
             filename, filetype = mainFiles[0]

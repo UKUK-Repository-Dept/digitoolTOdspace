@@ -104,8 +104,8 @@ def convertItem(dtx, categorize, oai_id, originalMetadata, ds, run, archive):
     if collection == None:
         raise Exception('Unknown faculty')
     
-    if collection not in [254, 282]:
-        return #TODO testuju jen husitskou
+    #if collection not in [254, 282]:
+    #    return #TODO testuju jen husitskou
 
     if False:
         click.clear()
@@ -123,6 +123,7 @@ def convertItem(dtx, categorize, oai_id, originalMetadata, ds, run, archive):
         ds.new_item(collection,convertedMetadata,attachementsDescription)
     if archive:
         createArchive(oai_id, xml_dirname, convertedMetadata, attachementsDescription)
+
 
 @cli.command()
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
