@@ -93,7 +93,7 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
         ds.delete_all_item(int(arg[0]))
     ds.logout()
 
-def convertItem(dtx, categorize, oai_id, originalMetadata, ds, run, archive):
+def convertItem(dtx, categorize, oai_id, originalMetadata, ds, f, run, archive):
     
     metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, originalMetadata)
     convertedMetadata, collection = metadataConvertor.createDC(server,categorize, oai_id, metadataTopic, originalMetadata)
@@ -123,6 +123,7 @@ def convertItem(dtx, categorize, oai_id, originalMetadata, ds, run, archive):
         ds.new_item(collection,convertedMetadata,attachementsDescription)
     if archive:
         createArchive(oai_id, xml_dirname, convertedMetadata, attachementsDescription)
+        f.write("{} {}\n".format(oai_id, collection))
 
 
 @cli.command()
@@ -141,7 +142,8 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, archive, log):
     categorize = Categorize(dtx)
     ds = Dspace(server,dspace_admin_username,dspace_admin_passwd,xml_dirname=xml_dirname)
     records = aleph.openAleph("dtl_2006.xml")
-    
+    f = open('output/'+server,'w')
+
     count = 0
     #for oai_id in oai_ids:
     for oai_id in oai_ids:
@@ -149,10 +151,11 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, archive, log):
         digitoolMetadata = dtx.get_metadata(oai_id)['marc']
         aleph_id = aleph.normalise(digitoolMetadata['001'])
         originalMetadata = records[aleph_id]
-        convertItem(dtx, categorize, oai_id, originalMetadata, ds, run, archive)
+        convertItem(dtx, categorize, oai_id, originalMetadata, ds, f, run, archive)
         if count % 1000 == 0:
             time.sleep(1)
     ds.logout()
+    f.close()
 
 if __name__ == '__main__':
     cli()

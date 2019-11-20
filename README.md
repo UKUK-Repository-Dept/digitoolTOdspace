@@ -22,3 +22,8 @@ mkdir -p $FOLDER/$(date +%F)
 scp -r novotj@dingo.is.cuni.cz:/home/novotj/ls_streams.txt $FOLDER/$(date +%F)
 scp -r novotj@dingo.is.cuni.cz:/exlibris/dtl/j3_1/digitool/home/profile/export/export_Jitka/$FOLDER/digital_entities $FOLDER/$(date +%F)/digital_entities
 ```
+
+Import on gull
+```
+cat output/gull | while read -r id col ; do /opt/dspace/bin/dspace import -a -e jitkaucw@gmail.com -t /dspace/kvalifikacni2006/$id.zip -c $col /tmp/mapfile/$id; done
+```

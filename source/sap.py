@@ -130,6 +130,12 @@ def createArchive(oai_id, xml_dirname, metadata, attachements):
                         qualifier='program', 
                         language = row['language']
                         ).text = row['value']
+            elif key[1] == 'degree' and key[2] == 'department':
+                ET.SubElement(m.thesis, "dcvalue", 
+                        element='degree', 
+                        qualifier='department', 
+                        language = row['language']
+                        ).text = row['value']
             else:
                 raise Exception("Not implemented")
         else:
