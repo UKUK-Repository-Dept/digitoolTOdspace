@@ -124,6 +124,9 @@ def convertItem(dtx, categorize, oai_id, originalMetadata, ds, f, run, archive):
     if archive:
         createArchive(oai_id, xml_dirname, convertedMetadata, attachementsDescription)
         f.write("{} {}\n".format(oai_id, collection))
+    for row in convertedMetadata['metadata']:
+        if row['key'] == 'dc.description.faculty':
+            return row['value']
 
 
 @cli.command()
@@ -131,8 +134,9 @@ def convertItem(dtx, categorize, oai_id, originalMetadata, ds, f, run, archive):
 @click.option('--dspace_admin_passwd', prompt='passwd', help='Dspace admin passwd')
 @click.option('--run/--no-run', default=False, help='Push to converted data to server')
 @click.option('--archive/--no-archive', default=False, help='Create Simlpe Archive Formate')
+@click.option('--facultysum/--no-facultysum', default=False, help='Create Simlpe Archive Formate')
 @click.option('--log', default='error', type=click.Choice(loggingMap.keys()), help='Logging level')
-def convert(dspace_admin_passwd, dspace_admin_username, run, archive, log):
+def convert(dspace_admin_passwd, dspace_admin_username, run, archive, log, facultysum):
     #TODO aleph, weird_attachmement by měli být nulové a ostatní by tak měli zustat
     logging.getLogger().setLevel(loggingMap[log])
     if log == 'error':
@@ -146,16 +150,24 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, archive, log):
 
     count = 0
     #for oai_id in oai_ids:
+    facultysum = {}
     for oai_id in oai_ids:
         count += 1
         digitoolMetadata = dtx.get_metadata(oai_id)['marc']
         aleph_id = aleph.normalise(digitoolMetadata['001'])
         originalMetadata = records[aleph_id]
-        convertItem(dtx, categorize, oai_id, originalMetadata, ds, f, run, archive)
+        faculty = convertItem(dtx, categorize, oai_id, originalMetadata, ds, f, run, archive)
+        if faculty not in facultysum:
+            facultysum[faculty] = 1
+        else:
+            facultysum[faculty] +=1
         if count % 1000 == 0:
             time.sleep(1)
     ds.logout()
     f.close()
+
+    if facultysum:
+        print(facultysum)
 
 if __name__ == '__main__':
     cli()
