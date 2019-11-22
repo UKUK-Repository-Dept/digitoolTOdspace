@@ -107,13 +107,17 @@ def convertItem(dtx, categorize, oai_id, originalMetadata, ds, f, run, archive):
     #if collection not in [254, 282]:
     #    return #TODO testuju jen husitskou
 
+    if collection == 248:
+        for row in convertedMetadata['metadata']:
+            if row['key'] == 'dc.title':
+                print(row['value'])
     if False:
         click.clear()
-        print("converting ",oai_id)
-        print("\noriginalMetadata:")
-        for key in originalMetadata.keys():
-            print(key,originalMetadata[key])
-        print("\nconvertedMetadata:")
+        #print("converting ",oai_id)
+        #print("\noriginalMetadata:")
+        #for key in originalMetadata.keys():
+        #    print(key,originalMetadata[key])
+        #print("\nconvertedMetadata:")
         for row in convertedMetadata['metadata']:
             print(row)
         print("\nattachements:")

@@ -1,3 +1,27 @@
+
+fakulta: má být, je
+
+'Lékařská fakulta, 1': 1, 2 (testovaci kniha - cajk)
+'Lékařská fakulta, 2.': 1, 1
+'Lékařská fakulta, 3.': 1, 1
+'Evangelická teologická fakulta': 32,  
+'Komenského evangelická bohoslovecká fakulta': 21, 
+sum 43, 49
+'Fakulta humanitních studií': 50, 50 
+'Fakulta sociálních věd': 211, 
+'Fakulta sociálních věd a publicistiky': 2, 
+sum: 213, 213 
+'Filozofická fakulta': 2881, 2881 
+'Husova československá evangelická bohoslovecká fakulta': 10, 
+'Husova evangelická bohoslovecká fakulta': 1, 
+'Husova československá bohoslovecká fakulta': 1,
+sum: 12, 14 (ty dalši jsou duplicity z testovani)
+'Matematicko-fyzikální fakulta': 14, 14 
+'Pedagogická fakulta': 7, 7
+'Právnická fakulta': 8, 8
+
+
+
 dc.language 56895 Problematika d&#283;t&#237; se slab&#253;m &#345;&#237;zen&#237;m v rodinn&#233; v&#253;chov&#283;
 dc.language TODO
 
