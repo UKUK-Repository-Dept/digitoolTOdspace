@@ -93,47 +93,6 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
         ds.delete_all_item(int(arg[0]))
     ds.logout()
 
-def convertItem(dtx, categorize, oai_id, originalMetadata, ds, f, run, archive):
-    
-    metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, originalMetadata)
-    convertedMetadata, collection = metadataConvertor.createDC(server,categorize, oai_id, metadataTopic, originalMetadata)
-    attachements = list(dtx.get_attachements(oai_id))
-    fc = filenameConvertor.FilenameConvertor(categorize)
-    attachementsDescription = fc.generate_description(oai_id,attachements)
-    
-    if collection == None:
-        raise Exception('Unknown faculty')
-    
-    #if collection not in [254, 282]:
-    #    return #TODO testuju jen husitskou
-
-    if collection == 248:
-        for row in convertedMetadata['metadata']:
-            if row['key'] == 'dc.title':
-                print(row['value'])
-            if row['key'] == 'dc.description.faculty':
-                print(row['value'])
-    if False:
-        click.clear()
-        #print("converting ",oai_id)
-        #print("\noriginalMetadata:")
-        #for key in originalMetadata.keys():
-        #    print(key,originalMetadata[key])
-        #print("\nconvertedMetadata:")
-        for row in convertedMetadata['metadata']:
-            print(row)
-        print("\nattachements:")
-        print(attachementsDescription)
-        #checked = click.confirm("Is converting OK?", default=True)
-    if run:
-        ds.new_item(collection,convertedMetadata,attachementsDescription)
-    if archive:
-        createArchive(oai_id, xml_dirname, convertedMetadata, attachementsDescription)
-        f.write("{} {}\n".format(oai_id, collection))
-    for row in convertedMetadata['metadata']:
-        if row['key'] == 'dc.description.faculty':
-            return row['value']
-
 
 @cli.command()
 @click.option('--dspace_admin_username', prompt='email', help='Dspace admin email')
@@ -162,13 +121,39 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, archive, log, facul
         digitoolMetadata = dtx.get_metadata(oai_id)['marc']
         aleph_id = aleph.normalise(digitoolMetadata['001'])
         originalMetadata = records[aleph_id]
-        faculty = convertItem(dtx, categorize, oai_id, originalMetadata, ds, f, run, archive)
-        if faculty not in facultysum:
-            facultysum[faculty] = 1
-        else:
-            facultysum[faculty] +=1
-        if count % 1000 == 0:
-            time.sleep(1)
+        metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, originalMetadata)
+        convertedMetadata, collection = metadataConvertor.createDC(server,categorize, oai_id, metadataTopic, originalMetadata)
+        attachements = list(dtx.get_attachements(oai_id))
+        fc = filenameConvertor.FilenameConvertor(categorize)
+        attachementsDescription = fc.generate_description(oai_id,attachements)
+        
+        if collection == None:
+            raise Exception('Unknown faculty')
+        
+        #if collection == 248:
+        #    for row in convertedMetadata['metadata']:
+        #        if row['key'] == 'dc.title':
+        #            print(row['value'])
+        #        if row['key'] == 'dc.description.faculty':
+        #            print(row['value'])
+        if False:
+            for row in convertedMetadata['metadata']:
+                print(row)
+            print(attachementsDescription)
+        if run:
+            ds.new_item(collection,convertedMetadata,attachementsDescription)
+        if archive:
+            createArchive(oai_id, xml_dirname, convertedMetadata, attachementsDescription)
+            f.write("{} {}\n".format(oai_id, collection))
+        #for row in convertedMetadata['metadata']:
+        #    if row['key'] == 'dc.description.faculty':
+        #        faculty =  row['value']
+    #    if faculty not in facultysum:
+    #        facultysum[faculty] = 1
+    #    else:
+    #        facultysum[faculty] +=1
+    #    if count % 1000 == 0:
+    #        time.sleep(1)
     ds.logout()
     f.close()
 
