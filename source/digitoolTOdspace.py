@@ -111,6 +111,8 @@ def convertItem(dtx, categorize, oai_id, originalMetadata, ds, f, run, archive):
         for row in convertedMetadata['metadata']:
             if row['key'] == 'dc.title':
                 print(row['value'])
+            if row['key'] == 'dc.description.faculty':
+                print(row['value'])
     if False:
         click.clear()
         #print("converting ",oai_id)
