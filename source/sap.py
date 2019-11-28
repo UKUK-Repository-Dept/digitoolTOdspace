@@ -2,6 +2,7 @@ import os
 import requests
 import xml.etree.cElementTree as ET
 import shutil
+import json
 from bs4 import BeautifulSoup
 
 class Metadata:
@@ -64,7 +65,6 @@ def createArchive(oai_id, ds, xml_dirname, metadata, attachements):
                         qualifier='iso'
                         ).text = row['value']
             elif key[1] == 'title' and key[2] == 'translated':
-                title = row['value']
                 ET.SubElement(m.dc, "dcvalue", 
                         element='title', 
                         qualifier='translated',
@@ -148,13 +148,19 @@ def createArchive(oai_id, ds, xml_dirname, metadata, attachements):
 
    
     #handle = ds.get_handle()
-    response = requests.get(
-            "https://dspace.cuni.cz/discover?query="+aleph_id+"&submit=",
-            )
+    response = requests.get("https://dspace.cuni.cz/discover?query="+aleph_id+"&submit=")
     soup = BeautifulSoup(response.text,"lxml")
-    search_ressults = soup.findAll("div", {"class":"row ds-artifact-item search-result-item-div"})
-    print(search_ressults)
-    print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+    search_results = soup.findAll("div", {"class":"row ds-artifact-item search-result-item-div"})
+    title_search = soup.findAll("h4")
+    if len(title_search) > 0:
+        tag = title_search[0]
+        handle = tag.parent['href']
+        item_id = json.loads(requests.get("https://dspace.cuni.cz/rest"+handle).text)['id']
+        old_metadata = json.loads(requests.get("https://dspace.cuni.cz/rest/items/"+str(item_id)+"/metadata").text)
+        for row in old_metadata:
+            if row['key'] == 'dc.identifier.aleph':
+                if aleph_id == row['value']:
+                    print(oai_id,handle)
 
 
 
