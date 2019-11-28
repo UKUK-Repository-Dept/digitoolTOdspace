@@ -194,6 +194,14 @@ class Dspace:
                 headers=self.headers,
                 )
 
+    def get_handle(self):
+        response = requests.post(
+                "https://dspace.cuni.cz/rest/items/find-by-metadata-field",
+                headers=self.headers,
+                data='{"key": "dc.title","value": "práce","language": "cs_CZ"}',
+                verify=False
+                )
+        print(response.text)
 
     
     def delete_all_item(self, collection_id):

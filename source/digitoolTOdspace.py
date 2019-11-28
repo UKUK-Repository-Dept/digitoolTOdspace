@@ -143,7 +143,7 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, archive, log, facul
         if run:
             ds.new_item(collection,convertedMetadata,attachementsDescription)
         if archive:
-            createArchive(oai_id, xml_dirname, convertedMetadata, attachementsDescription)
+            createArchive(oai_id, ds, xml_dirname, convertedMetadata, attachementsDescription)
             f.write("{} {}\n".format(oai_id, collection))
         #for row in convertedMetadata['metadata']:
         #    if row['key'] == 'dc.description.faculty':

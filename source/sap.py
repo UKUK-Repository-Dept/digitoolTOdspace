@@ -1,6 +1,8 @@
 import os
+import requests
 import xml.etree.cElementTree as ET
 import shutil
+from bs4 import BeautifulSoup
 
 class Metadata:
     def __init__(self):
@@ -19,9 +21,10 @@ class Metadata:
         tree.write(directory+'/metadata_thesis.xml')
 
 
-def createArchive(oai_id, xml_dirname, metadata, attachements):
+def createArchive(oai_id, ds, xml_dirname, metadata, attachements):
     outputDirectory = 'output/' + str(oai_id)
-    
+
+
     m = Metadata()
     for row in metadata['metadata']:
         key = row['key'].split('.')
@@ -61,12 +64,14 @@ def createArchive(oai_id, xml_dirname, metadata, attachements):
                         qualifier='iso'
                         ).text = row['value']
             elif key[1] == 'title' and key[2] == 'translated':
+                title = row['value']
                 ET.SubElement(m.dc, "dcvalue", 
                         element='title', 
                         qualifier='translated',
                         language = row['language']
                         ).text = row['value']
             elif key[1] == 'identifier' and key[2] == 'aleph':
+                aleph_id = row['value']
                 ET.SubElement(m.dc, "dcvalue", 
                         element='identifier', 
                         qualifier='aleph'
@@ -141,6 +146,18 @@ def createArchive(oai_id, xml_dirname, metadata, attachements):
         else:
             raise Exception('Key {} do not has a category'.format(key))
 
+   
+    #handle = ds.get_handle()
+    response = requests.get(
+            "https://dspace.cuni.cz/discover?query="+aleph_id+"&submit=",
+            )
+    soup = BeautifulSoup(response.text,"lxml")
+    search_ressults = soup.findAll("div", {"class":"row ds-artifact-item search-result-item-div"})
+    print(search_ressults)
+    print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+
+
+
     if not os.path.exists(outputDirectory):
         os.mkdir(outputDirectory)
     
@@ -149,7 +166,7 @@ def createArchive(oai_id, xml_dirname, metadata, attachements):
     f = open(outputDirectory+'/contents','w')
     for filename, filetype, description in attachements:
         filepath = xml_dirname + '/streams/' + filename
-        os.system("cp '"+filepath+"' "+outputDirectory)
+        #os.system("cp '"+filepath+"' "+outputDirectory)
         row = filename + '\t'
         row += 'bundle:ORIGINAL\t'
         row += 'permissits:-r '
