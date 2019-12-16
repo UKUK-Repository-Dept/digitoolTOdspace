@@ -22,7 +22,7 @@ class Metadata:
         tree.write(directory+'/metadata_thesis.xml')
 
 
-def createArchive(oai_id, ds, xml_dirname, metadata, attachements):
+def createArchive(oai_id, xml_dirname, metadata, attachements):
     outputDirectory = 'output/' + str(oai_id)
 
 
@@ -146,8 +146,14 @@ def createArchive(oai_id, ds, xml_dirname, metadata, attachements):
         else:
             raise Exception('Key {} do not has a category'.format(key))
 
-   
-    #handle = ds.get_handle()
+
+    if not os.path.exists(outputDirectory):
+        os.mkdir(outputDirectory)
+
+    #create meadtada files 
+    m.save(outputDirectory)
+
+    #create handle file if possible
     response = requests.get("https://dspace.cuni.cz/discover?query="+aleph_id+"&submit=")
     soup = BeautifulSoup(response.text,"lxml")
     search_results = soup.findAll("div", {"class":"row ds-artifact-item search-result-item-div"})
@@ -160,19 +166,15 @@ def createArchive(oai_id, ds, xml_dirname, metadata, attachements):
         for row in old_metadata:
             if row['key'] == 'dc.identifier.aleph':
                 if aleph_id == row['value']:
-                    print(oai_id,handle)
-
-
-
-    if not os.path.exists(outputDirectory):
-        os.mkdir(outputDirectory)
-    
-    m.save(outputDirectory)
+                    handle = handle[8:]
+                    f = open(outputDirectory+'/handle','w')
+                    f.write(handle)
+                    f.close()
 
     f = open(outputDirectory+'/contents','w')
     for filename, filetype, description in attachements:
         filepath = xml_dirname + '/streams/' + filename
-        #os.system("cp '"+filepath+"' "+outputDirectory)
+        os.system("cp '"+filepath+"' "+outputDirectory)
         row = filename + '\t'
         row += 'bundle:ORIGINAL\t'
         row += 'permissits:-r '

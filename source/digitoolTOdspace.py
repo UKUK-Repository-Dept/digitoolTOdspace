@@ -16,8 +16,8 @@ from sap import createArchive
 xml_dirname = "DUR01/2019-10-01"
 #xml_dirname = "Cerge/2019-09-05"
 digitool_category = "oai_kval"
-server = "gull"
-#server = "dodo"
+#server = "gull"
+server = "dodo"
 
 loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
 @click.group()
@@ -99,9 +99,9 @@ def dspace(dspace_admin_passwd, dspace_admin_username, operation,arg):
 @click.option('--dspace_admin_passwd', prompt='passwd', help='Dspace admin passwd')
 @click.option('--run/--no-run', default=False, help='Push to converted data to server')
 @click.option('--archive/--no-archive', default=False, help='Create Simlpe Archive Formate')
-@click.option('--facultysum/--no-facultysum', default=False, help='Create Simlpe Archive Formate')
+@click.option('--catalogue/--no-catalogue', default=False, help='Create list of id, collection')
 @click.option('--log', default='error', type=click.Choice(loggingMap.keys()), help='Logging level')
-def convert(dspace_admin_passwd, dspace_admin_username, run, archive, log, facultysum):
+def convert(dspace_admin_passwd, dspace_admin_username, run, archive, catalogue, log):
     #TODO aleph, weird_attachmement by měli být nulové a ostatní by tak měli zustat
     logging.getLogger().setLevel(loggingMap[log])
     if log == 'error':
@@ -109,9 +109,11 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, archive, log, facul
     dtx = DigitoolXML(xml_dirname)
     oai_ids = dtx.getList()
     categorize = Categorize(dtx)
-    ds = Dspace(server,dspace_admin_username,dspace_admin_passwd,xml_dirname=xml_dirname)
+    if run:
+        ds = Dspace(server,dspace_admin_username,dspace_admin_passwd,xml_dirname=xml_dirname)
     records = aleph.openAleph("dtl_2006.xml")
-    f = open('output/'+server,'w')
+    if catalogue:
+        f = open('output/'+server,'w')
 
     count = 0
     #for oai_id in oai_ids:
@@ -143,7 +145,8 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, archive, log, facul
         if run:
             ds.new_item(collection,convertedMetadata,attachementsDescription)
         if archive:
-            createArchive(oai_id, ds, xml_dirname, convertedMetadata, attachementsDescription)
+            createArchive(oai_id, xml_dirname, convertedMetadata, attachementsDescription)
+        if catalogue:
             f.write("{} {}\n".format(oai_id, collection))
         #for row in convertedMetadata['metadata']:
         #    if row['key'] == 'dc.description.faculty':
@@ -154,8 +157,10 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, archive, log, facul
     #        facultysum[faculty] +=1
     #    if count % 1000 == 0:
     #        time.sleep(1)
-    ds.logout()
-    f.close()
+    if run:
+        ds.logout()
+    if catalogue:
+        f.close()
 
     if facultysum:
         print(facultysum)

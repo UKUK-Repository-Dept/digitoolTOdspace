@@ -1,68 +1,79 @@
 
-fakulta: má být, je
+fakulta: má být, je gull, je dodo
 
-'Lékařská fakulta, 1': 1, 2 (testovaci kniha - cajk)
-'Lékařská fakulta, 2.': 1, 1
-'Lékařská fakulta, 3.': 1, 1
+'Lékařská fakulta, 1': 1, 2 (testovaci kniha - cajk), 1
+'Lékařská fakulta, 2.': 1, 1, 1
+'Lékařská fakulta, 3.': 1, 1, 1
 'Evangelická teologická fakulta': 32,  
 'Komenského evangelická bohoslovecká fakulta': 21, 
-sum 53, 49
-'Fakulta humanitních studií': 50, 50 
+sum 53, 49, 4+49
+'Fakulta humanitních studií': 50, 50, 50
 'Fakulta sociálních věd': 211, 
 'Fakulta sociálních věd a publicistiky': 2, 
-sum: 213, 213 
-'Filozofická fakulta': 2881, 2881 
+sum: 213, 213, 213 
+'Filozofická fakulta': 2881, 2881, 2280!!!!! 
 'Husova československá evangelická bohoslovecká fakulta': 10, 
 'Husova evangelická bohoslovecká fakulta': 1, 
 'Husova československá bohoslovecká fakulta': 1,
-sum: 12, 14 (ty dalši jsou duplicity z testovani)
-'Matematicko-fyzikální fakulta': 14, 14 
-'Pedagogická fakulta': 7, 7
-'Právnická fakulta': 8, 8
+sum: 12, 14 (ty dalši jsou duplicity z testovani), 12
+'Matematicko-fyzikální fakulta': 14, 14, 14 
+'Pedagogická fakulta': 7, 7, 7
+'Právnická fakulta': 8, 8, 8
 
-grep 'degree" language="cs_CZ" qualifier="discipline' output/ -r
-https://gull.is.cuni.cz/handle/123456789/54357?show=full
-TODO nezobrazuje se, ale ani ne u sisových věcí 
-
-grep 'degree" language="cs_CZ" qualifier="program' output/ -r
-TODO nezobrazuje se, ale ani ne u sisových věcí 
-
-grep 'description" language="cs_CZ" qualifier="faculty' output/ -r
-TODO nezobrazuje se tady, ale u sis jo
 
 grep 'degree" language="cs_CZ" qualifier="department' output/ -r
 TODO
 
+grep 'degree" language="cs_CZ" qualifier="discipline' output/ -r
+TODO nezobrazuje se, ale ani ne u sisových věcí 
+ok
+
+grep 'degree" language="cs_CZ" qualifier="program' output/ -r
+TODO nezobrazuje se, ale ani ne u sisových věcí 
+ok
+
+grep 'description" language="cs_CZ" qualifier="faculty' output/ -r
+TODO nezobrazuje se tady, ale u sis jo
+ok
+
 grep 'description" language="cs_CZ" qualifier="abstract' output/ -r
 OK
+ok
 
 dc.language 56895 Problematika d&#283;t&#237; se slab&#253;m &#345;&#237;zen&#237;m v rodinn&#233; v&#253;chov&#283;
 OK
+ok
 
 grep 'identifier" qualifier="aleph"' output/ -r
 ok
+ok
 
 grep 'title" language="cs_CZ" qualifier="t' output/ -r
+ok
 ok
 
 grep 'degree" language="cs_CZ" qualifier="name' output/ -r
 output/71147/metadata_thesis.xml:<dublin_core schema="thesis"><dcvalue element="degree" language="cs_CZ" qualifier="name">Mgr.</dcvalue></dublin_core>
 OK
-
+ok
 
 grep 'contributor" qualifier="author' output/ -r | head
+ok
 ok
 
 grep 'contributor" qualifier="refe' output/ -r | head
 ok
+ok
 
 grep 'contributor" qualifier="none' output/ -r | head
 ok
+ok
 
 grep 'date" qualifier="issued' output/ -r | head
+ok
 ok
 
 
 grep 'subject" language="cs_CZ" qualifier="c' output/ -r | head
 ok
-
+ok

@@ -25,5 +25,6 @@ scp -r novotj@dingo.is.cuni.cz:/exlibris/dtl/j3_1/digitool/home/profile/export/e
 
 Import on gull
 ```
-cat /dspace/kvalifikacni2006/gull | while read -r id col ; do /opt/dspace/bin/dspace import -a -e jitkaucw@gmail.com -t -s /dspace/kvalifikacni2006/$id -c $col -m /tmp/mapfile/$id; done
+cat /dspace/kvalifikacni2006/gull | while read -r id col ; do /opt/dspace/bin/dspace import -a -e jitkaucw@gmail.com -s /dspace/kvalifikacni2006/$id -c $col -m /tmp/mapfile/$id; done
 ```
+cat /dspace/kvalifikacni2006/dodo | while read -r id col ; do /opt/dspace/bin/dspace import -r -e jitkaucw@gmail.com -s /dspace/kvalifikacni2006/$id -c $col -m /tmp/mapfile/$id; done

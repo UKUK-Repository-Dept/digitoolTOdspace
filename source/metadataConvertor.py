@@ -99,7 +99,6 @@ def convertMarc(categorize, oai_id, metadataOrigin):
         if not tag in metadataOrigin.keys():
             continue
         metadata[tag] = allTags[tag](metadataOrigin[tag], oai_id, categorize)
-    
     return metadata
        
 
@@ -165,10 +164,10 @@ def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
         collection = catalogue.facultyToCollection[server][faculty][1]
     else: 
         raise Exception("Need degree", degree)
-    
-    deparment = getTopic(categorize, oai_id, 'deparment', metadataOrigin)
-    if deparment:
-        metadataReturn.append({ "key": "thesis.degree.deparment", "language": 'cs_CZ', "value": deparment },)
+   
+    department = getTopic(categorize, oai_id, 'deparment', metadataOrigin)
+    if department:
+        metadataReturn.append({ "key": "thesis.degree.department", "language": 'cs_CZ', "value": deparment },)
     
     author = getTopic(categorize, oai_id, 'author', metadataOrigin)
     metadataReturn.append({ "key": "dc.contributor.author", "value": author },)
