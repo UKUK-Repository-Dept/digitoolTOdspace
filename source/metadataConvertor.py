@@ -94,12 +94,13 @@ def convertMarc(categorize, oai_id, metadataOrigin):
             categorize.categorize_item(oai_id,error_msg)
             #print(metadata)
             return
-    
+   
     allTags = {**mandatory, **obligatory}
     for tag in allTags.keys():
         if not tag in metadataOrigin.keys():
             continue
         metadata[tag] = allTags[tag](metadataOrigin[tag], oai_id, categorize)
+    
     #print(metadata)
     return metadata
        

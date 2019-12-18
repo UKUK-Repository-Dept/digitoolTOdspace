@@ -91,6 +91,9 @@ def convertTag245(tag245, oai_id, categorize):
             title = title.replace(d,'')
     title = title.replace('\\','').replace('/','')
     ret['title'] = title
+    #TODO
+    #if '$' in title:
+    #    print(oai_id, tag245, title)
 
     #author
     if 'c' in tag245:

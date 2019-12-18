@@ -51,19 +51,20 @@ def categorize(group,output,log):
     print(c)
 
 @cli.command()
-def statistic(log):
-    logging.getLogger().setLevel(loggingMap[log])
-    records = aleph.openAleph("dtl_2006.xml")
-    print('záznamů ',len(records))
+def statistic():
+    dtx = DigitoolXML(xml_dirname)
+    oai_ids = dtx.getList()
+    print('záznamů ',len(oai_ids))
     allTags = []
-    for metadata in records:
+    for oai_id in oai_ids:
+        metadata = dtx.get_metadata(oai_id)['marc']
         allTags.extend(metadata.keys())
     statistic = []
     for tag in set(allTags):
         statistic.append((allTags.count(tag),tag))
     statistic = sorted(statistic,reverse=True)
     for count, tag in statistic:
-        print(tag,count)
+        print(tag,';',count,';')
 
 operations=['handle','delete_collection','delete_bitstream','total_size']
 @cli.command()
@@ -126,6 +127,7 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, archive, catalogue,
         metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, digitoolMetadata)
         #TODO odkomentovat vyrobu metadat
         #convertedMetadata, collection = metadataConvertor.createDC(server,categorize, oai_id, metadataTopic, digitoolMetadata)
+        #print(metadataTopic)
         attachements = list(dtx.get_attachements(oai_id))
         fc = filenameConvertor.FilenameConvertor(categorize)
         attachementsDescription = fc.generate_description(oai_id,attachements)
