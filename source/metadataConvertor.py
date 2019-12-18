@@ -61,13 +61,13 @@ def convertMarc(categorize, oai_id, metadataOrigin):
     metadata = {}
     mandatory = {
             '001': otherTag.convertTag001,#aleph_id
-            '100': tag100.convertTag100, #autor
             '245': tag245.convertTag245, #titul, autor 
-            '260': tag260.convertTag260, #místo vydání a datum 
-            '502': tag502.convertTag502, #kvalifikační práce
-            '710': tag710.convertTag710, #fakulta, katedra
+            #'502': tag502.convertTag502, #kvalifikační práce
             }
     obligatory = {
+            '100': tag100.convertTag100, #autor
+            '260': tag260.convertTag260, #místo vydání a datum 
+            '710': tag710.convertTag710, #fakulta, katedra
             '008': otherTag.convertTag008,#jazyk na pozici 35-37
             '041': tag041.convertTag041,  # jazyk 
             '246': tag246.convertTag246,  # titulek v překladu 
@@ -92,6 +92,7 @@ def convertMarc(categorize, oai_id, metadataOrigin):
         if not tag in metadataOrigin.keys():
             error_msg = "No tag {} in metadata".format(tag)
             categorize.categorize_item(oai_id,error_msg)
+            #print(metadata)
             return
     
     allTags = {**mandatory, **obligatory}
@@ -99,6 +100,7 @@ def convertMarc(categorize, oai_id, metadataOrigin):
         if not tag in metadataOrigin.keys():
             continue
         metadata[tag] = allTags[tag](metadataOrigin[tag], oai_id, categorize)
+    #print(metadata)
     return metadata
        
 
@@ -165,9 +167,9 @@ def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
     else: 
         raise Exception("Need degree", degree)
    
-    department = getTopic(categorize, oai_id, 'deparment', metadataOrigin)
+    department = getTopic(categorize, oai_id, 'department', metadataOrigin)
     if department:
-        metadataReturn.append({ "key": "thesis.degree.department", "language": 'cs_CZ', "value": deparment },)
+        metadataReturn.append({ "key": "dc.description.department", "language": 'cs_CZ', "value": department },)
     
     author = getTopic(categorize, oai_id, 'author', metadataOrigin)
     metadataReturn.append({ "key": "dc.contributor.author", "value": author },)

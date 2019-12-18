@@ -5,6 +5,10 @@ def convertTag001(tag001,oai_id,categorize):
 
 def convertTag008(tag008,oai_id,categorize):
     lang = tag008[35:38]
+    if lang not in catalogue.convertLang.keys():
+        #TODO kouknout kolik jich je a pak ignorovat?
+        #print(oai_id, lang)
+        return {}
     return {'lang': catalogue.convertLang[lang]}
 
 def convertTag526(tag526,oai_id,categorize):

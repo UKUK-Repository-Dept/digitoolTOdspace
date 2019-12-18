@@ -13,8 +13,8 @@ import urllib3 #disable warnings about http an gull
 import time
 from sap import createArchive
 
-xml_dirname = "DUR01/2019-10-01"
-#xml_dirname = "Cerge/2019-09-05"
+#xml_dirname = "DUR01/2019-10-01"
+xml_dirname = "Cerge/2019-09-05"
 digitool_category = "oai_kval"
 #server = "gull"
 server = "dodo"
@@ -26,7 +26,7 @@ def cli():
 
 
 categories = {
-    'all_problems_for_hanka': bugs.all_attachements,
+    'all_problems': bugs.all_attachements,
     'all_items_in_oai': bugs.oai,
     'forgot_attachements': bugs.forgot_attachements,
     'ittems_without_attachments': bugs.no_attachements,
@@ -121,17 +121,18 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, archive, catalogue,
     for oai_id in oai_ids:
         count += 1
         digitoolMetadata = dtx.get_metadata(oai_id)['marc']
-        aleph_id = aleph.normalise(digitoolMetadata['001'])
-        originalMetadata = records[aleph_id]
-        metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, originalMetadata)
-        convertedMetadata, collection = metadataConvertor.createDC(server,categorize, oai_id, metadataTopic, originalMetadata)
+        #aleph_id = aleph.normalise(digitoolMetadata['001'])
+        #originalMetadata = records[aleph_id]
+        metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, digitoolMetadata)
+        #TODO odkomentovat vyrobu metadat
+        #convertedMetadata, collection = metadataConvertor.createDC(server,categorize, oai_id, metadataTopic, digitoolMetadata)
         attachements = list(dtx.get_attachements(oai_id))
         fc = filenameConvertor.FilenameConvertor(categorize)
         attachementsDescription = fc.generate_description(oai_id,attachements)
         
-        if collection == None:
-            raise Exception('Unknown faculty')
-        
+        #if collection == None:
+        #    raise Exception('Unknown faculty')
+        # 
         #if collection == 248:
         #    for row in convertedMetadata['metadata']:
         #        if row['key'] == 'dc.title':

@@ -8,6 +8,12 @@ def all_attachements(oai_ids, dtx, c):
     forgot_attachements(oai_ids,dtx,c)
     no_attachements(oai_ids,dtx,c)
     only_dc(oai_ids,dtx,c)
+    for oai_id in oai_ids:
+        metadata = dtx.get_metadata(oai_id)['marc']
+        metadataConvertor.convertMarc(c, oai_id, metadata)
+        #TODO testovat prevod
+        #metadataTopic, collection = metadataConvertor.convertMarc(c, oai_id, metadata)
+        #metadataConvertor.createDC('gull',c, oai_id, metadataTopic, metadata)
 
 def oai(oai_ids, digitoolXML, categorize):
     for oai_id in oai_ids:
@@ -16,7 +22,9 @@ def oai(oai_ids, digitoolXML, categorize):
 def forgot_attachements(oai_ids, digitoolXML, categorize):
     attachements = []
     for oai_id in oai_ids:
-        attachements += list(zip(*digitoolXML.get_attachements(oai_id)))[0]
+        a = list(digitoolXML.get_attachements(oai_id))
+        if a != []:
+            attachements += list(zip(*a))[0]
     for row in open( digitoolXML.dirname+"/ls_streams.txt" ,"r"):
         if '_index.html' in row:
             continue
