@@ -13,9 +13,6 @@ def convertTag041(tag041,oai_id,categorize):
             if l in ['akh','hun']:
                 continue #nejde smazat v digitoolu
             if l not in catalogue.convertLang.keys():
-                #TODO kouknout kolik jich je a pak ignorovat?
-                #print(oai_id, l)
-                continue
                 raise Exception('unknown language {}'.format(l))
             else:
                 langs.append(catalogue.convertLang[l])

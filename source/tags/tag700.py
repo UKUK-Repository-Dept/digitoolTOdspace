@@ -17,7 +17,7 @@ def convertTag700(tag700, oai_id, categorize):
         elif roles[i] == 'edt':
             ret['editor']=persons[i]
         else:
-            print(oai_id, roles[i])
+            #print(oai_id, roles[i])
             #TODO mělo by být prázdné
             pass #neřeším others a dalšich pár
     return ret
