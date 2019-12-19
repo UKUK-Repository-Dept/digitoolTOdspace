@@ -80,6 +80,7 @@ def convertMarc(categorize, oai_id, metadataOrigin):
             #'650': tag650.convertTag650,  # keywords 
             #'651': otherTag.convertTag651,# keywords zeměpis
             #'655': tag655.convertTag655,  # druh práce ignorujeme 9/9 případů lhal
+            'C15': tagC15.convertTagC15,  # abstract
             '700': tag700.convertTag700,  # vedoucí, oponent,.. 
             'C30': otherTag.convertTagC30, #thesis: titul a druh prace
             '020': otherTag.convertTag020, # ISBN
@@ -111,6 +112,10 @@ def convertMarc(categorize, oai_id, metadataOrigin):
 
 def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
     metadataReturn = []
+    #TODO
+    #print('hui',metadataOrigin)
+    #if metadataOrigin is None:
+    #    return None, None
 
     lang = getTopic(categorize, oai_id, 'lang', metadataOrigin)
     if not lang:
@@ -139,8 +144,6 @@ def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
         metadataReturn.append({ "key": "dc.title.translated", "language": lang2, "value": title2 },)
 
     degree = getTopic(categorize, oai_id, 'degree', metadataOrigin)
-    if not degree:
-        raise Exception('No degree')
     metadataReturn.append({ "key": "dc.type", "language": 'cs_CZ', "value": degree },)
     degreeTitle = getTopic(categorize, oai_id, 'degreeTitle', metadataOrigin)
     metadataReturn.append({ "key": "thesis.degree.name", "language": 'cs_CZ', "value": degreeTitle },)
@@ -148,6 +151,7 @@ def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
     abstract = getTopic(categorize, oai_id, 'abstract', metadataOrigin)
     langA = getTopic(categorize, oai_id, 'abstract_lang', metadataOrigin)
     if abstract:
+        #print(oai_id, abstract, metadataOrigin, metadataDigitool)
         metadataReturn.append({ "key": "dc.description.abstract", "language": langA, "value": abstract },)
     abstract2 = getTopic(categorize, oai_id, 'alternative_abstract', metadataOrigin)
     langA2 = getTopic(categorize, oai_id, 'alternative_abstract_lang', metadataOrigin)
@@ -162,15 +166,9 @@ def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
         metadataReturn.append({ "key": "thesis.degree.program", "language": 'cs_CZ', "value": program },)
     
     faculty = getTopic(categorize, oai_id, 'faculty', metadataOrigin)
-    assert faculty
     metadataReturn.append({ "key": "dc.description.faculty", "language": 'cs_CZ', "value": faculty },)
-    
-    if degree in ["Bakalářská práce", "Diplomová práce", "Rigorózní práce", "Dizertační práce"]:
-        collection = catalogue.facultyToCollection[server][faculty][0]
-    elif degree in ["Habilitační práce"]:
-        collection = catalogue.facultyToCollection[server][faculty][1]
-    else: 
-        raise Exception("Need degree", degree)
+   
+    collection = 'TODO'
    
     department = getTopic(categorize, oai_id, 'department', metadataOrigin)
     if department:
@@ -178,8 +176,6 @@ def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
     
     author = getTopic(categorize, oai_id, 'author', metadataOrigin)
     metadataReturn.append({ "key": "dc.contributor.author", "value": author },)
-    if not author: 
-        raise Exception('No author')
 
     advisor = getTopic(categorize, oai_id, 'advisor', metadataOrigin)
     if advisor:

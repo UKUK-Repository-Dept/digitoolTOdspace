@@ -92,8 +92,13 @@ def convertTag245(tag245, oai_id, categorize):
     title = title.replace('\\','').replace('/','')
     ret['title'] = title
     #TODO
-    #if '$' in title:
-    #    print(oai_id, tag245, title)
+    if '$' in title:
+        shorter = {
+                'Blink, the power of thinking without thinking, Malcolm Gladwell. Penguin Books, London (2006). pp. 280, Paperback, ISBN 0316172324, $15.99': 'Blink, the power of thinking without thinking, Malcolm Gladwell.',
+                'Behavioral game theory, Colin F. Camerer, 2003, Russell Sage Foundation, New York, New YorkPrinceton University Press, Princeton, New Jersey, hardcover, 544 pages, ISBN: 0691090394, $65.00. Book review': 'Behavioral game theory',
+                'Decisions, uncertainty, and the brain. The science of neuroeconomics, Paul W. Glimcher; The MIT Press, Cambridge, MA, USA, 2003, pages 375, ISBN 0-262-07244-0 (hbk), $37.95': 'Decisions, uncertainty, and the brain. The science of neuroeconomics',}
+        title = shorter[title] 
+        #print(oai_id, title)
 
     #author
     if 'c' in tag245:

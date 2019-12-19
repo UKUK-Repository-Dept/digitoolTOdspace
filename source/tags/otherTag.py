@@ -23,7 +23,9 @@ def convertTagTYP(tagTYP,oai_id,categorize):
     #print(oai_id, tagTYP) 
     return {}
 
+
 def convertTag008(tag008,oai_id,categorize):
+    #print(oai_id, tag008)
     lang = tag008[35:38]
     if lang not in catalogue.convertLang.keys():
         #TODO kouknout kolik jich je a pak ignorovat?

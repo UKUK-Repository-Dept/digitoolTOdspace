@@ -11,8 +11,8 @@ def convertTag260(tag,oai_id,categorize):
     else:
         if len(tag['a']) != 1:
             #TODO
-            print(oai_id, tag)
-            return
+            #print(oai_id, tag)
+            return {}
         assert len(tag['a']) == 1
         place = tag['a'][0].upper()
         place = unicodedata.normalize('NFD', place).encode('ascii', 'ignore').decode("utf-8")

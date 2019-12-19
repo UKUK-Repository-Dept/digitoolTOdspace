@@ -125,8 +125,7 @@ def convert(dspace_admin_passwd, dspace_admin_username, run, archive, catalogue,
         #aleph_id = aleph.normalise(digitoolMetadata['001'])
         #originalMetadata = records[aleph_id]
         metadataTopic = metadataConvertor.convertMarc(categorize, oai_id, digitoolMetadata)
-        #TODO odkomentovat vyrobu metadat
-        #convertedMetadata, collection = metadataConvertor.createDC(server,categorize, oai_id, metadataTopic, digitoolMetadata)
+        convertedMetadata, collection = metadataConvertor.createDC(server,categorize, oai_id, metadataTopic, digitoolMetadata)
         #print(metadataTopic)
         attachements = list(dtx.get_attachements(oai_id))
         fc = filenameConvertor.FilenameConvertor(categorize)
