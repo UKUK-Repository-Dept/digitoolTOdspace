@@ -38,7 +38,7 @@ def getTopic(categorize, oai_id, topic, metadata):
             continue
         result2 = metadata[tag2][topic]
         error_msg = 'Different {} {}:"{}" {}: "{}"'.format(topic, tag1, result1, tag2, result2)
-        personTopics = ['author','advisor','commitee','consultant']
+        personTopics = ['author','advisor','commitee','consultant','editor']
         if topic in personTopics and not comparePeople(result1,result2):
             categorize.categorize_item(oai_id,error_msg)
         elif topic not in personTopics and result1 and result1 != result2:

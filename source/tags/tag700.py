@@ -12,13 +12,12 @@ def convertTag700(tag700, oai_id, categorize):
         return {}
     ret = {}
     for i in range(len(persons)):
-        if roles[i] == 'ths':
-            ret['advisor'] = persons[i]
-        elif roles[i] in ['csl','sad']:
-            ret['consultant'] = persons[i]
-        elif roles[i] == 'opn':
-            ret['commitee']=persons[i]
+        if roles[i] == 'aut':
+            ret['author'] = persons[i]
+        elif roles[i] == 'edt':
+            ret['editor']=persons[i]
         else:
-            #TODO projet ostatni
+            print(oai_id, roles[i])
+            #TODO mělo by být prázdné
             pass #neřeším others a dalšich pár
     return ret
