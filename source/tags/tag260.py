@@ -9,6 +9,10 @@ def convertTag260(tag,oai_id,categorize):
         pass #kašlem na to
         #categorize.categorize_item(oai_id,"260 Není podpole 'a'")
     else:
+        if len(tag['a']) != 1:
+            #TODO
+            print(oai_id, tag)
+            return
         assert len(tag['a']) == 1
         place = tag['a'][0].upper()
         place = unicodedata.normalize('NFD', place).encode('ascii', 'ignore').decode("utf-8")
@@ -41,4 +45,7 @@ def convertTag260(tag,oai_id,categorize):
     
     for k in tag.keys():
         assert k in 'abc'
-    return {}
+    #TODO cist pulishera 'b' 
+    #TODO ořezat města o dvojtečku
+    #print(tag,ret)
+    return ret

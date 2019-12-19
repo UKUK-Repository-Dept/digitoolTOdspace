@@ -67,20 +67,24 @@ def convertMarc(categorize, oai_id, metadataOrigin):
     obligatory = {
             '100': tag100.convertTag100, #autor
             '260': tag260.convertTag260, #místo vydání a datum 
-            '710': tag710.convertTag710, #fakulta, katedra
+            #'710': tag710.convertTag710, #fakulta, katedra
             '008': otherTag.convertTag008,#jazyk na pozici 35-37
             '041': tag041.convertTag041,  # jazyk 
             '246': tag246.convertTag246,  # titulek v překladu 
-            '520': tag520.convertTag520,  # abstrakt 
-            '526': otherTag.convertTag526,# obor a program
-            '600': otherTag.convertTag600,# keywords osoba
-            '610': otherTag.convertTag610,# keywords organizace
-            '630': otherTag.convertTag630,# keywords knihy
-            '648': otherTag.convertTag648,# keywords období
-            '650': tag650.convertTag650,  # keywords 
-            '651': otherTag.convertTag651,# keywords zeměpis
+            #'520': tag520.convertTag520,  # abstrakt 
+            #'526': otherTag.convertTag526,# obor a program
+            #'600': otherTag.convertTag600,# keywords osoba
+            #'610': otherTag.convertTag610,# keywords organizace
+            #'630': otherTag.convertTag630,# keywords knihy
+            #'648': otherTag.convertTag648,# keywords období
+            #'650': tag650.convertTag650,  # keywords 
+            #'651': otherTag.convertTag651,# keywords zeměpis
             #'655': tag655.convertTag655,  # druh práce ignorujeme 9/9 případů lhal
             '700': tag700.convertTag700,  # vedoucí, oponent,.. 
+            'C30': otherTag.convertTagC30, #thesis: titul a druh prace
+            '020': otherTag.convertTag020, # ISBN
+            '500': otherTag.convertTag500, # obecná poznámka - TODO smazat
+            'TYP': otherTag.convertTagTYP, 
             }
 
     # Jaro potvrdil následůjící postup
