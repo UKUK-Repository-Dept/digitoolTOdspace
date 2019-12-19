@@ -22,6 +22,7 @@ convertLang = {
     'pol': 'pl_PL',
     'spa': 'es_ES',
     'ita': 'it_IT',
+    'fin': 'fi-FI',
     }
 
 langText = {

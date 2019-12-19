@@ -149,14 +149,30 @@ def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
     metadataReturn.append({ "key": "thesis.degree.name", "language": 'cs_CZ', "value": degreeTitle },)
 
     abstract = getTopic(categorize, oai_id, 'abstract', metadataOrigin)
-    langA = getTopic(categorize, oai_id, 'abstract_lang', metadataOrigin)
     if abstract:
-        #print(oai_id, abstract, metadataOrigin, metadataDigitool)
-        metadataReturn.append({ "key": "dc.description.abstract", "language": langA, "value": abstract },)
-    abstract2 = getTopic(categorize, oai_id, 'alternative_abstract', metadataOrigin)
-    langA2 = getTopic(categorize, oai_id, 'alternative_abstract_lang', metadataOrigin)
-    if abstract2:
-        metadataReturn.append({ "key": "dc.description.abstract", "language": langA2, "value": abstract2 },)
+        metadataReturn.append({ "key": "dc.description.abstract", "language": lang, "value": abstract },)
+    abstract2 = getTopic(categorize, oai_id, 'abstract2', metadataOrigin)
+    abstract3 = getTopic(categorize, oai_id, 'abstract3', metadataOrigin)
+    if abstract2 and abstract3:
+        assert "Thomas Schelling's  Beitrag" in abstract or 'volatilitu menových' in abstract 
+        metadataReturn.append({ "key": "dc.description.abstract", "language": 'en_US', "value": abstract2 },)
+        metadataReturn.append({ "key": "dc.description.abstract", "language": 'cs_CZ', "value": abstract3 },)
+    elif abstract2 or abstract3:
+        if abstract3:
+            abstract2 = abstract3
+        lang2 = getTopic(categorize, oai_id, 'alternative_lang', metadataOrigin)
+        if lang2 == ['en_US','cs_CZ'] and lang == 'en_US':
+            lang2 = 'cs_CZ'
+        #if lang2 and len(lang2)!=5:
+        #    print(oai_id, "\n", abstract,"\n", abstract2,"\n", lang, lang2)  #metadataOrigin)
+        if not lang2 and lang in ['cs_CZ','sk_SK']:
+            lang2 = 'en_US'
+        if not lang2 and lang in ['en_US']:
+            lang2 = 'cs_CZ'
+        if not lang2:
+            raise Exception('Unknown langue of alternative title')
+        #print(oai_id, abstract2, lang2)  #metadataOrigin)
+        #metadataReturn.append({ "key": "dc.description.abstract", "language": lang2, "value": abstract2 },)
    
     discipline = getTopic(categorize, oai_id, 'discipline', metadataOrigin)
     if discipline:
