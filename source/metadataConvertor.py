@@ -81,6 +81,7 @@ def convertMarc(categorize, oai_id, metadataOrigin):
             #'651': otherTag.convertTag651,# keywords zeměpis
             #'655': tag655.convertTag655,  # druh práce ignorujeme 9/9 případů lhal
             'C15': tagC15.convertTagC15,  # abstract
+            '653': tag653.convertTag653,  # keywords
             '700': tag700.convertTag700,  # vedoucí, oponent,.. 
             'C30': otherTag.convertTagC30, #thesis: titul a druh prace
             '020': otherTag.convertTag020, # ISBN
@@ -223,10 +224,6 @@ def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
     keywords = sumTopic(categorize, oai_id, 'keywords', metadataOrigin)
     if keywords:
         for keyword in keywords:
-            metadataReturn.append({ "key": "dc.subject","value": keyword, "language": "cs_CZ" },)
-    czenas = sumTopic(categorize, oai_id, 'czenas', metadataOrigin)
-    if czenas:
-        for keyword in czenas:
-            metadataReturn.append({ "key": "dc.subject.czenas","value": keyword, "language": "cs_CZ" },)
+            metadataReturn.append({ "key": "dc.subject","value": keyword, "language": "en_US" },)
 
     return {"metadata": metadataReturn }, collection
