@@ -201,7 +201,9 @@ def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
     if consultant:
         metadataReturn.append({ "key": "dc.contributor","value": consultant },)
 
-    #další lide
+    #TODO place, institut
+
+    #další lide TODO poupravit
     tip = getTopic(categorize, oai_id, 'tip', metadataOrigin)
     if tip:
         for person in tip:
