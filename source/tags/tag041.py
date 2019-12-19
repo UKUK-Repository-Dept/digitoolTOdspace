@@ -19,7 +19,7 @@ def convertTag041(tag041,oai_id,categorize):
                 raise Exception('unknown language {}'.format(l))
             else:
                 langs.append(catalogue.convertLang[l])
-        assert len(langs) <= 1:
+        assert len(langs) <= 1
         if len(langs) == 1:
             ret['alternative_lang'] = langs[0]
     return ret

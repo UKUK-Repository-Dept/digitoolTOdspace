@@ -25,12 +25,12 @@ def convertTagTYP(tagTYP,oai_id,categorize):
 
 
 def convertTag008(tag008,oai_id,categorize):
-    #print(oai_id, tag008)
     lang = tag008[35:38]
     if lang not in catalogue.convertLang.keys():
-        #TODO kouknout kolik jich je a pak ignorovat?
-        #print(oai_id, lang)
-        return {}
+        if lang == '---':
+            return {} #ty tri maji vyplnenou 041
+        else:
+            raise Exception('Unknown language')
     return {'lang': catalogue.convertLang[lang]}
 
 def convertTag526(tag526,oai_id,categorize):

@@ -1,6 +1,5 @@
 
 def convertTagC15(tagC15,oai_id,categorize):
-    #print(oai_id, tagC15)
     ret = {}
     if not 'a' in tagC15.keys():
         return {} #TODO

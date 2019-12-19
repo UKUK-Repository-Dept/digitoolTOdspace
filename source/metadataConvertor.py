@@ -161,18 +161,15 @@ def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
         if abstract3:
             abstract2 = abstract3
         lang2 = getTopic(categorize, oai_id, 'alternative_lang', metadataOrigin)
-        if lang2 == ['en_US','cs_CZ'] and lang == 'en_US':
-            lang2 = 'cs_CZ'
-        #if lang2 and len(lang2)!=5:
-        #    print(oai_id, "\n", abstract,"\n", abstract2,"\n", lang, lang2)  #metadataOrigin)
         if not lang2 and lang in ['cs_CZ','sk_SK']:
             lang2 = 'en_US'
         if not lang2 and lang in ['en_US']:
             lang2 = 'cs_CZ'
         if not lang2:
             raise Exception('Unknown langue of alternative title')
-        #print(oai_id, abstract2, lang2)  #metadataOrigin)
-        #metadataReturn.append({ "key": "dc.description.abstract", "language": lang2, "value": abstract2 },)
+        if lang2=='sk_SK':
+            lang2='cs_CZ'
+        metadataReturn.append({ "key": "dc.description.abstract", "language": lang2, "value": abstract2 },)
    
     discipline = getTopic(categorize, oai_id, 'discipline', metadataOrigin)
     if discipline:
