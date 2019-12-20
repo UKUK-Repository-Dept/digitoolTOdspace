@@ -184,8 +184,6 @@ def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
     faculty = getTopic(categorize, oai_id, 'faculty', metadataOrigin)
     metadataReturn.append({ "key": "dc.description.faculty", "language": 'cs_CZ', "value": faculty },)
    
-    collection = 'TODO'
-   
     department = getTopic(categorize, oai_id, 'department', metadataOrigin)
     if department:
         metadataReturn.append({ "key": "dc.description.department", "language": 'cs_CZ', "value": department },)
@@ -233,4 +231,4 @@ def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
         for keyword in keywords:
             metadataReturn.append({ "key": "dc.subject","value": keyword, "language": "en_US" },)
 
-    return {"metadata": metadataReturn }, collection
+    return {"metadata": metadataReturn }
