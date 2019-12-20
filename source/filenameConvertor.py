@@ -1,4 +1,4 @@
-
+#TODO aktualizovat pro Cerge
 def distance(word1,word2):
     word1 = word1.split('_',1)[1]
     word2 = word2.split('_',1)[1]

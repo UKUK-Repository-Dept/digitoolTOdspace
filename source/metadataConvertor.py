@@ -83,7 +83,7 @@ def convertMarc(categorize, oai_id, metadataOrigin):
             'C15': tagC15.convertTagC15,  # abstract
             '653': tag653.convertTag653,  # keywords
             '700': tag700.convertTag700,  # vedoucí, oponent,.. 
-            'C30': otherTag.convertTagC30, #thesis: titul a druh prace
+            '300': otherTag.convertTag300, # počet stran
             '020': tag020.convertTag020, # ISBN
             '500': otherTag.convertTag500, # obecná poznámka - TODO smazat
             '964': otherTag.convertTag964, 
@@ -218,6 +218,9 @@ def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
             if consultant and comparePeople(person,consultant):
                 continue
             metadataReturn.append({ "key": "dc.contributor","value": person },)
+
+    pages = getTopic(categorize, oai_id, 'pages', metadataOrigin)
+    #TODO ulozit
 
     year = getTopic(categorize, oai_id, 'year', metadataOrigin)
     if year:

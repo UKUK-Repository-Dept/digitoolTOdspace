@@ -3,8 +3,8 @@ import catalogue
 def convertTag001(tag001,oai_id,categorize):
     return {'aleph_id': tag001} 
 
-def convertTagC30(tagC30,oai_id,categorize):
-    #print(oai_id, tagC30) 
+def convertTagC12(tagC12,oai_id,categorize):
+    #print(oai_id, tagC12) 
     return {}
 
 def convertTag500(tag500,oai_id,categorize):
@@ -18,6 +18,11 @@ def convertTag490(tag490,oai_id,categorize):
 def convertTag964(tag964,oai_id,categorize):
     #TODO keywords
     #print(oai_id, tag964) 
+    return {}
+
+def convertTag300(tag300,oai_id,categorize):
+    if 'a' in tag300.keys():
+        return {'pages': tag300['a'][0]} 
     return {}
 
 def convertTag008(tag008,oai_id,categorize):
