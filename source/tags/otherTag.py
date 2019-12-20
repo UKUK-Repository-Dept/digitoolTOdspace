@@ -7,10 +7,6 @@ def convertTagC12(tagC12,oai_id):
     #print(oai_id, tagC12) 
     return {}
 
-def convertTag500(tag500,oai_id):
-    #print(oai_id, tag500) 
-    return {}
-
 def convertTag490(tag490,oai_id):
     #print(oai_id, tag490) 
     return {}

@@ -47,16 +47,15 @@ def comparePeople(name1,name2): #TODO potrebuju to?
 
 
 def getTopic(topic, metadata):
-    #v neshodě vrací to poslední, nikoliv autoritaivní 
-    #TODO kontrovat vše
     result1  = None
     tag1 = None
     for tag2 in metadata:
         if not topic in metadata[tag2].keys():
             continue
         result2 = metadata[tag2][topic]
-        error_msg = 'Different {} {}:"{}" {}: "{}"'.format(topic, tag1, result1, tag2, result2)
-        personTopics = ['author','editor','other']
+        if result1 and result1 != result2:
+            error_msg = 'Different {} {}:"{}" {}: "{}"'.format(topic, tag1, result1, tag2, result2)
+            raise Exception(error_msg)
         result1 = result2
         tag1 = tag2
     return result1
@@ -86,9 +85,9 @@ def parseMarc(metadataDigitool, oai_id):
             '700': tag700.convertTag700,  # vedoucí, oponent,.. 
             '300': otherTag.convertTag300, # počet stran
             '020': tag020.convertTag020, # ISBN
-            '500': otherTag.convertTag500, # obecná poznámka - TODO smazat
             '964': otherTag.convertTag964, 
             }
+    ignoredTags = ['500']
 
     for tag in tags.keys():
         if not tag in metadataDigitool.keys():
@@ -149,9 +148,12 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
             lang2='cs_CZ'
         ET.SubElement(m.dc, "dcvalue", element='description', qualifier='abstract', language=lang2).text = abstract2
    
-    author = getTopic('author', metadataOrigin)
+    author = sumTopic('author', metadataOrigin)
     ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='author').text = author
-    #TODO editor, other
+    editor = sumTopic('editor', metadataOrigin)
+    ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='editor').text = editor
+    other = sumTopic('other', metadataOrigin)
+    ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='other').text = other
 
     #TODO place, institut, isbn
 
