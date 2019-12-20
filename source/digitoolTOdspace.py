@@ -2,23 +2,22 @@
 import os, click, logging
 import urllib3 #disable warnings about http an gull
 
-from digitoolXML import DigitoolXML #TODO promazat
+from digitoolXML import DigitoolXML 
 import filenameConvertor #TODO přepsat
 import metadataConvertor #TODO přepsat
 
 xml_dirname = "Cerge/2019-12-19"
 loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
-output = ['no','list','id_on_row','with_reason']
 
 @click.group()
 def cli():
     pass
 
-#TODO smazat TODO, print, categorize, zbytecne komenty
+#TODO 
+#smazat TODO, print, categorize, zbytecne komenty
 #tabulka cela
 #exportovat vsechno do SAF
 #nahrad na gull a otestovat
-#promazat catalogue
 #napsat navod
 
 @cli.command()

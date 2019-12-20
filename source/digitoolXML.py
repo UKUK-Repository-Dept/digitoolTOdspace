@@ -16,12 +16,6 @@ class DigitoolXML:
         self.dirname = dirname
         self.xml_dirname = dirname+'/digital_entities'
 
-    def __skipped_type(self, oai_id):
-        tree = ET.parse(self.xml_dirname+'/'+str(oai_id)+".xml")
-        root = tree.getroot()
-        usage_type = root.findall("./*/*/usage_type")[0].text
-        return usage_type in ['ARCHIVE','INDEX']
-    
     def get_relations(self, oai_id):
         seen = []
         stack = [oai_id]
@@ -119,10 +113,3 @@ class DigitoolXML:
                 raise Exception("unknown format")
         return res
 
-    def get_category(self, oai_id):
-        tree = ET.parse(self.xml_dirname+"/"+oai_id+".xml")
-        root = tree.getroot()
-        label = tag(tag(tag(root,"digital_entity"),"control"),"label")
-        note = tag(tag(tag(root,"digital_entity"),"control"),"note")
-        ingest = tag(tag(tag(root,"digital_entity"),"control"),"ingest_name")
-        return (label.text,ingest.text,note.text)
