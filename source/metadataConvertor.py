@@ -84,10 +84,12 @@ def convertMarc(categorize, oai_id, metadataOrigin):
             '653': tag653.convertTag653,  # keywords
             '700': tag700.convertTag700,  # vedoucí, oponent,.. 
             'C30': otherTag.convertTagC30, #thesis: titul a druh prace
-            '020': otherTag.convertTag020, # ISBN
+            '020': tag020.convertTag020, # ISBN
             '500': otherTag.convertTag500, # obecná poznámka - TODO smazat
-            'TYP': otherTag.convertTagTYP, 
+            '964': otherTag.convertTag964, 
             }
+
+    #TODO jsou dva zdroje autoru zkotrovat jestli sedi
 
     # Jaro potvrdil následůjící postup
     if '264' in metadataOrigin.keys():
@@ -201,7 +203,7 @@ def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
     if consultant:
         metadataReturn.append({ "key": "dc.contributor","value": consultant },)
 
-    #TODO place, institut
+    #TODO place, institut, isbn
 
     #další lide TODO poupravit
     tip = getTopic(categorize, oai_id, 'tip', metadataOrigin)

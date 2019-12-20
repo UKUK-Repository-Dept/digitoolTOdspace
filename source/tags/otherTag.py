@@ -7,10 +7,6 @@ def convertTagC30(tagC30,oai_id,categorize):
     #print(oai_id, tagC30) 
     return {}
 
-def convertTag020(tag020,oai_id,categorize):
-    #print(oai_id, tag020) 
-    return {}
-
 def convertTag500(tag500,oai_id,categorize):
     #print(oai_id, tag500) 
     return {}
@@ -19,10 +15,10 @@ def convertTag490(tag490,oai_id,categorize):
     #print(oai_id, tag490) 
     return {}
 
-def convertTagTYP(tagTYP,oai_id,categorize):
-    #print(oai_id, tagTYP) 
+def convertTag964(tag964,oai_id,categorize):
+    #TODO keywords
+    #print(oai_id, tag964) 
     return {}
-
 
 def convertTag008(tag008,oai_id,categorize):
     lang = tag008[35:38]
