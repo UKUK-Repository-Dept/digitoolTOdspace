@@ -113,7 +113,7 @@ def convertMarc(categorize, oai_id, metadataOrigin):
     return metadata
        
 
-def createDC(server, categorize, oai_id, metadataOrigin, metadataDigitool):
+def createDC(categorize, oai_id, metadataOrigin, metadataDigitool):
     metadataReturn = []
     #TODO
     #print('hui',metadataOrigin)

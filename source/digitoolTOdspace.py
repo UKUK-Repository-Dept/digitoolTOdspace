@@ -1,33 +1,33 @@
 #!/usr/bin/python3
-import os, click
-from digitoolXML import DigitoolXML
-from dspace import Dspace
-import filenameConvertor
-import metadataConvertor
-from categorize import Categorize
-import problematicGroup as bugs
-import logging
+import click, logging
 import urllib3 #disable warnings about http an gull
-import time
+
+from digitoolXML import DigitoolXML #TODO promazat
+import filenameConvertor #TODO přepsat
+import metadataConvertor #TODO přepsat
+
+from categorize import Categorize
 from sap import createArchive
 
-#xml_dirname = "DUR01/2019-10-01"
 xml_dirname = "Cerge/2019-12-19"
-digitool_category = "oai_kval"
-#server = "gull"
-server = "dodo"
-
 loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
 output = ['no','list','id_on_row','with_reason']
+
 @click.group()
 def cli():
     pass
+
+#TODO smazat TODO, print
+#tabulka cela
+#exportovat vsechno do SAF
+#nahrad na gull a otestovat
+#promazat vše
 
 @cli.command()
 def statistic():
     dtx = DigitoolXML(xml_dirname)
     oai_ids = dtx.getList()
-    print('záznamů ',len(oai_ids))
+    click.echo("záznamů {}".format(len(oai_ids)))
     allTags = []
     for oai_id in oai_ids:
         metadata = dtx.get_metadata(oai_id)['marc']
@@ -37,7 +37,7 @@ def statistic():
         statistic.append((allTags.count(tag),tag))
     statistic = sorted(statistic,reverse=True)
     for count, tag in statistic:
-        print(tag,';',count,';')
+        click.echo("{}; {};".format(tag,count))
 
 
 @cli.command()
@@ -55,7 +55,7 @@ def convert(archive,copyfile,log):
     for oai_id in oai_ids:
         digitoolMetadata = dtx.get_metadata(oai_id)['marc']
         parsedMetadata = metadataConvertor.convertMarc(categorize, oai_id, digitoolMetadata)
-        convertedMetadata = metadataConvertor.createDC(server,categorize, oai_id, parsedMetadata, digitoolMetadata)
+        convertedMetadata = metadataConvertor.createDC(categorize, oai_id, parsedMetadata, digitoolMetadata)
         attachements = list(dtx.get_attachements(oai_id))
         fc = filenameConvertor.FilenameConvertor(categorize)
         attachementsDescription = fc.generate_description(oai_id,attachements)
