@@ -17,7 +17,5 @@ def convertTag700(tag700, oai_id):
         elif roles[i] == 'oth':
             ret['other'] = [persons[i]]
         else:
-            print(oai_id, roles[i])
-            #TODO mělo by být prázdné
-            pass #neřeším others a dalšich pár
+            raise Exception('Unknown role')
     return ret

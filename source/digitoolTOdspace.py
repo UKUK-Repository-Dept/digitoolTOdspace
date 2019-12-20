@@ -2,8 +2,7 @@
 import os, click, logging
 import urllib3 #disable warnings about http an gull
 
-from digitoolXML import DigitoolXML 
-import filenameConvertor #TODO přepsat
+from digitoolXML import DigitoolXML #přepsat 
 import metadataConvertor #TODO přepsat
 
 xml_dirname = "Cerge/2019-12-19"
@@ -56,8 +55,23 @@ def convert(archive,copyfile,log):
         convertedMetadata = metadataConvertor.createDC(oai_id, parsedMetadata, digitoolMetadata)
         #print(convertedMetadata)
         attachements = list(dtx.get_attachements(oai_id))
-        fc = filenameConvertor.FilenameConvertor()
-        attachementsDescription = fc.generate_description(oai_id,attachements)
+        attachementsDescription = None
+        if len(attachements) == 0:
+            pass #TODO otestovat nahravani
+        elif attachements[0][0] == 'undefined':
+            pass #TODO
+            #print(oai_id,attachements)
+        else:
+            # z příloh vyřadím náhledy a indexy
+            attachementsDescription = []
+            for (filename, filetype) in attachements:
+                if '_thumbnail.jpg' in filename or '_index.html' in filename: 
+                    continue
+                if filetype != 'application/pdf':
+                    pass #TODO kouknout se na obsah tech html
+                    #print(oai_id,attachements)
+                attachementsDescription.append((filename,filetype,'TODO to co je videt'))
+            assert len(attachementsDescription) == 1
 
         if archive:
             outputDirectory = 'output/' + str(oai_id)
@@ -69,22 +83,23 @@ def convert(archive,copyfile,log):
             convertedMetadata.save(outputDirectory)
 
             #create contents file
-            f = open(outputDirectory+'/contents','w')
-            for filename, filetype, description in attachements:
-                filepath = xml_dirname + '/streams/' + filename
-                if copyfile:
-                    os.system("cp '"+filepath+"' "+outputDirectory)
-                row = filename + '\t'
-                row += 'bundle:ORIGINAL\t'
-                row += 'permissits:-r '
-                if 'Posudek' in description:
-                    row += "'Admin'"
-                else:
-                    row += "'IPshibAuthenticatedUniMember'"
-                row += '\tdescription:'+description
-                row += '\n'
-                f.write(row)
-            f.close()
+            if attachementsDescription:
+                f = open(outputDirectory+'/contents','w')
+                for filename, filetype, description in attachementsDescription:
+                    filepath = xml_dirname + '/streams/' + filename
+                    if copyfile:
+                        os.system("cp '"+filepath+"' "+outputDirectory)
+                    row = filename + '\t'
+                    row += 'bundle:ORIGINAL\t'
+                    row += 'permissits:-r '
+                    if 'Posudek' in description:
+                        row += "'Admin'"
+                    else:
+                        row += "'IPshibAuthenticatedUniMember'"
+                    row += '\tdescription:'+description
+                    row += '\n'
+                    f.write(row)
+                f.close()
 
 if __name__ == '__main__':
     cli()
