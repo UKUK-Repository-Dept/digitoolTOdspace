@@ -1,6 +1,23 @@
 import re
+import xml.etree.cElementTree as ET
 from tags import * 
 import catalogue
+
+class Metadata:
+    def __init__(self):
+        self.dc = ET.Element("dublin_core")
+        self.thesis = ET.Element("dublin_core", schema="thesis")
+
+    def __str__(self):
+        s = ET.tostring(self.dc).decode() + "\n"
+        s += ET.tostring(self.thesis).decode()
+        return s
+
+    def save(self, directory):
+        tree = ET.ElementTree(self.dc)
+        tree.write(directory+'/dublin_core.xml')
+        tree = ET.ElementTree(self.thesis)
+        tree.write(directory+'/metadata_thesis.xml')
 
 def comparePeople(name1,name2): #TODO potrebuju to?
     def normaliseName(name):
@@ -82,25 +99,21 @@ def parseMarc(metadataDigitool, oai_id):
        
 
 def createDC(oai_id, metadataOrigin, metadataDigitool):
-    metadataReturn = []
-    #TODO
-    #print('hui',metadataOrigin)
-    #if metadataOrigin is None:
-    #    return None, None
+    m = Metadata()
 
     lang = getTopic('lang', metadataOrigin)
     if not lang:
         raise Exception("No language found in 041 and 008.")
-    metadataReturn.append({ "key": "dc.language", "value": catalogue.langText[lang], "language": 'cs_CZ' },) 
-    metadataReturn.append({ "key": "dc.language.iso", "value": lang },) 
+    ET.SubElement(m.dc, "dcvalue", element='language', qualifier='none', language=lang).text = catalogue.langText[lang]
+    ET.SubElement(m.dc, "dcvalue", element='language', qualifier='iso').text = lang
     
     aleph_id = getTopic('aleph_id', metadataOrigin)
-    metadataReturn.append({ "key": "dc.identifier.aleph", "value": aleph_id },)
+    ET.SubElement(m.dc, "dcvalue", element='identifier', qualifier='aleph').text = aleph_id
     
     title = getTopic('title', metadataOrigin)
     if not title: 
         raise Exception('No title')
-    metadataReturn.append({ "key": "dc.title", "language": lang, "value": title },)
+    ET.SubElement(m.dc, "dcvalue", element='title', qualifier='none', language = lang).text = title
     
     title2 = getTopic('alternative', metadataOrigin)
     if title2:
@@ -111,22 +124,17 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
             lang2 = 'cs_CZ'
         if not lang2:
             raise Exception('Unknown langue of alternative title')
-        metadataReturn.append({ "key": "dc.title.translated", "language": lang2, "value": title2 },)
-
-    degree = getTopic('degree', metadataOrigin)
-    metadataReturn.append({ "key": "dc.type", "language": 'cs_CZ', "value": degree },)
-    degreeTitle = getTopic('degreeTitle', metadataOrigin)
-    metadataReturn.append({ "key": "thesis.degree.name", "language": 'cs_CZ', "value": degreeTitle },)
+        ET.SubElement(m.dc, "dcvalue", element='title', qualifier='translated', language=lang2).text = title2
 
     abstract = getTopic('abstract', metadataOrigin)
     if abstract:
-        metadataReturn.append({ "key": "dc.description.abstract", "language": lang, "value": abstract },)
+        ET.SubElement(m.dc, "dcvalue", element='description', qualifier='abstract', language=lang).text = abstract
     abstract2 = getTopic('abstract2', metadataOrigin)
     abstract3 = getTopic('abstract3', metadataOrigin)
     if abstract2 and abstract3:
         assert "Thomas Schelling's  Beitrag" in abstract or 'volatilitu menových' in abstract 
-        metadataReturn.append({ "key": "dc.description.abstract", "language": 'en_US', "value": abstract2 },)
-        metadataReturn.append({ "key": "dc.description.abstract", "language": 'cs_CZ', "value": abstract3 },)
+        ET.SubElement(m.dc, "dcvalue", element='description', qualifier='abstract', language='en_US').text = abstract2
+        ET.SubElement(m.dc, "dcvalue", element='description', qualifier='abstract', language='cs_CZ').text = abstract3
     elif abstract2 or abstract3:
         if abstract3:
             abstract2 = abstract3
@@ -139,61 +147,24 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
             raise Exception('Unknown langue of alternative title')
         if lang2=='sk_SK':
             lang2='cs_CZ'
-        metadataReturn.append({ "key": "dc.description.abstract", "language": lang2, "value": abstract2 },)
+        ET.SubElement(m.dc, "dcvalue", element='description', qualifier='abstract', language=lang2).text = abstract2
    
-    discipline = getTopic('discipline', metadataOrigin)
-    if discipline:
-        metadataReturn.append({ "key": "thesis.degree.discipline", "language": 'cs_CZ', "value": discipline },)
-    program = getTopic('program', metadataOrigin)
-    if program:
-        metadataReturn.append({ "key": "thesis.degree.program", "language": 'cs_CZ', "value": program },)
-    
-    faculty = getTopic('faculty', metadataOrigin)
-    metadataReturn.append({ "key": "dc.description.faculty", "language": 'cs_CZ', "value": faculty },)
-   
-    department = getTopic('department', metadataOrigin)
-    if department:
-        metadataReturn.append({ "key": "dc.description.department", "language": 'cs_CZ', "value": department },)
-    
     author = getTopic('author', metadataOrigin)
-    metadataReturn.append({ "key": "dc.contributor.author", "value": author },)
-
-    advisor = getTopic('advisor', metadataOrigin)
-    if advisor:
-        metadataReturn.append({ "key": "dc.contributor.advisor","value": advisor },)
-    commitee = getTopic('commitee', metadataOrigin)
-    if commitee:
-        metadataReturn.append({ "key": "dc.contributor.referee","value": commitee },)
-    consultant = getTopic('consultant', metadataOrigin)
-    if consultant:
-        metadataReturn.append({ "key": "dc.contributor","value": consultant },)
+    ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='author').text = author
+    #TODO editor, other
 
     #TODO place, institut, isbn
-
-    #další lide TODO poupravit
-    tip = getTopic('tip', metadataOrigin)
-    if tip:
-        for person in tip:
-            if comparePeople(person,author):
-                continue
-            if advisor and comparePeople(person,advisor):
-                continue
-            if commitee and comparePeople(person,commitee):
-                continue
-            if consultant and comparePeople(person,consultant):
-                continue
-            metadataReturn.append({ "key": "dc.contributor","value": person },)
 
     pages = getTopic('pages', metadataOrigin)
     #TODO ulozit
 
     year = getTopic('year', metadataOrigin)
     if year:
-        metadataReturn.append({ "key": "dc.date.issued","value": year },)
+        ET.SubElement(m.dc, "dcvalue", element='date', qualifier='issued').text = year
 
     keywords = sumTopic('keywords', metadataOrigin)
     if keywords:
         for keyword in keywords:
-            metadataReturn.append({ "key": "dc.subject","value": keyword, "language": "en_US" },)
+            ET.SubElement(m.dc, "dcvalue", element='subject', qualifier='none', language='en_US').text = keyword
 
-    return {"metadata": metadataReturn }
+    return m
