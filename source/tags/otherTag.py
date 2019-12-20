@@ -3,18 +3,12 @@ import catalogue
 def convertTag001(tag001,oai_id):
     return {'aleph_id': tag001} 
 
-def convertTagC12(tagC12,oai_id):
-    #print(oai_id, tagC12) 
-    return {}
-
-def convertTag490(tag490,oai_id):
-    #print(oai_id, tag490) 
-    return {}
+def convertTag022(tag022,oai_id):
+    assert len(tag022['a']) == 1
+    return {'issn': tag022['a'][0]}
 
 def convertTag964(tag964,oai_id):
-    #TODO keywords
-    #print(oai_id, tag964) 
-    return {}
+    return {'keywords': tag964['a']} 
 
 def convertTag300(tag300,oai_id):
     if 'a' in tag300.keys():

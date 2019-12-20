@@ -19,6 +19,8 @@ def cli():
 #exportovat vsechno do SAF
 #nahrad na gull a otestovat
 #napsat navod
+#vypisovat ignorovate tagy do spesl tagu
+#nahravat xml jako prilohu
 
 @cli.command()
 def statistic():

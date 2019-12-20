@@ -86,6 +86,7 @@ def parseMarc(metadataDigitool, oai_id):
             '700': tag700.convertTag700,  # vedoucí, oponent,.. 
             '300': otherTag.convertTag300, # počet stran
             '020': tag020.convertTag020, # ISBN
+            '022': otherTag.convertTag022, # ISSN
             '964': otherTag.convertTag964, 
             }
 
@@ -94,7 +95,8 @@ def parseMarc(metadataDigitool, oai_id):
     for tag in metadataDigitool.keys():
         if not tag in tags.keys():
             if  not tag in ignoredTags:
-                print(tag)    
+                pass
+                #print(tag)    
             continue #TODO
             #raise Exception('Unknown tag')
         parsedMetadata[tag] = tags[tag](metadataDigitool[tag], oai_id)
@@ -113,6 +115,16 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
     
     aleph_id = getTopic('aleph_id', metadataOrigin)
     ET.SubElement(m.dc, "dcvalue", element='identifier', qualifier='aleph').text = aleph_id
+    doi = getTopic('doi', metadataOrigin)
+    if doi:
+        ET.SubElement(m.dc, "dcvalue", element='identifier', qualifier='doi').text = doi
+    isbns = getTopic('isbns', metadataOrigin)
+    if isbns:
+        for isbn in isbns:
+            ET.SubElement(m.dc, "dcvalue", element='identifier', qualifier='isbn').text = isbn
+    issn = getTopic('issn', metadataOrigin)
+    if issn:
+        ET.SubElement(m.dc, "dcvalue", element='identifier', qualifier='issn').text = issn
     
     title = getTopic('title', metadataOrigin)
     if not title: 
@@ -154,13 +166,14 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
         ET.SubElement(m.dc, "dcvalue", element='description', qualifier='abstract', language=lang2).text = abstract2
    
     author = sumTopic('author', metadataOrigin)
-    ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='author').text = author
+    if author:
+        ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='author').text = author
     editor = sumTopic('editor', metadataOrigin)
-    ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='editor').text = editor
+    if editor:
+        ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='editor').text = editor
     other = sumTopic('other', metadataOrigin)
-    ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='other').text = other
-
-    #TODO place, institut, isbn
+    if other:
+        ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='other').text = other
 
     pages = getTopic('pages', metadataOrigin)
     ET.SubElement(m.dcterms, "dcvalue", element='pages', qualifier='none').text = pages
