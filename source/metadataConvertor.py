@@ -168,11 +168,13 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
    
     author = sumTopic('author', metadataOrigin)
     if author:
-        ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='author').text = author
+        for a in author:
+            ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='author').text = a
     editor = sumTopic('editor', metadataOrigin)
     if editor:
-        ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='editor').text = editor
-    other = sumTopic('other', metadataOrigin)
+        for e in editor:
+            ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='editor').text = e
+    other = getTopic('other', metadataOrigin)
     if other:
         ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='other').text = other
 

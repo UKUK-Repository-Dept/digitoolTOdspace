@@ -15,7 +15,7 @@ def convertTag700(tag700, oai_id):
         elif roles[i] == 'edt':
             ret['editor'] = [persons[i]]
         elif roles[i] == 'oth':
-            ret['other'] = [persons[i]]
+            ret['other'] = persons[i]
         else:
             raise Exception('Unknown role')
     return ret

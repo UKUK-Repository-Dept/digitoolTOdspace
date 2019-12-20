@@ -53,7 +53,7 @@ def convert(archive,copyfile,log):
         digitoolMetadata = dtx.get_metadata(oai_id)['marc']
         parsedMetadata = metadataConvertor.parseMarc(digitoolMetadata, oai_id)
         convertedMetadata = metadataConvertor.createDC(oai_id, parsedMetadata, digitoolMetadata)
-        #print(convertedMetadata)
+        #print(oai_id, parsedMetadata, convertedMetadata)
         attachements = list(dtx.get_attachements(oai_id))
         attachementsDescription = None
         if len(attachements) == 0:
