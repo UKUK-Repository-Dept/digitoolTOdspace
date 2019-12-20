@@ -1,5 +1,5 @@
 
-def convertTag100(tag100,oai_id,categorize):
+def convertTag100(tag100,oai_id):
     ret = {}
     if 'a' in tag100.keys():
         assert len(tag100['a']) == 1, tag100

@@ -6,7 +6,6 @@ from digitoolXML import DigitoolXML #TODO promazat
 import filenameConvertor #TODO přepsat
 import metadataConvertor #TODO přepsat
 
-from categorize import Categorize
 from sap import createArchive
 
 xml_dirname = "Cerge/2019-12-19"
@@ -22,6 +21,7 @@ def cli():
 #exportovat vsechno do SAF
 #nahrad na gull a otestovat
 #promazat vše
+#napsat navod
 
 @cli.command()
 def statistic():
@@ -50,14 +50,13 @@ def convert(archive,copyfile,log):
         urllib3.disable_warnings()
     dtx = DigitoolXML(xml_dirname)
     oai_ids = dtx.getList()
-    categorize = Categorize(dtx)
 
     for oai_id in oai_ids:
         digitoolMetadata = dtx.get_metadata(oai_id)['marc']
-        parsedMetadata = metadataConvertor.convertMarc(categorize, oai_id, digitoolMetadata)
-        convertedMetadata = metadataConvertor.createDC(categorize, oai_id, parsedMetadata, digitoolMetadata)
+        parsedMetadata = metadataConvertor.parseMarc(digitoolMetadata, oai_id)
+        convertedMetadata = metadataConvertor.createDC(oai_id, parsedMetadata, digitoolMetadata)
         attachements = list(dtx.get_attachements(oai_id))
-        fc = filenameConvertor.FilenameConvertor(categorize)
+        fc = filenameConvertor.FilenameConvertor()
         attachementsDescription = fc.generate_description(oai_id,attachements)
         
         if archive:

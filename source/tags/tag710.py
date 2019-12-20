@@ -1,6 +1,6 @@
 import catalogue 
 
-def convertTag710(tag710,oai_id,categorize):
+def convertTag710(tag710,oai_id):
     ret = {}
     if 'a' in tag710.keys(): #univerzita nebo fakulta
         if len(tag710['a']) > 1:

@@ -1,5 +1,5 @@
 import catalogue
-def convertTag041(tag041,oai_id,categorize):
+def convertTag041(tag041,oai_id):
     ret = {}
     lang = None
     if 'a' in tag041.keys():

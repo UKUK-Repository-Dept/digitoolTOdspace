@@ -1,5 +1,5 @@
 
-def convertTag700(tag700, oai_id, categorize):
+def convertTag700(tag700, oai_id):
     if not 'a' in tag700.keys() or not '4' in tag700.keys():
         return {} #je to jen doplňková informace
     assert 'a' in tag700.keys() and '4' in tag700.keys()

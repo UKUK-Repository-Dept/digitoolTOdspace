@@ -1,5 +1,5 @@
 
-def convertTag246(tag246,oai_id,categorize):
+def convertTag246(tag246,oai_id):
     ret = {}
     if 'b' in tag246.keys():
         ret['alternative'] = "{} {}".format(tag246['a'][0],tag246['b'][0])

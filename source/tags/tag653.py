@@ -1,5 +1,5 @@
 
-def convertTag653(tag653,oai_id,categorize):
+def convertTag653(tag653,oai_id):
     ret = {}
     assert 'a' in tag653.keys()
     ret = {'keywords': tag653['a']}

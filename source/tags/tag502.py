@@ -1,6 +1,6 @@
 import catalogue 
 
-def convertCorrectTag502(tag502, oai_id, categorize):
+def convertCorrectTag502(tag502, oai_id):
     ret = {}
     itemClass, origin = tag502.split("--")
     itemClass = itemClass.strip()
@@ -55,7 +55,7 @@ def convertCorrectTag502(tag502, oai_id, categorize):
             #categorize.categorize_item(oai_id,"Unknown department {}".format(department))
     return ret 
 
-def convertTag502(tag502, oai_id, categorize):
+def convertTag502(tag502, oai_id):
     ret = {}
     tag502 = tag502['a']
     if len(tag502) > 1:
@@ -68,4 +68,4 @@ def convertTag502(tag502, oai_id, categorize):
         categorize.categorize_item(oai_id,"502: No -- split.")
         return ret
     
-    return convertCorrectTag502(tag, oai_id, categorize)
+    return convertCorrectTag502(tag, oai_id)

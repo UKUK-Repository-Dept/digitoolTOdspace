@@ -1,31 +1,31 @@
 import catalogue
 
-def convertTag001(tag001,oai_id,categorize):
+def convertTag001(tag001,oai_id):
     return {'aleph_id': tag001} 
 
-def convertTagC12(tagC12,oai_id,categorize):
+def convertTagC12(tagC12,oai_id):
     #print(oai_id, tagC12) 
     return {}
 
-def convertTag500(tag500,oai_id,categorize):
+def convertTag500(tag500,oai_id):
     #print(oai_id, tag500) 
     return {}
 
-def convertTag490(tag490,oai_id,categorize):
+def convertTag490(tag490,oai_id):
     #print(oai_id, tag490) 
     return {}
 
-def convertTag964(tag964,oai_id,categorize):
+def convertTag964(tag964,oai_id):
     #TODO keywords
     #print(oai_id, tag964) 
     return {}
 
-def convertTag300(tag300,oai_id,categorize):
+def convertTag300(tag300,oai_id):
     if 'a' in tag300.keys():
         return {'pages': tag300['a'][0]} 
     return {}
 
-def convertTag008(tag008,oai_id,categorize):
+def convertTag008(tag008,oai_id):
     lang = tag008[35:38]
     if lang not in catalogue.convertLang.keys():
         if lang == '---':
@@ -34,33 +34,33 @@ def convertTag008(tag008,oai_id,categorize):
             raise Exception('Unknown language')
     return {'lang': catalogue.convertLang[lang]}
 
-def convertTag526(tag526,oai_id,categorize):
+def convertTag526(tag526,oai_id):
     ret = {'discipline': tag526['a'][0] }
     if len(tag526['a']) > 1:
         ret['program'] = tag526['a'][1]
     return ret
 
-def convertTag600(tag600,oai_id,categorize):
+def convertTag600(tag600,oai_id):
     if '2' in tag600:
         return {'czenas': tag600['a']} 
     else:
         return {'keywords': tag600['a']} 
 
-def convertTag610(tag610,oai_id,categorize):
+def convertTag610(tag610,oai_id):
     if '2' in tag610:
         return {'czenas': tag610['a']} 
     else:
         return {'keywords': tag610['a']} 
 
-def convertTag630(tag630,oai_id,categorize):
+def convertTag630(tag630,oai_id):
     return {'keywords': tag630['a']} 
 
-def convertTag648(tag648,oai_id,categorize):
+def convertTag648(tag648,oai_id):
     if '2' in tag648:
         return {'czenas': tag648['a']} 
     return {'keywords': tag648['a']} 
 
-def convertTag651(tag651,oai_id,categorize):
+def convertTag651(tag651,oai_id):
     if '2' in tag651:
         return {'czenas': tag651['a']} 
     return {'keywords': tag651['a']} 

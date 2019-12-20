@@ -2,7 +2,7 @@ import catalogue
 import string
 import unicodedata
 
-def convertTag260(tag,oai_id,categorize):
+def convertTag260(tag,oai_id):
     ret = {}
     
     if 'a' in tag.keys():

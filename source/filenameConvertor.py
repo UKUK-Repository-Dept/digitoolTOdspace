@@ -12,9 +12,6 @@ def distance(word1,word2):
     return diff
 
 class FilenameConvertor:
-    def __init__(self, categorize):
-        self.categorize = categorize
-
     side = [
             ( ['vedouci'], "Posudek vedoucího" ),
             ( ['opon'], "Posudek oponenta" ),
@@ -80,7 +77,8 @@ class FilenameConvertor:
         elif len(mainFiles) == 1:
             filename, filetype = mainFiles[0]
             if filetype != 'application/pdf': 
-                self.categorize.categorize_item(oai_id, "text práce není v pdf")
+                pass
+                #self.categorize.categorize_item(oai_id, "text práce není v pdf")
             else:
                 return attachement + [(filename, filetype, "Text práce")]
         elif len(mainFiles) == 2:
@@ -89,7 +87,8 @@ class FilenameConvertor:
             if filetype1 == filetype2 == 'application/pdf':
                 return attachement + [(filename1, filetype1, "Text práce"), (filename2, filetype2, "Text práce")]
             if filetype1 != 'application/pdf' and filetype2 != 'application/pdf':
-                self.categorize.categorize_item(oai_id, "text práce není v pdf")
+                pass
+                #self.categorize.categorize_item(oai_id, "text práce není v pdf")
             if filetype2 == 'application/pdf':
                 filename1, filename2 = filename2, filename1
                 filetype1, filetype2 = filetype2, filetype1

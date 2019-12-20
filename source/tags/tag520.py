@@ -1,6 +1,6 @@
 import catalogue
 
-def convertTag520(tag520,oai_id,categorize):
+def convertTag520(tag520,oai_id):
     ret = {}
     assert 'a' in tag520.keys()
     if len(tag520['a']) > 1:

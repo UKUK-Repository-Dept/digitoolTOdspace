@@ -1,6 +1,6 @@
 import catalogue
 
-def convertTag655(tag655,oai_id,categorize):
+def convertTag655(tag655,oai_id):
     ret = {}
     if 'a' in tag655.keys():
         if len(tag655['a']) > 1:

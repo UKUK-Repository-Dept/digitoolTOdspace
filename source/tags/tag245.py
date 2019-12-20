@@ -75,7 +75,7 @@ delete = [
         ' /',
         ]
 
-def convertTag245(tag245, oai_id, categorize):
+def convertTag245(tag245, oai_id):
     ret = {}
 
     #title

@@ -1,5 +1,5 @@
 
-def convertTag020(tag020,oai_id,categorize):
+def convertTag020(tag020,oai_id):
     for isbn in tag020['a']:
         isbn2=isbn.replace('-','')
   #      print(isbn2)
