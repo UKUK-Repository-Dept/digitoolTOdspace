@@ -6,7 +6,7 @@ def convertTag100(tag100,oai_id):
         author = tag100['a'][0]
         if author[-1] == ',':
             author = author[:-1]
-        ret['author'] = author
+        ret['author'] = [author]
     if 'c' in tag100.keys(): # má tam být Dr a pod nikoliv 'psychologie'
         assert len(tag100['c']) == 1
         if not tag100['c'] in ['PhDr','ml','Dr']:

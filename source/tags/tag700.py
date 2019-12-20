@@ -11,11 +11,11 @@ def convertTag700(tag700, oai_id):
     ret = {}
     for i in range(len(persons)):
         if roles[i] == 'aut':
-            ret['author'] = persons[i]
+            ret['author'] = [persons[i]]
         elif roles[i] == 'edt':
-            ret['editor']=persons[i]
+            ret['editor'] = [persons[i]]
         elif roles[i] == 'oth':
-            ret['other']=persons[i]
+            ret['other'] = [persons[i]]
         else:
             print(oai_id, roles[i])
             #TODO mělo by být prázdné

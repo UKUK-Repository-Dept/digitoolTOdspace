@@ -7,6 +7,7 @@ class Metadata:
     def __init__(self):
         self.dc = ET.Element("dublin_core")
         self.thesis = ET.Element("dublin_core", schema="thesis")
+        self.dcterms = ET.Element("dublin_core", schema="dcterms")
 
     def __str__(self):
         s = ET.tostring(self.dc).decode() + "\n"
@@ -87,11 +88,15 @@ def parseMarc(metadataDigitool, oai_id):
             '020': tag020.convertTag020, # ISBN
             '964': otherTag.convertTag964, 
             }
-    ignoredTags = ['500']
 
-    for tag in tags.keys():
-        if not tag in metadataDigitool.keys():
-            continue
+    ignoredTags = ['LDR','FMT','500','C26','BAS','999','005','003','C13','024','250']
+
+    for tag in metadataDigitool.keys():
+        if not tag in tags.keys():
+            if  not tag in ignoredTags:
+                print(tag)    
+            continue #TODO
+            #raise Exception('Unknown tag')
         parsedMetadata[tag] = tags[tag](metadataDigitool[tag], oai_id)
     
     return parsedMetadata
@@ -158,7 +163,7 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
     #TODO place, institut, isbn
 
     pages = getTopic('pages', metadataOrigin)
-    #TODO ulozit
+    ET.SubElement(m.dcterms, "dcvalue", element='pages', qualifier='none').text = pages
 
     year = getTopic('year', metadataOrigin)
     if year:
