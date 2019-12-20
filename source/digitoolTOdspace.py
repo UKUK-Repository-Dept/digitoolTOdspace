@@ -14,7 +14,7 @@ def cli():
     pass
 
 #TODO 
-#smazat TODO, print, categorize, zbytecne komenty
+#smazat TODO, print, zbytecne komenty
 #tabulka cela
 #exportovat vsechno do SAF
 #nahrad na gull a otestovat

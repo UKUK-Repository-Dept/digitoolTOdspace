@@ -3,6 +3,10 @@ import catalogue
 def convertTag001(tag001,oai_id):
     return {'aleph_id': tag001} 
 
+def convertTag017(tag017,oai_id):
+    assert len(tag017['a']) == 1
+    return {'dio': tag017['a'][0]}
+
 def convertTag022(tag022,oai_id):
     assert len(tag022['a']) == 1
     return {'issn': tag022['a'][0]}

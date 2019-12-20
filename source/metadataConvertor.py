@@ -87,6 +87,7 @@ def parseMarc(metadataDigitool, oai_id):
             '300': otherTag.convertTag300, # počet stran
             '020': tag020.convertTag020, # ISBN
             '022': otherTag.convertTag022, # ISSN
+            '017': otherTag.convertTag017, # DIO
             '964': otherTag.convertTag964, 
             }
 

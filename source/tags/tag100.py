@@ -10,12 +10,11 @@ def convertTag100(tag100,oai_id):
     if 'c' in tag100.keys(): # má tam být Dr a pod nikoliv 'psychologie'
         assert len(tag100['c']) == 1
         if not tag100['c'] in ['PhDr','ml','Dr']:
-            categorize.categorize_item(oai_id,"100c neznámá hodnota  {}".format(tag100['c']))
+            raise Exception("100c neznámá hodnota  {}".format(tag100['c']))
     if 'd' in tag100.keys(): # narození (a úmrti) autora
         pass 
     if 'q' in tag100.keys():
         assert 'obhaj' in tag100['q'][0]
-        categorize.categorize_item(oai_id,"100q nemá mít roky obhajoby  {}".format(tag100['q']))
     if '4' in tag100.keys():
         if not tag100['4'][0] in ['dis','aut','ths']:
             pass
