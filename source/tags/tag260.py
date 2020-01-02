@@ -6,13 +6,10 @@ def convertTag260(tag,oai_id):
     ret = {}
     
     if 'a' in tag.keys():
-        ret['place'] = []
-        for place in tag['a']:
-            if place[-2:] == ' :':
-                place = place[:-2]
-            ret['place'].append(place)
-        ret['place'] = tag['a'][0]
-        #TODO zkontrolovat že zmizel ten institut
+        place = tag['a'][0]
+        if place[-2:] == ' :':
+            place = place[:-2]
+        ret['place'] = place
     
     if 'b' in tag.keys():
         if len(tag['b']) == 1:

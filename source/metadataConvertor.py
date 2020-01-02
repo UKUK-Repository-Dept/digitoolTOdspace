@@ -202,7 +202,14 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
             ET.SubElement(
                     m.oaire, "dcvalue", element='fundingReference', qualifier='adwardNumber'
                     ).text = grantAgency
+    
+    place = getTopic('place', metadataOrigin)
+    if place:
+        ET.SubElement(m.dc, "dcvalue", element='publisher', qualifier='place').text = place
 
+    institut = getTopic('institut', metadataOrigin)
+    if institut:
+        ET.SubElement(m.dc, "dcvalue", element='publisher', qualifier='none').text = institut
 
     ignored = getTopic('ignored', metadataOrigin)
     #print(ignored) #TODO
