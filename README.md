@@ -8,25 +8,47 @@ pip3 install -r requirements.txt
 python3 source/digitoolTOdspace.py --help 
 ```
 
-# File export from digitool
+# Detailed converting instruction
 
-xml with metadata:
+Prepare structure for source data
 ```
 FOLDER='Cerge'
+mkdir -p $FOLDER/$(date +%F)
+```
+
+Download xml with metadata:
+````
 scp -r novotj@dingo.is.cuni.cz:/exlibris/dtl/j3_1/digitool/home/profile/export/export_Jitka/$FOLDER/digital_entities $FOLDER/$(date +%F)/digital_entities
 ```
-Assets:
+
+Download list of assets for quick testing of metadata: (recommended for thesis)
 ```
 ssh novotj@dingo.is.cuni.cz "ls /exlibris/dtl/j3_1/digitool/home/profile/export/export_Jitka/$FOLDER/streams/ > /home/novotj/ls_streams.txt"
-mkdir -p $FOLDER/$(date +%F)
 scp -r novotj@dingo.is.cuni.cz:/home/novotj/ls_streams.txt $FOLDER/$(date +%F)
 ```
-or
+or download all assets: (recommended for Cerge)
 ```
 scp -r novotj@dingo.is.cuni.cz:/exlibris/dtl/j3_1/digitool/home/profile/export/export_Jitka/$FOLDER/streams/ $FOLDER/$(date +%F)/streams/
 ```
 
-Import on gull #TODO jen jedna sbírka
+Create simple archive format:
+```
+python3 source/digitoolTOdspace.py convert --archive --copyfile
+```
+
+Upload simple archive format:
+```
+scp -r output/* novotj@gull.is.cuni.cz:/dspace/cerge
+```
+
+Login to gull:
+```
+ssh novotj@gull.is.cuni.cz
+sudo -i -u dspace
+```
+
+Import the first ten items:
+on gull #TODO jen jedna sbírka 284
 ```
 cat /dspace/kvalifikacni2006/gull | while read -r id col ; do /opt/dspace/bin/dspace import -a -e jitkaucw@gmail.com -s /dspace/kvalifikacni2006/$id -c $col -m /tmp/mapfile/$id; done
 ```

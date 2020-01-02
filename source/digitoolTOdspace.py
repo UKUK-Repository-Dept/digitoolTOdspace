@@ -5,7 +5,7 @@ import urllib3 #disable warnings about http an gull
 from digitoolXML import DigitoolXML #přepsat 
 import metadataConvertor 
 
-xml_dirname = "Cerge/2019-12-19"
+xml_dirname = "Cerge/2020-01-02"
 loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
 
 @click.group()
