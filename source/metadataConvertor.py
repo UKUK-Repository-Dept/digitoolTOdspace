@@ -67,10 +67,12 @@ def parseMarc(metadataDigitool, oai_id):
             '242': otherTag.convertTag242,
             '773': tag773.convertTag,
             '856': tag856.convertTag,
+            '490': tag490.convertTag,
+            'C12': tagC12.convertTag,
+            'C20': tagC20.convertTag,
             }
 
     ignoredTags = ['LDR','FMT','500','C26','BAS','999','005','003','C13','024','250','787','C34','C30']
-    todoTags = [ '490', 'C12', 'C20']
 
     ignoredSummary = ""
 
@@ -79,8 +81,6 @@ def parseMarc(metadataDigitool, oai_id):
             parsedMetadata[tag] = tags[tag](metadataDigitool[tag], oai_id)
         elif tag in ignoredTags:
             ignoredSummary += tag +":  " + str(metadataDigitool[tag])+"\n"
-        elif tag in todoTags:
-            continue #TODO
         else:
             raise Exception('Unknown tag')
 
