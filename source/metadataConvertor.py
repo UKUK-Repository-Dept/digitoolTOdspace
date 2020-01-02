@@ -62,17 +62,18 @@ def parseMarc(metadataDigitool, oai_id):
             '022': otherTag.convertTag022, # ISSN
             '017': otherTag.convertTag017, # DIO
             '964': otherTag.convertTag964, 
+            'TYP': otherTag.convertTagTYP, 
             }
 
     ignoredTags = ['LDR','FMT','500','C26','BAS','999','005','003','C13','024','250']
+    todoTags = ['003', '005', '024', '242', '250', '490', '500', '773', '787', '856', '999', 'BAS', 'C12', 'C13', 'C20', 'C26', 'C30', 'C34', 'C99', 'FMT', 'LDR']
+
 
     for tag in metadataDigitool.keys():
         if not tag in tags.keys():
-            if  not tag in ignoredTags:
-                pass
-                print(tag)    
-            continue #TODO
-            #raise Exception('Unknown tag')
+            if  not tag in (ignoredTags + todoTags):
+                raise Exception('Unknown tag')
+            continue
         parsedMetadata[tag] = tags[tag](metadataDigitool[tag], oai_id)
     
     return parsedMetadata

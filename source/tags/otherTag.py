@@ -1,5 +1,9 @@
 import catalogue
 
+def convertTagTYP(tagTYP,oai_id):
+    assert len(tagTYP['a']) == 1
+    return {'book_type': tagTYP['a'][0]} 
+
 def convertTag001(tag001,oai_id):
     return {'aleph_id': tag001} 
 
