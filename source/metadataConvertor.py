@@ -8,6 +8,7 @@ class Metadata:
         self.dc = ET.Element("dublin_core")
         self.thesis = ET.Element("dublin_core", schema="thesis")
         self.dcterms = ET.Element("dublin_core", schema="dcterms")
+        self.oaire = ET.Element("dublin_core", schema="oaire")
 
     def __str__(self):
         s = ET.tostring(self.dc).decode() + "\n"
@@ -19,6 +20,10 @@ class Metadata:
         tree.write(directory+'/dublin_core.xml')
         tree = ET.ElementTree(self.thesis)
         tree.write(directory+'/metadata_thesis.xml')
+        tree = ET.ElementTree(self.dcterms)
+        tree.write(directory+'/dcterms.xml')
+        tree = ET.ElementTree(self.oaire)
+        tree.write(directory+'/oaire.xml')
 
 def getTopic(topic, metadata):
     result1  = None
@@ -182,7 +187,23 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
     book_type = getTopic('book_type', metadataOrigin)
     if book_type: #TODO ověřit správnost
         ET.SubElement(m.dcterms, "dcvalue", element='type', qualifier='none', language='en_US').text = book_type
+   
+
+    grantNumbers = getTopic('grantNumbers', metadataOrigin)
+    if grantNumbers:
+        for grantNumber in grantNumbers:
+            ET.SubElement(
+                    m.oaire, "dcvalue", element='fundingReference', qualifier='adwardNumber'
+                    ).text = grantNumber
     
+    grantAgencies = getTopic('grantAgencies', metadataOrigin)
+    if grantAgencies:
+        for grantAgency in grantAgencies:
+            ET.SubElement(
+                    m.oaire, "dcvalue", element='fundingReference', qualifier='adwardNumber'
+                    ).text = grantAgency
+
+
     ignored = getTopic('ignored', metadataOrigin)
     #print(ignored) #TODO
 
