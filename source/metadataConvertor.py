@@ -69,7 +69,7 @@ def parseMarc(metadataDigitool, oai_id):
             }
 
     ignoredTags = ['LDR','FMT','500','C26','BAS','999','005','003','C13','024','250']
-    todoTags = ['003', '005', '024', '242', '250', '490', '500', '787', '856', '999', 'BAS', 'C12', 'C13', 'C20', 'C26', 'C30', 'C34', 'FMT', 'LDR']
+    todoTags = ['003', '005', '024', '242', '250', '490', '500', '787', '999', 'BAS', 'C12', 'C13', 'C20', 'C26', 'C30', 'C34', 'FMT', 'LDR']
 
 
     for tag in metadataDigitool.keys():

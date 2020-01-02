@@ -54,19 +54,6 @@ def convert(archive,copyfile,log):
         convertedMetadata = metadataConvertor.createDC(oai_id, parsedMetadata, digitoolMetadata)
         #print(oai_id, parsedMetadata, convertedMetadata)
         attachements = list(dtx.get_attachements(oai_id))
-        attachementsDescription = None
-        if len(attachements) == 0 or attachements[0][0] == 'undefined':
-            pass 
-        else:
-            # z příloh vyřadím náhledy a indexy
-            attachementsDescription = []
-            for (filename, filetype) in attachements:
-                if '_thumbnail.jpg' in filename or '_index.html' in filename: 
-                    continue
-                if filetype not in ['application/pdf','text/html']:
-                    raise Exception("new type of document")
-                attachementsDescription.append((filename,filetype,'Příloha'))
-            assert len(attachementsDescription) == 1
 
         if archive:
             outputDirectory = 'output/' + str(oai_id)
@@ -78,23 +65,37 @@ def convert(archive,copyfile,log):
             convertedMetadata.save(outputDirectory)
 
             #create contents file
-            if attachementsDescription:
-                f = open(outputDirectory+'/contents','w')
-                for filename, filetype, description in attachementsDescription:
-                    filepath = xml_dirname + '/streams/' + filename
-                    if copyfile:
-                        os.system("cp '"+filepath+"' "+outputDirectory)
-                    row = filename + '\t'
-                    row += 'bundle:ORIGINAL\t'
-                    row += 'permissits:-r '
-                    if 'Posudek' in description:
-                        row += "'Admin'"
-                    else:
-                        row += "'IPshibAuthenticatedUniMember'"
-                    row += '\tdescription:'+description
-                    row += '\n'
-                    f.write(row)
-                f.close()
+            f = open(outputDirectory+"/contents","w")
+            for filename, filetype in attachements:
+                if filename == 'undefined':
+                    continue
+                if '_thumbnail.jpg' in filename or '_index.html' in filename: 
+                    continue
+                if filetype not in ['application/pdf','text/html']:
+                    raise Exception("new type of document")
+                if copyfile:
+                    filepath = xml_dirname + "/streams/" + filename
+                    os.system("cp '"+filepath+"' "+outputDirectory)
+                row = createRow(filename,"Příloha")
+                f.write(row)
+            if copyfile:
+                filepath = xml_dirname + "/digital_entities/" + oai_id + ".xml" 
+                os.system("cp '"+filepath+"' "+outputDirectory)
+            row = createRow(oai_id + ".xml", "metadata")
+            f.write(row)
+            f.close()
+
+def createRow(filename, description):
+        row = filename + '\t'
+        row += 'bundle:ORIGINAL\t'
+        row += 'permissits:-r '
+        #if 'Posudek' in description:
+        #    row += "'Admin'"
+        #else:
+        #    row += "'IPshibAuthenticatedUniMember'"
+        row += '\tdescription:'+description
+        row += '\n'
+        return row
 
 if __name__ == '__main__':
     cli()

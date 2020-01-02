@@ -48,7 +48,7 @@ sudo -i -u dspace
 ```
 
 Import the first ten items:
-on gull #TODO jen jedna sbírka 284
+
 ```
-cat /dspace/kvalifikacni2006/gull | while read -r id col ; do /opt/dspace/bin/dspace import -a -e jitkaucw@gmail.com -s /dspace/kvalifikacni2006/$id -c $col -m /tmp/mapfile/$id; done
+ls /dspace/cerge/ | head | while read -r ID ; do /opt/dspace/bin/dspace import -a -e jitkaucw@gmail.com -s /dspace/cerge/$ID -c 284 -m /dspace/mapfile_zaloha/cerge/$ID; done
 ```
