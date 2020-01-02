@@ -1,5 +1,11 @@
 import catalogue
 
+def convertTagC99(tagC99,oai_id):
+    print(tagC99) #někteří mají 'a' někteří 'd' vždy jen jedno
+    return {}
+    #assert len(tagTYP['a']) == 1
+    #return {'book_type': tagTYP['a'][0]} 
+
 def convertTagTYP(tagTYP,oai_id):
     assert len(tagTYP['a']) == 1
     return {'book_type': tagTYP['a'][0]} 
