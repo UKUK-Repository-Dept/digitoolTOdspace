@@ -13,11 +13,9 @@ def cli():
     pass
 
 #TODO 
-#smazat TODO, print, zbytecne komenty
+#smazat TODO, print
 #tabulka cela
 #napsat navod
-#vypisovat ignorovate tagy do spesl tagu
-#nahravat xml jako prilohu
 #otestovat nahravani bez prilohy, s prilohou, metadata
 
 @cli.command()

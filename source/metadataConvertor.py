@@ -64,20 +64,27 @@ def parseMarc(metadataDigitool, oai_id):
             '964': otherTag.convertTag964, 
             'TYP': otherTag.convertTagTYP, 
             'C99': otherTag.convertTagC99,
+            '242': otherTag.convertTag242,
             '773': tag773.convertTag,
             '856': tag856.convertTag,
             }
 
-    ignoredTags = ['LDR','FMT','500','C26','BAS','999','005','003','C13','024','250']
-    todoTags = ['003', '005', '024', '242', '250', '490', '500', '787', '999', 'BAS', 'C12', 'C13', 'C20', 'C26', 'C30', 'C34', 'FMT', 'LDR']
+    ignoredTags = ['LDR','FMT','500','C26','BAS','999','005','003','C13','024','250','787','C34','C30']
+    todoTags = [ '490', 'C12', 'C20']
 
+    ignoredSummary = ""
 
     for tag in metadataDigitool.keys():
-        if not tag in tags.keys():
-            if  not tag in (ignoredTags + todoTags):
-                raise Exception('Unknown tag')
-            continue
-        parsedMetadata[tag] = tags[tag](metadataDigitool[tag], oai_id)
+        if tag in tags.keys():
+            parsedMetadata[tag] = tags[tag](metadataDigitool[tag], oai_id)
+        elif tag in ignoredTags:
+            ignoredSummary += tag +":  " + str(metadataDigitool[tag])+"\n"
+        elif tag in todoTags:
+            continue #TODO
+        else:
+            raise Exception('Unknown tag')
+
+    parsedMetadata['all'] = {'ignored': ignoredSummary }
     
     return parsedMetadata
        
@@ -166,5 +173,17 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
     if keywords:
         for keyword in keywords:
             ET.SubElement(m.dc, "dcvalue", element='subject', qualifier='none', language='en_US').text = keyword
+    
+    titleByAgency = getTopic('title_by_agency', metadataOrigin)
+    if titleByAgency: #TODO ověřit správnost
+        #TODO jazyky jsou nahodne
+        ET.SubElement(m.dc, "dcvalue", element='title', qualifier='alternative').text = titleByAgency
+    
+    book_type = getTopic('book_type', metadataOrigin)
+    if book_type: #TODO ověřit správnost
+        ET.SubElement(m.dcterms, "dcvalue", element='type', qualifier='none', language='en_US').text = book_type
+    
+    ignored = getTopic('ignored', metadataOrigin)
+    #print(ignored) #TODO
 
     return m
