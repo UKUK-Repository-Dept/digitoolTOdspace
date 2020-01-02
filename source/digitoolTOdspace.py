@@ -3,7 +3,7 @@ import os, click, logging
 import urllib3 #disable warnings about http an gull
 
 from digitoolXML import DigitoolXML #přepsat 
-import metadataConvertor #TODO přepsat
+import metadataConvertor 
 
 xml_dirname = "Cerge/2019-12-19"
 loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
@@ -15,11 +15,10 @@ def cli():
 #TODO 
 #smazat TODO, print, zbytecne komenty
 #tabulka cela
-#exportovat vsechno do SAF
-#nahrad na gull a otestovat
 #napsat navod
 #vypisovat ignorovate tagy do spesl tagu
 #nahravat xml jako prilohu
+#otestovat nahravani bez prilohy, s prilohou, metadata
 
 @cli.command()
 def statistic():
@@ -40,7 +39,7 @@ def statistic():
 
 @cli.command()
 @click.option('--archive/--no-archive', default=False, help='Create Simple Archive Formate')
-@click.option('--copyfile/--no-copyfile', default=False, help='Copy files to SAF') #TODO napsat
+@click.option('--copyfile/--no-copyfile', default=False, help='Copy files to SAF')
 @click.option('--log', default='error', type=click.Choice(loggingMap.keys()), help='Logging level')
 def convert(archive,copyfile,log):
     logging.getLogger().setLevel(loggingMap[log])
@@ -56,21 +55,17 @@ def convert(archive,copyfile,log):
         #print(oai_id, parsedMetadata, convertedMetadata)
         attachements = list(dtx.get_attachements(oai_id))
         attachementsDescription = None
-        if len(attachements) == 0:
-            pass #TODO otestovat nahravani
-        elif attachements[0][0] == 'undefined':
-            pass #TODO
-            #print(oai_id,attachements)
+        if len(attachements) == 0 or attachements[0][0] == 'undefined':
+            pass 
         else:
             # z příloh vyřadím náhledy a indexy
             attachementsDescription = []
             for (filename, filetype) in attachements:
                 if '_thumbnail.jpg' in filename or '_index.html' in filename: 
                     continue
-                if filetype != 'application/pdf':
-                    pass #TODO kouknout se na obsah tech html
-                    #print(oai_id,attachements)
-                attachementsDescription.append((filename,filetype,'TODO to co je videt'))
+                if filetype not in ['application/pdf','text/html']:
+                    raise Exception("new type of document")
+                attachementsDescription.append((filename,filetype,'Příloha'))
             assert len(attachementsDescription) == 1
 
         if archive:

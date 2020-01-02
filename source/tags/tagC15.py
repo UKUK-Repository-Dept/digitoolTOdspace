@@ -2,7 +2,7 @@
 def convertTagC15(tagC15,oai_id):
     ret = {}
     if not 'a' in tagC15.keys():
-        return {} #TODO
+        return {} #jenom jeden
     assert 'a' in tagC15.keys()
     ret['abstract'] = tagC15['a'][0]
     

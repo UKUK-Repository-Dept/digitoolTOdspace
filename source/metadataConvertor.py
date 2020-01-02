@@ -20,33 +20,6 @@ class Metadata:
         tree = ET.ElementTree(self.thesis)
         tree.write(directory+'/metadata_thesis.xml')
 
-def comparePeople(name1,name2): #TODO potrebuju to?
-    def normaliseName(name):
-        name = name.replace(':','').replace('.','. ')
-        names = sorted(name.replace(',',' ').replace('-',' ').split())
-        for name in names:
-            if name in ['vypracoval', 'vypracovala', 'p.', 'autorka', 'autor:', 'roz.', 'a', 'prcáe', 'sociolog', 'prác', 'práve', 'by']:
-                continue
-            name = name.strip()
-            yield name
-    if name1 == None:
-        return True
-    name1 = list(normaliseName(name1))
-    name2 = list(normaliseName(name2))
-    if not len(name1) == len(name2):
-       return False
-    for i in range(len(name1)):
-        if len(name1[i]) > len(name2[i]):
-            first, second = name2[i], name1[i]
-        else:
-            first, second = name1[i], name2[i]
-        if len(first) == 2 and first[1] in ['.',','] and first[0] == second[0]: 
-            continue #iniciály
-        if not first == second:
-            return False
-    return True
-
-
 def getTopic(topic, metadata):
     result1  = None
     tag1 = None
@@ -73,7 +46,7 @@ def sumTopic(topic, metadata):
 
 def parseMarc(metadataDigitool, oai_id):
     parsedMetadata = {}
-    tags = { #TODO zkontroval vyplnenou tabulku vs statistiku vs toto
+    tags = { 
             '001': otherTag.convertTag001,#aleph_id
             '245': tag245.convertTag245, #titul, autor 
             '100': tag100.convertTag100, #autor
@@ -97,7 +70,7 @@ def parseMarc(metadataDigitool, oai_id):
         if not tag in tags.keys():
             if  not tag in ignoredTags:
                 pass
-                #print(tag)    
+                print(tag)    
             continue #TODO
             #raise Exception('Unknown tag')
         parsedMetadata[tag] = tags[tag](metadataDigitool[tag], oai_id)
