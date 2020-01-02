@@ -180,12 +180,11 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
             ET.SubElement(m.dc, "dcvalue", element='subject', qualifier='none', language='en_US').text = keyword
     
     titleByAgency = getTopic('title_by_agency', metadataOrigin)
-    if titleByAgency: #TODO ověřit správnost
-        #TODO jazyky jsou nahodne
+    if titleByAgency: 
         ET.SubElement(m.dc, "dcvalue", element='title', qualifier='alternative').text = titleByAgency
     
     book_type = getTopic('book_type', metadataOrigin)
-    if book_type: #TODO ověřit správnost
+    if book_type: 
         ET.SubElement(m.dcterms, "dcvalue", element='type', qualifier='none', language='en_US').text = book_type
    
 
