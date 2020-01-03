@@ -9,6 +9,7 @@ class Metadata:
         self.thesis = ET.Element("dublin_core", schema="thesis")
         self.dcterms = ET.Element("dublin_core", schema="dcterms")
         self.oaire = ET.Element("dublin_core", schema="oaire")
+        self.uk = ET.Element("dublin_core", schema="uk")
 
     def __str__(self):
         s = ET.tostring(self.dc).decode() + "\n"
@@ -24,6 +25,8 @@ class Metadata:
         tree.write(directory+'/dcterms.xml')
         tree = ET.ElementTree(self.oaire)
         tree.write(directory+'/oaire.xml')
+        tree = ET.ElementTree(self.uk)
+        tree.write(directory+'/uk.xml')
 
 def getTopic(topic, metadata):
     result1  = None
@@ -102,7 +105,7 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
     ET.SubElement(m.dc, "dcvalue", element='language', qualifier='iso').text = lang
     
     aleph_id = getTopic('aleph_id', metadataOrigin)
-    ET.SubElement(m.dc, "dcvalue", element='identifier', qualifier='aleph').text = aleph_id
+    ET.SubElement(m.dc, "dcvalue", element='identifier', qualifier='other').text = aleph_id
     doi = getTopic('doi', metadataOrigin)
     if doi:
         ET.SubElement(m.dc, "dcvalue", element='identifier', qualifier='doi').text = doi
@@ -179,11 +182,11 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
     
     titleByAgency = getTopic('title_by_agency', metadataOrigin)
     if titleByAgency: 
-        ET.SubElement(m.dc, "dcvalue", element='title', qualifier='alternative').text = titleByAgency
+        ET.SubElement(m.dc, "dcvalue", element='title', qualifier='alternativeTranslated').text = titleByAgency
     
     book_type = getTopic('book_type', metadataOrigin)
     if book_type: 
-        ET.SubElement(m.dcterms, "dcvalue", element='type', qualifier='none', language='en_US').text = book_type
+        ET.SubElement(m.dc, "dcvalue", element='type', qualifier='none', language='en_US').text = book_type
    
 
     grantNumbers = getTopic('grantNumbers', metadataOrigin)
@@ -223,6 +226,8 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
 
 
     ignored = getTopic('ignored', metadataOrigin)
-    #print(ignored) #TODO
+    ET.SubElement(m.uk, "dcvalue", element='metadata', qualifier='string').text = ignored
+    
+    ET.SubElement(m.dc, "dcvalue", element='identifier', qualifier='dtl').text = oai_id
 
     return m
