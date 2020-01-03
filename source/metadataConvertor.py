@@ -108,7 +108,7 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
     doi = getTopic('doi', metadataOrigin)
     if doi:
         ET.SubElement(m.dc, "dcvalue", element='identifier', qualifier='doi').text = doi
-    isbns = getTopic('isbns', metadataOrigin)
+    isbns = sumTopic('isbns', metadataOrigin)
     if isbns:
         for isbn in isbns:
             ET.SubElement(m.dc, "dcvalue", element='identifier', qualifier='isbn').text = isbn
@@ -209,6 +209,12 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
     institut = getTopic('institut', metadataOrigin)
     if institut:
         ET.SubElement(m.dc, "dcvalue", element='publisher', qualifier='none').text = institut
+
+    source = getTopic('source', metadataOrigin)
+    if source:
+        ET.SubElement(m.dc, "dcvalue", element='source', qualifier='none').text = source
+
+
 
     ignored = getTopic('ignored', metadataOrigin)
     #print(ignored) #TODO
