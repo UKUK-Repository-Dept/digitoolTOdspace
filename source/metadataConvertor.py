@@ -213,6 +213,10 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
     source = getTopic('source', metadataOrigin)
     if source:
         ET.SubElement(m.dc, "dcvalue", element='source', qualifier='none').text = source
+    
+    series = getTopic('series', metadataOrigin)
+    if series:
+        ET.SubElement(m.dc, "dcvalue", element='relation', qualifier='ispartofseries').text = series
 
     urls = getTopic('urls', metadataOrigin)
     if urls:
