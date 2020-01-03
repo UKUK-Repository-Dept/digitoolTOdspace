@@ -25,7 +25,7 @@ def statistic():
     click.echo("záznamů {}".format(len(oai_ids)))
     allTags = []
     for oai_id in oai_ids:
-        metadata = dtx.get_metadata(oai_id)['marc']
+        metadata = dtx.get_metadata(oai_id)
         allTags.extend(metadata.keys())
     statistic = []
     for tag in set(allTags):
@@ -47,7 +47,7 @@ def convert(archive,copyfile,log):
     oai_ids = dtx.getList()
 
     for oai_id in oai_ids:
-        digitoolMetadata = dtx.get_metadata(oai_id)['marc']
+        digitoolMetadata = dtx.get_metadata(oai_id)
         parsedMetadata = metadataConvertor.parseMarc(digitoolMetadata, oai_id)
         convertedMetadata = metadataConvertor.createDC(oai_id, parsedMetadata, digitoolMetadata)
         #print(oai_id, parsedMetadata, convertedMetadata)

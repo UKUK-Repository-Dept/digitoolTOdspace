@@ -51,7 +51,7 @@ class DigitoolXML:
             marc = 0
             for relation in self.get_relations(oai_id):
                 seen.append(relation)
-                if 'marc' in self.get_metadata(relation):
+                if self.get_metadata(relation):
                     marc += 1
                     oai_ids.append(relation)
             assert marc == 1 
@@ -93,7 +93,6 @@ class DigitoolXML:
         tree = ET.parse(self.xml_dirname+"/"+str(oai_id)+".xml")
         root = tree.getroot()
         mds = tag(tag(root,"digital_entity"),"mds")
-        res = {}
         for child in mds:
             name = tag(child,"name")
             metadataType = tag(child,"type")
@@ -101,9 +100,7 @@ class DigitoolXML:
             if name.text != 'descriptive':
                 continue
             if metadataType.text == 'marc':
-                assert 'marc' not in res.keys()
-                res['marc'] = parseMarc(value.text)
+                return parseMarc(value.text)
             else:
                 raise Exception("unknown format")
-        return res
 
