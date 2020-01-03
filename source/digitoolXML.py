@@ -16,7 +16,12 @@ class DigitoolXML:
         self.dirname = dirname
         self.xml_dirname = dirname+'/digital_entities'
 
-    def get_relations(self, oai_id):
+    def get_relations(self, oai_id): 
+        # dostane oai_id a vrátí všechny oai_id od stejné práce
+        # (v digitoolu má každá příloha, ale i další věci vlastní 
+        # oai_id a mají mezi sebou různý vztah. U kvalifikačěk 
+        # v té struktuře bylo tolik chyb, že jsme se rozhodli neřešit 
+        # strukturu a druh vztahu, ale brát všechno)
         seen = []
         stack = [oai_id]
         while len(stack) > 0:
@@ -33,6 +38,7 @@ class DigitoolXML:
         return seen
 
     def getList(self):
+        # vrátí seznam oai_id, kde za každou práci má právě jedno oai_id a to to které má marc
         oai_ids = []
         path = self.xml_dirname
         seen = []
@@ -45,17 +51,14 @@ class DigitoolXML:
             marc = 0
             for relation in self.get_relations(oai_id):
                 seen.append(relation)
-                originalMetadataXML = self.get_metadata(relation)
-                if 'marc' in originalMetadataXML.keys():
+                if 'marc' in self.get_metadata(relation):
                     marc += 1
                     oai_ids.append(relation)
-            #TODO smazat
-            #if marc != 1:
-            #    print(oai_id, marc)
-            #assert marc == 1 
+            assert marc == 1 
         return oai_ids
 
     def get_attachements(self, oai_id, seen=None):
+        # vrátí všechny přílohy práce na základně jednoho jejího oai_id
         logging.debug("Getting attachement of {}.".format(oai_id))
         for relation in self.get_relations(oai_id):
             tree = ET.parse(self.xml_dirname+'/'+str(relation)+".xml")
@@ -67,6 +70,7 @@ class DigitoolXML:
                     yield filename, mime_type
     
     def get_metadata(self, oai_id):
+        # vrátí metadata z daného oai_id (ale to musí být to co má marc, nikoliv jiná příloha)
         def parseMarc(value):
             metadata = {}
             tree = ET.fromstring(value)
@@ -85,10 +89,6 @@ class DigitoolXML:
                     index = tag['tag']
                     metadata[index] = field.text
             return metadata
-        def parseDC(value):
-            tree = ET.fromstring(value)
-            for field in tree:
-                yield (field.tag,field.text)
         logging.debug("Getting metadata of {}.".format(oai_id))        
         tree = ET.parse(self.xml_dirname+"/"+str(oai_id)+".xml")
         root = tree.getroot()
@@ -98,17 +98,11 @@ class DigitoolXML:
             name = tag(child,"name")
             metadataType = tag(child,"type")
             value = tag(child,"value")
-            #print(oai_id, name.text, metadataType.text, value.text)
             if name.text != 'descriptive':
                 continue
             if metadataType.text == 'marc':
                 assert 'marc' not in res.keys()
-                if 'marc' in res.keys():
-                    print(oai_id)
                 res['marc'] = parseMarc(value.text)
-            elif metadataType.text == 'dc':
-                res['dc'] = list(parseDC(value.text))
-                pass
             else:
                 raise Exception("unknown format")
         return res

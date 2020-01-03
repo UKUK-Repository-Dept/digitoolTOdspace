@@ -86,11 +86,7 @@ def convert(archive,copyfile,log):
 def createRow(filename, description):
         row = filename + '\t'
         row += 'bundle:ORIGINAL\t'
-        row += 'permissits:-r '
-        #if 'Posudek' in description:
-        #    row += "'Admin'"
-        #else:
-        #    row += "'IPshibAuthenticatedUniMember'"
+        row += 'permissits:-r Anonymous' #TODO otestovat
         row += '\tdescription:'+description
         row += '\n'
         return row

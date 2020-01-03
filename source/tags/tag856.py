@@ -1,4 +1,5 @@
 def convertTag(tag, oai_id):
-    ret = {} 
-    #print(tag)
-    return ret #TODO KAM?
+    ret = {}
+    if 'u' in tag.keys():
+        ret['urls'] = tag['u']
+    return ret 

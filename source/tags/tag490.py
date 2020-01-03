@@ -1,4 +1,4 @@
 def convertTag(tag, oai_id):
     ret = {} 
-    #print(tag)
+    #print(oai_id, tag)
     return ret #TODO KAM?

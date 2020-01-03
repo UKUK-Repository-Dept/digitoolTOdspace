@@ -214,6 +214,10 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
     if source:
         ET.SubElement(m.dc, "dcvalue", element='source', qualifier='none').text = source
 
+    urls = getTopic('urls', metadataOrigin)
+    if urls:
+        for url in urls:
+            ET.SubElement(m.dc, "dcvalue", element='relationURI', qualifier='none').text = url
 
 
     ignored = getTopic('ignored', metadataOrigin)
