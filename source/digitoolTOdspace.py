@@ -54,7 +54,7 @@ def convert(archive,copyfile,log):
         attachements = list(dtx.get_attachements(oai_id))
 
         if archive:
-            outputDirectory = 'output/' + str(oai_id)
+            outputDirectory = 'output/' + str(oai_id) + '/' + str(oai_id)
             
             if not os.path.exists(outputDirectory):
                 os.mkdir(outputDirectory)

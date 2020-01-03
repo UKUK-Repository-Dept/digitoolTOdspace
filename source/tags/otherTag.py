@@ -6,7 +6,7 @@ def convertTag242(tag242,oai_id):
 
 def convertTagC99(tagC99,oai_id):
     #print(tagC99) #někteří mají 'a' někteří 'd' vždy jen jedno
-    return {} #TODO
+    return {} #TODO KAM?
     #assert len(tagTYP['a']) == 1
     #return {'book_type': tagTYP['a'][0]} 
 
