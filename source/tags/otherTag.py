@@ -4,12 +4,6 @@ def convertTag242(tag242,oai_id):
     assert len(tag242.keys()) == 1
     return {'title_by_agency': tag242['a']} 
 
-def convertTagC99(tagC99,oai_id):
-    #print(tagC99) #někteří mají 'a' někteří 'd' vždy jen jedno
-    return {} #TODO KAM?
-    #assert len(tagTYP['a']) == 1
-    #return {'book_type': tagTYP['a'][0]} 
-
 def convertTagTYP(tagTYP,oai_id):
     assert len(tagTYP['a']) == 1
     return {'book_type': tagTYP['a'][0]} 

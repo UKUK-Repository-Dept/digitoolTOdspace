@@ -68,16 +68,14 @@ def parseMarc(metadataDigitool, oai_id):
             '017': otherTag.convertTag017, # DIO
             '964': otherTag.convertTag964, 
             'TYP': otherTag.convertTagTYP, 
-            'C99': otherTag.convertTagC99,
             '242': otherTag.convertTag242,
             '773': tag773.convertTag,
             '856': tag856.convertTag,
             '490': tag490.convertTag,
             'C12': tagC12.convertTag,
-            'C20': tagC20.convertTag,
             }
 
-    ignoredTags = ['LDR','FMT','500','C26','BAS','999','005','003','C13','024','250','787','C34','C30']
+    ignoredTags = ['LDR','FMT','500','C26','BAS','999','005','003','C13','024','250','787','C34','C30','C99','C20']
 
     ignoredSummary = ""
 
