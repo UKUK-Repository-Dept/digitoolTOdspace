@@ -2,7 +2,7 @@ import catalogue
 
 def convertTag242(tag242,oai_id):
     assert len(tag242.keys()) == 1
-    return {'title_by_agency': tag242['a']} 
+    return {'title_by_agency': tag242['a'][0]} 
 
 def convertTagTYP(tagTYP,oai_id):
     assert len(tagTYP['a']) == 1

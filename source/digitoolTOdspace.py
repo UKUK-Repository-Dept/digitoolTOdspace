@@ -50,14 +50,16 @@ def convert(archive,copyfile,log):
         digitoolMetadata = dtx.get_metadata(oai_id)
         parsedMetadata = metadataConvertor.parseMarc(digitoolMetadata, oai_id)
         convertedMetadata = metadataConvertor.createDC(oai_id, parsedMetadata, digitoolMetadata)
+        #for tagName, tag in parsedMetadata.items():
+        #    print(tagName, tag)
         #print(oai_id, parsedMetadata, convertedMetadata)
+        
         attachements = list(dtx.get_attachements(oai_id))
 
         if archive:
             outputDirectory = 'output/' + str(oai_id) + '/' + str(oai_id)
             
-            if not os.path.exists(outputDirectory):
-                os.mkdir(outputDirectory)
+            os.makedirs(outputDirectory, exist_ok=True)
 
             #create metadatada files 
             convertedMetadata.save(outputDirectory)
