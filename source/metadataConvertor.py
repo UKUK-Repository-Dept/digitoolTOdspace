@@ -22,11 +22,11 @@ class Metadata:
         tree = ET.ElementTree(self.thesis)
         tree.write(directory+'/metadata_thesis.xml')
         tree = ET.ElementTree(self.dcterms)
-        tree.write(directory+'/dcterms.xml')
+        tree.write(directory+'/metadata_dcterms.xml')
         tree = ET.ElementTree(self.oaire)
-        tree.write(directory+'/oaire.xml')
+        tree.write(directory+'/metadata_oaire.xml')
         tree = ET.ElementTree(self.uk)
-        tree.write(directory+'/uk.xml')
+        tree.write(directory+'/metadata_uk.xml')
 
 def getTopic(topic, metadata):
     result1  = None
@@ -169,7 +169,9 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
         ET.SubElement(m.dc, "dcvalue", element='contributor', qualifier='other').text = other
 
     pages = getTopic('pages', metadataOrigin)
-    ET.SubElement(m.dcterms, "dcvalue", element='pages', qualifier='none').text = pages
+    if pages:
+        pass #TODO to pole neni
+        ET.SubElement(m.dcterms, "dcvalue", element='pages', qualifier='none').text = pages
 
     year = getTopic('year', metadataOrigin)
     if year:
@@ -193,19 +195,19 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
     if grantNumbers:
         for grantNumber in grantNumbers:
             ET.SubElement(
-                    m.oaire, "dcvalue", element='fundingReference', qualifier='adwardNumber'
+                    m.oaire, "dcvalue", element='fundingReference', qualifier='awardNumber'
                     ).text = grantNumber
     
     grantAgencies = getTopic('grantAgencies', metadataOrigin)
     if grantAgencies:
         for grantAgency in grantAgencies:
             ET.SubElement(
-                    m.oaire, "dcvalue", element='fundingReference', qualifier='adwardNumber'
+                    m.oaire, "dcvalue", element='fundingReference', qualifier='adwardTitle'
                     ).text = grantAgency
     
     place = getTopic('place', metadataOrigin)
     if place:
-        ET.SubElement(m.dc, "dcvalue", element='publisher', qualifier='place').text = place
+        ET.SubElement(m.uk, "dcvalue", element='publication', qualifier='place').text = place
 
     institut = getTopic('institut', metadataOrigin)
     if institut:
@@ -222,7 +224,7 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
     urls = getTopic('urls', metadataOrigin)
     if urls:
         for url in urls:
-            ET.SubElement(m.dc, "dcvalue", element='relationURI', qualifier='none').text = url
+            ET.SubElement(m.dc, "dcvalue", element='relation', qualifier='uri').text = url
 
 
     ignored = getTopic('ignored', metadataOrigin)

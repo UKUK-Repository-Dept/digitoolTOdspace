@@ -50,9 +50,10 @@ def convert(archive,copyfile,log):
         digitoolMetadata = dtx.get_metadata(oai_id)
         parsedMetadata = metadataConvertor.parseMarc(digitoolMetadata, oai_id)
         convertedMetadata = metadataConvertor.createDC(oai_id, parsedMetadata, digitoolMetadata)
-        #for tagName, tag in parsedMetadata.items():
-        #    print(tagName, tag)
-        #print(oai_id, parsedMetadata, convertedMetadata)
+        #if oai_id == '65315':
+        if False:
+            for tagName, tag in parsedMetadata.items():
+                print(tagName, tag)
         
         attachements = list(dtx.get_attachements(oai_id))
 

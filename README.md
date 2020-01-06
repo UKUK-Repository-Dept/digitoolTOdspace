@@ -47,8 +47,8 @@ ssh novotj@gull.is.cuni.cz
 sudo -i -u dspace
 ```
 
-Import the first ten items:
+Import the first three items:
 
 ```
-ls /dspace/cerge/ | head | while read -r ID ; do /opt/dspace/bin/dspace import -a -e jitkaucw@gmail.com -s /dspace/cerge/$ID -c 284 -m /dspace/mapfile_zaloha/cerge/$ID; done
+ls /dspace/cerge/ | head -n 3 | while read -r ID ; do /opt/dspace/bin/dspace import -a -e jitkaucw@gmail.com -s /dspace/cerge/$ID -c 284 -m /dspace/mapfile_zaloha/cerge/$ID; done
 ```
