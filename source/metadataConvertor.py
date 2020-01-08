@@ -19,14 +19,18 @@ class Metadata:
     def save(self, directory):
         tree = ET.ElementTree(self.dc)
         tree.write(directory+'/dublin_core.xml')
-        tree = ET.ElementTree(self.thesis)
-        tree.write(directory+'/metadata_thesis.xml')
-        tree = ET.ElementTree(self.dcterms)
-        tree.write(directory+'/metadata_dcterms.xml')
-        tree = ET.ElementTree(self.oaire)
-        tree.write(directory+'/metadata_oaire.xml')
-        tree = ET.ElementTree(self.uk)
-        tree.write(directory+'/metadata_uk.xml')
+        if list(self.thesis) != []:
+            tree = ET.ElementTree(self.thesis)
+            tree.write(directory+'/metadata_thesis.xml')
+        if list(self.dcterms) != []:
+            tree = ET.ElementTree(self.dcterms)
+            tree.write(directory+'/metadata_dcterms.xml')
+        if list(self.oaire) != []:
+            tree = ET.ElementTree(self.oaire)
+            tree.write(directory+'/metadata_oaire.xml')
+        if list(self.uk) != []:
+            tree = ET.ElementTree(self.uk)
+            tree.write(directory+'/metadata_uk.xml')
 
 def getTopic(topic, metadata):
     result1  = None
@@ -78,7 +82,7 @@ def parseMarc(metadataDigitool, oai_id):
             'C12': tagC12.convertTag,
             }
 
-    ignoredTags = ['LDR','FMT','500','C26','BAS','999','005','003','C13','024','250','787','C34','C30','C99','C20']
+    ignoredTags = ['LDR','FMT','500','C26','BAS','999','005','003','C13','024','250','787','C34','C30','C99','C20','242', 'C12']
 
     ignoredSummary = ""
 
@@ -170,8 +174,7 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
 
     pages = getTopic('pages', metadataOrigin)
     if pages:
-        pass #TODO to pole neni
-        ET.SubElement(m.dcterms, "dcvalue", element='pages', qualifier='none').text = pages
+        ET.SubElement(m.dcterms, "dcvalue", element='extent', qualifier='none').text = pages
 
     year = getTopic('year', metadataOrigin)
     if year:

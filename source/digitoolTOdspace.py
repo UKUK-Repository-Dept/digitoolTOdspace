@@ -5,18 +5,12 @@ import urllib3 #disable warnings about http an gull
 from digitoolXML import DigitoolXML #přepsat 
 import metadataConvertor 
 
-xml_dirname = "Cerge/2020-01-02"
+xml_dirname = "Cerge/2020-01-07"
 loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
 
 @click.group()
 def cli():
     pass
-
-#TODO 
-#smazat TODO, print
-#tabulka cela
-#napsat navod
-#otestovat nahravani bez prilohy, s prilohou, metadata
 
 @cli.command()
 def statistic():
@@ -50,11 +44,6 @@ def convert(archive,copyfile,log):
         digitoolMetadata = dtx.get_metadata(oai_id)
         parsedMetadata = metadataConvertor.parseMarc(digitoolMetadata, oai_id)
         convertedMetadata = metadataConvertor.createDC(oai_id, parsedMetadata, digitoolMetadata)
-        #if oai_id == '65315':
-        if False:
-            for tagName, tag in parsedMetadata.items():
-                print(tagName, tag)
-        
         attachements = list(dtx.get_attachements(oai_id))
 
         if archive:
@@ -89,7 +78,7 @@ def convert(archive,copyfile,log):
 def createRow(filename, description):
         row = filename + '\t'
         row += 'bundle:ORIGINAL\t'
-        row += 'permissits:-r Anonymous' #TODO otestovat
+        row += 'permissits:-r Anonymous' 
         row += '\tdescription:'+description
         row += '\n'
         return row

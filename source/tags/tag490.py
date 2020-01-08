@@ -2,8 +2,8 @@ def convertTag(tag, oai_id):
     ret = {} 
     series = ''
     if type(tag) == str:
-        #print(oai_id, tag)
-        return {} #TODO nema nastat má tam být 'a'
+        ret['series'] = series
+        return ret #to tu nema byt ale kdyz uz je..
     for name in tag['a']:
         if name[-2:] == ' ;':
             name = name[:-2]

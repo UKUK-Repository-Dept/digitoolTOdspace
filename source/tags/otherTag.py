@@ -2,7 +2,17 @@ import catalogue
 
 def convertTag242(tag242,oai_id):
     assert len(tag242.keys()) == 1
-    return {'title_by_agency': tag242['a'][0]} 
+    title = tag242['a'][0]
+    if '$' in title:
+        shorter = {
+                'Rozhodování, nejistota a mozek. Věda neuroekonomie, Paul W. Glimcher; The MIT Press, Cambridge, MA, USA, 2003, 375 stran, ISBN 0-262-07244-0 (hbk), $37.95': 'Rozhodování, nejistota a mozek',
+                'Behaviorální teorie her, Colin F. Camerer, 2003, Russell Sage Foundation, New York, New York/Princeton University Press, Princeton, New Jersey, hardcover, 544 stran, ISBN: 0691090394, $65.00. Recenze knihy': 'Behaviorální teorie her',
+                }
+        title = shorter[title] 
+        if '$' in title:
+            raise Exception()
+
+    return {'title_by_agency': title} 
 
 def convertTagTYP(tagTYP,oai_id):
     assert len(tagTYP['a']) == 1
@@ -13,7 +23,7 @@ def convertTag001(tag001,oai_id):
 
 def convertTag017(tag017,oai_id):
     assert len(tag017['a']) == 1
-    return {'dio': tag017['a'][0]}
+    return {'doi': tag017['a'][0]}
 
 def convertTag022(tag022,oai_id):
     assert len(tag022['a']) == 1
