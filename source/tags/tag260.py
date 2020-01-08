@@ -27,6 +27,7 @@ def convertTag260(tag,oai_id):
         year = tag['c'][0] 
         if year[0] == '[' and year[-1] == ']': 
             year = year[1:-1] 
+        assert len(year) == 4
         ret['year'] = year
     
     for k in tag.keys():

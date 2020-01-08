@@ -8,6 +8,10 @@ import metadataConvertor
 xml_dirname = "Cerge/2020-01-07"
 loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
 
+
+#TODO
+# language cs_CZ en_EN
+
 @click.group()
 def cli():
     pass

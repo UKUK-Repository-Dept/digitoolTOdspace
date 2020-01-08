@@ -178,6 +178,7 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
 
     year = getTopic('year', metadataOrigin)
     if year:
+        assert len(year) == 4
         ET.SubElement(m.dc, "dcvalue", element='date', qualifier='issued').text = year
 
     keywords = sumTopic('keywords', metadataOrigin)
