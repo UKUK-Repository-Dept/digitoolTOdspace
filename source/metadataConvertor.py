@@ -105,7 +105,8 @@ def createDC(oai_id, metadataOrigin, metadataDigitool):
     lang = getTopic('lang', metadataOrigin)
     if not lang:
         raise Exception("No language found in 041 and 008.")
-    ET.SubElement(m.dc, "dcvalue", element='language', qualifier='none', language=lang).text = catalogue.langText[lang]
+    ET.SubElement(m.dc, "dcvalue", element='language', qualifier='none', language='cs_CZ').text = catalogue.langText[lang][0]
+    ET.SubElement(m.dc, "dcvalue", element='language', qualifier='none', language='en_US').text = catalogue.langText[lang][1]
     ET.SubElement(m.dc, "dcvalue", element='language', qualifier='iso').text = lang
     
     aleph_id = getTopic('aleph_id', metadataOrigin)

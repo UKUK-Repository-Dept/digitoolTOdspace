@@ -9,9 +9,6 @@ xml_dirname = "Cerge/2020-01-07"
 loggingMap = {'error':logging.ERROR, 'info':logging.INFO, 'debug':logging.DEBUG}
 
 
-#TODO
-# language cs_CZ en_EN
-
 @click.group()
 def cli():
     pass
@@ -70,7 +67,8 @@ def convert(archive,copyfile,log):
                 if copyfile:
                     filepath = xml_dirname + "/streams/" + filename
                     os.system("cp '"+filepath+"' "+outputDirectory)
-                row = createRow(filename,"Příloha")
+                description = {'application/pdf':'Plný text','text/html':'Příloha'}
+                row = createRow(filename,description[filetype])
                 f.write(row)
             if copyfile:
                 filepath = xml_dirname + "/digital_entities/" + oai_id + ".xml" 

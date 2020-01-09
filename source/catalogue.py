@@ -7,17 +7,18 @@ convertLang = {
     'pol': 'pl_PL',
     'spa': 'es_ES',
     'ita': 'it_IT',
-    'fin': 'fi-FI',
+    'fin': 'fi_FI',
     }
 
 langText = {
-    'cs_CZ': 'čeština',    
-    'sk_SK': 'slovenština',    
-    'fr_FR': 'francouština',    
-    'en_US': 'angličtina',    
-    'de_DE': 'němčina',    
-    'pl_PL': 'polština',    
-    'es_ES': 'španělština',    
-    'it_IT': 'italština',    
+    'cs_CZ': ['čeština', 'Czech'], 
+    'sk_SK': ['slovenština', 'Slovak'],    
+    'fr_FR': ['francouština', 'French'],    
+    'en_US': ['angličtina', 'English'],    
+    'de_DE': ['němčina', 'German'],    
+    'pl_PL': ['polština', 'Polish'],    
+    'es_ES': ['španělština', 'Spanish'],    
+    'it_IT': ['italština', 'Italian'],
+    'fi_FI': ['finština', 'Finnish'],
     }
 
